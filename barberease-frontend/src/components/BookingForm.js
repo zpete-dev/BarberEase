@@ -1,54 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation hook
+import axios from 'axios'; // Make sure to install axios with npm install axios
 
-export const BookingForm = ({ selectedBarber, availability }) => {
-    const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+const BookingForm = () => {
+    const navigate = useNavigate(); // Initialize the useNavigate hook
+    const location = useLocation(); // Access the location object
+    const { selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName } = location.state || {};
+    const [selectedDateString, setSelectedDateString] = useState('');
 
-    const handleBooking = async () => {
-        // Send booking details to the server
-        const response = await fetch('http://localhost:5000/api/bookings', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                barberId: selectedBarber,
-                date: /* selected date from the calendar */,
-                slotTime: selectedTimeSlot,
-                customerEmail: email,
-                customerPhone: phone,
-            }),
-        });
+    useEffect(() => {
+        if (selectedDate && selectedDate instanceof Date) {
+            const dateString = selectedDate.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            });
+            setSelectedDateString(dateString);
+        }
+    }, [selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName]);
 
-        const data = await response.json();
-        if (data.success) {
-            alert('Booking successful!');
-            // Send email and text confirmation here, or better, have the backend handle this
-        } else {
-            alert('Error booking slot.');
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phoneNumber: ''
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const bookingData = {
+            customerName: formData.name,
+            customerEmail: formData.email,
+            customerPhone: formData.phoneNumber,
+            barberId: selectedBarber, // Ensure this is the ID, not the name
+            date: selectedDate.toISOString(), // Ensure selectedDate is a Date object
+            slotTime: selectedSlot,
+            service: selectedServiceName
+        };
+        // Define the base URL for your backend server
+        const BASE_URL = 'http://localhost:5000/api';
+
+        try {
+        const response = await axios.post(`${BASE_URL}/bookings`, bookingData);
+            // Check for success response and navigate with state
+            if (response.data.success) {
+                navigate('/', { state: { bookingConfirmed: true } });
+            } else {
+                // Handle unsuccessful booking attempt
+            }
+        } catch (error) {
+            // Handle error (network error, server error, etc.)
         }
     };
 
     return (
-        <div>
-            {/* Display available time slots from 'availability' here for the selected date */}
-            {/* ... */}
-            <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-            />
-            <input 
-                type="tel" 
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter your phone number"
-                required
-            />
-            <button onClick={handleBooking}>Book</button>
+        <div className="booking-layout">
+            <div className="booking-info">
+                <p>Booking your <strong>{selectedServiceName}</strong> with <strong>{selectedBarberName}</strong> on <strong>{selectedDateString}</strong> at <strong>{selectedSlot}</strong>.</p>
+            </div>
+            <div className="booking-form">
+                <h2>Fill in your booking details</h2>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Name:
+                        <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
+                    </label>
+                    <br />
+                    <label>
+                        Email:
+                        <input type="email" name="email" value={formData.email} onChange={handleInputChange} required />
+                    </label>
+                    <br />
+                    <label>
+                        Phone Number:
+                        <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} required />
+                    </label>
+                    <br />
+                    <button type="submit">Submit Booking</button>
+                </form>
+            </div>
         </div>
     );
 };
+
+export default BookingForm;

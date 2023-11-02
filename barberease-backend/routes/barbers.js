@@ -19,7 +19,7 @@ router.get('/:barberId/availability', async (req, res) => {
         if (!barber) {
             return res.status(404).json({ msg: 'Barber not found' });
         }
-        res.json({ success: true, availability: barber.availability });
+        res.json({ success: true, availability: barber.availability, barberName: barber.name});
     } catch (err) {
         res.status(500).json({ msg: 'Server Error' });
     }

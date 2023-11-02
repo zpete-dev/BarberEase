@@ -36,3 +36,92 @@
     transform: rotate(360deg);
   }
 }
+/* Barber Selection Styling  */
+.barberSelection-container {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 15%;
+}
+
+.calendar-container {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 5%;
+}
+
+.calendar-container select {
+  width: 20%;
+  margin-bottom: 20px;
+}
+
+.timeslots-container {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  margin-top: 50px;
+}
+
+.time-slot-button {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.time-slot-button:hover {
+  background-color: #0056b3;
+}
+
+.confirmation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Use fixed or absolute positioning */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Offset the position to truly center it */
+}
+
+.service-selection-container {
+  margin-left: 20px;
+}
+
+.booking-layout {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.booking-info {
+  flex: 1; /* Take up half the space */
+  padding: 20px;
+  /* Add additional styling as needed */
+}
+
+.booking-form {
+  flex: 1; /* Take up the other half */
+  padding: 20px;
+  /* Add additional styling as needed */
+}
+
+/* Ensure the form inputs and labels are nicely aligned */
+.booking-form form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.booking-form form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar li {
+  /* Other styles can go here */
+}

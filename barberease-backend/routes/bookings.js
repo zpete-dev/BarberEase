@@ -41,8 +41,7 @@ router.post('/', async (req, res) => {
             service
         });
 
-        const savedBooking = await newBooking;
-        //const savedBooking = await newBooking.save();
+        const savedBooking = newBooking;
 
         // Update barber availability
         const barber = await Barber.findById(barberId);
@@ -60,7 +59,7 @@ router.post('/', async (req, res) => {
             }
         } else {
             // Create a default slots array for 9 AM to 3 PM
-            const defaultSlots = ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'];
+            const defaultSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
 
             // Remove the booked slot from the default slots
             const bookedSlotIndex = defaultSlots.indexOf(slotTime);

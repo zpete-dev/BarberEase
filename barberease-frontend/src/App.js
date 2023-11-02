@@ -1,20 +1,48 @@
-import React from 'react';
+// App.js
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import BookingList from './components/BookingList';
-import AddBooking from './components/AddBooking';
-import { BarberSelection } from './components/BarberSelection';
+import {BarberSelection} from './components/BarberSelection';
+import BookingForm from './components/BookingForm';
+import ConfirmationBanner from './components/ConfirmationBanner'; // import ConfirmationBanner
+
+const HomePage = () => {
+    const location = useLocation(); // Hook to access the current location
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
+    useEffect(() => {
+        // Check if the location state has the `bookingConfirmed` property set to true
+        if (location.state?.bookingConfirmed) {
+            setShowConfirmation(true);
+        }
+        // Cleanup function to reset the confirmation state when the component unmounts or user navigates away
+        return () => {
+            setShowConfirmation(false);
+        };
+    }, [location]);
+
+    return (
+        <div>
+            {showConfirmation && <ConfirmationBanner />}
+            <h1>Welcome to our Barber Shop</h1>
+            {/* Other content for the homepage can go here */}
+        </div>
+    );
+};
 
 function App() {
     return (
-        <div className="App">
-            <Navbar />
-            {/* <BookingList /> */}
-            <AddBooking />
-            <BarberSelection />
-            {/* <EditBooking bookingId={someBookingId} /> */}
-            {/* Uncomment and provide a bookingId if you want to use the EditBooking component directly here. */}
-        </div>
+        <Router>
+            <div className="App">
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/book-appointment" element={<BarberSelection />} />
+                    <Route path="/booking-form" element={<BookingForm />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
