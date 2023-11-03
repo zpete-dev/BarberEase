@@ -1,14 +1,25 @@
 const mongoose = require('mongoose');
+const sanitize = require('mongo-sanitize'); // Consider using a sanitization library
 
 const BarberSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true, // Trims whitespace
+        minlength: 2, // Minimum length
+        set: v => sanitize(v) // Sanitize to prevent injection attacks
     },
     availability: [
         {
-            date: Date,
-            slots: [String] // e.g., ['9:00 AM', '10:00 AM', ...]
+            date: {
+                type: Date,
+                required: true
+            },
+            slots: [{
+                type: String,
+                trim: true,
+                set: v => sanitize(v)
+            }]
         }
     ]
 });
