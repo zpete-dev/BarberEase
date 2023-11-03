@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axios from 'axios';
-import BookingForm from './BookingForm'; // Adjust the import path as necessary
+import BookingForm from '../components/BookingForm';
 import { BrowserRouter } from 'react-router-dom';
 
 // Mock the useNavigate hook
@@ -36,7 +36,8 @@ describe('BookingForm', () => {
     );
 
     // Check if the BookingForm renders with the correct initial data
-    expect(screen.getByText(/booking your haircut with john doe/i)).toBeInTheDocument();
+    expect(screen.getByText(/Haircut/i)).toBeInTheDocument();
+    expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
 
     // Simulate user input
     fireEvent.change(screen.getByLabelText(/name:/i), { target: { value: 'Jane Doe' } });
