@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bookingsRoutes = require('./routes/bookings');
 const barbersRoutes = require('./routes/barbers');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 
@@ -20,6 +21,7 @@ mongoose.connect('mongodb://localhost:27017/barberease', {
 // API routes
 app.use('/api/bookings', bookingsRoutes);
 app.use('/api/barbers', barbersRoutes);
+app.use('/api/users', usersRoutes);
 
 // Root route
 app.get('/', (req, res) => {

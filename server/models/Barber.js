@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const sanitize = require('mongo-sanitize'); // Consider using a sanitization library
+const sanitize = require('mongo-sanitize');
 
 const BarberSchema = new mongoose.Schema({
     name: {

@@ -1,10 +1,47 @@
 const express = require('express');
+const { body, validationResult, param } = require('express-validator');
 const Booking = require('../models/Booking');
 const Barber = require('../models/Barber');
+const sanitize = require('mongo-sanitize');
+const helmet = require('helmet');
 const router = express.Router();
 
+//Middleware Imports
+const auth = require('../middleware/auth');
+const apiLimiter = require('../middleware/rateLimit.js');
+const apiKeyAuth = require('../middleware/apiKeyAuth');
+
+// Apply Helmet to all routes in this router for security
+router.use(helmet());
+// Apply the rate limiting middleware to all routes
+router.use(apiLimiter);
+// All routes require API Key
+router.use(apiKeyAuth);
+
+// Define a reusable validation middleware for bookings
+const validateBooking = [
+    body('customerName').trim().notEmpty().withMessage('Customer name is required'),
+    body('customerEmail').isEmail().withMessage('Invalid email format'),
+    body('customerPhone').trim().isMobilePhone('any', {strictMode: false}).withMessage('Invalid phone number format'),
+    body('barberId').trim().notEmpty().withMessage('Barber ID is required'),
+    body('date').isISO8601().withMessage('Invalid date format'),
+    body('slotTime').trim().notEmpty().withMessage('Slot time is required'),
+    body('service').trim().notEmpty().withMessage('Service is required'),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        next();
+    },
+];
+
+const validateBookingId = [
+    param('id').trim().isMongoId().withMessage('Invalid booking ID'),
+];
+
 // Get all bookings
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const bookings = await Booking.find();
         res.json({ success: true, bookings: bookings });
@@ -14,7 +51,10 @@ router.get('/', async (req, res) => {
 });
 
 // POST - Create a new booking
-router.post('/', async (req, res) => {
+router.post('/', validateBooking, async (req, res) => {
+    // Sanitize input to prevent NoSQL injection
+    const sanitizedBody = sanitize(req.body);
+
     const {
         customerName,
         customerEmail,
@@ -23,10 +63,16 @@ router.post('/', async (req, res) => {
         date,
         slotTime,
         service
-    } = req.body;
+    } = sanitizedBody;
+
+    // Validate input data (basic validation)
+    if (!customerName || !customerEmail || !customerPhone || !barberId || !date || !slotTime || !service) {
+        return res.status(400).json({ msg: 'Please provide all required fields' });
+    }
 
     try {
         successState = true;
+
         // Standardizing the date
         const standardizedDate = new Date(date);
         standardizedDate.setUTCHours(0, 0, 0, 0);
@@ -85,7 +131,10 @@ router.post('/', async (req, res) => {
 });
 
 // PUT - Update a booking by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateBookingId, auth, async (req, res) => {
+
+    const sanitizedBody = sanitize(req.body);
+
     const {
         customerName,
         customerEmail,
@@ -94,10 +143,11 @@ router.put('/:id', async (req, res) => {
         date,
         slotTime,
         service
-    } = req.body;
+    } = sanitizedBody;
+
 
     try {
-        let booking = await Booking.findById(req.params.id);
+        let booking = await Booking.findById(barberId);
 
         if (!booking) {
             return res.status(404).json({ msg: 'Booking not found' });
@@ -119,9 +169,9 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE - Remove a booking by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateBookingId, auth, async (req, res) => {
     try {
-        const booking = await Booking.findById(req.params.id);
+        const booking = await Booking.findById(barberId);
 
         if (!booking) {
             return res.status(404).json({ msg: 'Booking not found' });

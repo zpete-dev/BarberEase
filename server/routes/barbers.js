@@ -1,23 +1,22 @@
 const express = require('express');
 const { body, param, validationResult } = require('express-validator');
 const sanitize = require('mongo-sanitize');
-const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const Barber = require('../models/Barber');
 const router = express.Router();
 
+//Middleware Imports
+const auth = require('../middleware/auth');
+const apiLimiter = require('../middleware/rateLimit.js');
+const apiKeyAuth = require('../middleware/apiKeyAuth');
+
+
 // Apply Helmet to all routes in this router for security
 router.use(helmet());
-
-// Define API limitations
-const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 50, 
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
 // Apply the rate limiting middleware to all routes
 router.use(apiLimiter);
+// All routes require API Key
+router.use(apiKeyAuth);
 
 
 // Get all barbers
@@ -52,7 +51,7 @@ router.get('/:barberId/availability', [
 });
 
 // POST - Add a new barber
-router.post('/', [
+router.post('/', auth, [
     body('name').trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters long.')
 ], async (req, res) => {
     const errors = validationResult(req);
