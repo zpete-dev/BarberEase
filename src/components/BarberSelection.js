@@ -25,7 +25,11 @@ export const BarberSelection = () => {
     useEffect(() => {
         // Fetch barbers from the backend (assuming an endpoint exists for this)
         async function fetchBarbers() {
-            const response = await fetch('http://localhost:5000/api/barbers');
+            const response = await fetch('https://localhost:5000/api/barbers', {
+                headers: {
+                    'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                }
+            });
             const data = await response.json();
             console.log(data);
             if (data.success && data.barbers) {
@@ -59,14 +63,14 @@ export const BarberSelection = () => {
 
         //Finding availability keeping everything in America/Denver Time Zone
         const availabilityForTheDay = availability.find(avail =>
-            new Date(avail.date).toISOString().split('T')[0] === 
+            new Date(avail.date).toISOString().split('T')[0] ===
             DateTime.fromJSDate(date).minus({ hours: 6 }).toJSDate().toISOString().split('T')[0]);
 
 
         if (availabilityForTheDay) {
             // If the day exists in the barber's availability
             setSlotsForSelectedDate(availabilityForTheDay.slots);
-            
+
         } else {
             // If the day doesn't exist in the barber's availability, assume full availability (e.g., 9 AM - 3 PM)
             setSlotsForSelectedDate(['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM']);
@@ -80,7 +84,7 @@ export const BarberSelection = () => {
     const confirmBooking = async () => {
         // Find the service object by its id
         const serviceObject = services.find(service => service.id === selectedService);
-    
+
         // Check if the service was found
         if (serviceObject) {
             // If found, navigate to the BookingForm page with state including the service name
@@ -99,8 +103,8 @@ export const BarberSelection = () => {
             console.error('Selected service not found.');
         }
     };
-    
-    
+
+
     const tileContent = ({ date, view }) => {
         if (view === 'month' && date > new Date()) {
             const dayAvailability = availability.find(avail => new Date(avail.date).toDateString() === date.toDateString());
@@ -123,7 +127,7 @@ export const BarberSelection = () => {
                         </option>
                     ))}
                 </select>
-    
+
                 {selectedBarber && (
                     <div>
                         <Calendar
@@ -134,7 +138,7 @@ export const BarberSelection = () => {
                     </div>
                 )}
             </div>
-    
+
             {selectedDate && (
                 <div className="timeslots-container">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
