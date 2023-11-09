@@ -14,16 +14,38 @@ const apiKeyAuth = require('../middleware/apiKeyAuth');
 // Apply Helmet to all routes in this router for security
 router.use(helmet());
 // Apply the rate limiting middleware to all routes
-router.use(apiLimiter);
+router.use(apiLimiter(50));// max of 50 request every 15 minutes
 // All routes require API Key
 router.use(apiKeyAuth);
 
 
 // Get all barbers
-router.get('/', async (req, res) => {
+router.get('/all', auth, async (req, res) => {
     try {
         const barbers = await Barber.find().exec(); // Use exec() to return a true Promise
         res.json({ success: true, barbers: barbers });
+    } catch (err) {
+        res.status(500).json({ msg: 'Server error occurred.' });
+    }
+});
+
+router.get('/', async (req, res) => {
+    try {
+        const barbers = await Barber.find().exec(); // Use exec() to return a true Promise
+        const barbersWithoutID = barbers.map((barber) => {
+            // Map over each barber's availability to exclude the _id
+            const availabilityWithoutID = barber.availability.map(({ date, slots }) => ({
+                date,
+                slots // Assuming you want to keep the slots here
+            }));
+            // Return a new object without the barber's _id
+            return {
+                name: barber.name,
+                availability: availabilityWithoutID
+            };
+        });
+
+        res.json({ success: true, barbers: barbersWithoutID });
     } catch (err) {
         res.status(500).json({ msg: 'Server error occurred.' });
     }
@@ -44,7 +66,12 @@ router.get('/:barberId/availability', [
         if (!barber) {
             return res.status(404).json({ msg: 'Barber not found' });
         }
-        res.json({ success: true, availability: barber.availability, barberName: barber.name });
+        const availabilityWithoutID = barber.availability.map(({ date, slots }) => ({
+            date,
+            slots
+        }));
+
+        res.json({ success: true, availability: availabilityWithoutID, barberName: barber.name });
     } catch (err) {
         res.status(500).json({ msg: 'Server error occurred.' });
     }

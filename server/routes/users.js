@@ -3,6 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const helmet = require('helmet');
+//Middleware Imports
+const apiLimiter = require('../middleware/rateLimit.js');
+
+// Apply Helmet to all routes in this router for security
+router.use(helmet());
+// Apply the rate limiting middleware to all routes
+router.use(apiLimiter(5));// max of 5 request every 15 minutes
 
 const adminApiKeyAuth = (req, res, next) => {
     const apiKey = req.header('x-api-admin-key');
