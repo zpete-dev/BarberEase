@@ -45,12 +45,17 @@ const BookingForm = () => {
             service: selectedServiceName
         };
         // Define the base URL for your backend server
-        const BASE_URL = 'http://localhost:5000/api';
+        const BASE_URL = 'https://localhost:5000/api';
 
         try {
-        const response = await axios.post(`${BASE_URL}/bookings`, bookingData);
+            const response = await axios.post(`${BASE_URL}/bookings`, bookingData, {
+                headers: {
+                    'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                }
+            });
             // Check for success response and navigate with state
             if (response.data.success) {
+                //console.log(`Booking created for ${bookingData.customerName} on ${bookingData.date.split('T')[0]} at ${bookingData.slotTime}.`);
                 navigate('/', { state: { bookingConfirmed: true } });
             } else {
                 // Handle unsuccessful booking attempt

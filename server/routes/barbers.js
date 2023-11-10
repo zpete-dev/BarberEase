@@ -6,7 +6,7 @@ const Barber = require('../models/Barber');
 const router = express.Router();
 
 //Middleware Imports
-const auth = require('../middleware/auth');
+const { auth , validSession } = require('../middleware/auth');
 const apiLimiter = require('../middleware/rateLimit.js');
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
@@ -14,25 +14,15 @@ const apiKeyAuth = require('../middleware/apiKeyAuth');
 // Apply Helmet to all routes in this router for security
 router.use(helmet());
 // Apply the rate limiting middleware to all routes
-router.use(apiLimiter(50));// max of 50 request every 15 minutes
+router.use(apiLimiter(25));// max of 25 request every 15 minutes
 // All routes require API Key
 router.use(apiKeyAuth);
-
-
-// Get all barbers
-router.get('/all', auth, async (req, res) => {
-    try {
-        const barbers = await Barber.find().exec(); // Use exec() to return a true Promise
-        res.json({ success: true, barbers: barbers });
-    } catch (err) {
-        res.status(500).json({ msg: 'Server error occurred.' });
-    }
-});
 
 router.get('/', async (req, res) => {
     try {
         const barbers = await Barber.find().exec(); // Use exec() to return a true Promise
-        const barbersWithoutID = barbers.map((barber) => {
+        //Want to be returning barbersWithoutID but need to expose ID for now.
+/*         const barbersWithoutID = barbers.map((barber) => {
             // Map over each barber's availability to exclude the _id
             const availabilityWithoutID = barber.availability.map(({ date, slots }) => ({
                 date,
@@ -43,9 +33,8 @@ router.get('/', async (req, res) => {
                 name: barber.name,
                 availability: availabilityWithoutID
             };
-        });
-
-        res.json({ success: true, barbers: barbersWithoutID });
+        }); */
+        res.json({ success: true, barbers: barbers });
     } catch (err) {
         res.status(500).json({ msg: 'Server error occurred.' });
     }
@@ -88,6 +77,12 @@ router.post('/', auth, [
 
     try {
         const sanitizedBody = sanitize(req.body);
+        
+        const barberExists = await Barber.findOne({ name: sanitizedBody.name }).exec();
+        if (barberExists) {
+            return res.status(400).json({ msg: 'A barber with this name already exists.' });
+        }
+
         const newBarber = new Barber({
             name: sanitizedBody.name,
             availability: []  // Initially empty

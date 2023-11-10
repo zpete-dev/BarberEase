@@ -31,7 +31,7 @@ export const BarberSelection = () => {
                 }
             });
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
             if (data.success && data.barbers) {
                 setBarbers(data.barbers);
             }
@@ -43,7 +43,11 @@ export const BarberSelection = () => {
         const barberId = event.target.value;
         if (barberId) {
             // Fetch barber's availability (assuming an endpoint exists for this)
-            const response = await fetch(`http://localhost:5000/api/barbers/${barberId}/availability`);
+            const response = await fetch(`https://localhost:5000/api/barbers/${barberId}/availability`, {
+                headers: {
+                    'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                }
+            });
             const data = await response.json();
             setSelectedBarber(barberId);
             setSelectedBarberName(data.barberName);

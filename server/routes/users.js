@@ -51,7 +51,7 @@ router.post('/register', async (req, res) => {
 
         jwt.sign(
             payload,
-            process.env.JWT_SECRET, // Secret is stored in an environment variable
+            process.env.JWT_SECRET_ADMIN, // Secret is stored in an environment variable
             { expiresIn: '1h' }, // Token validity
             (err, token) => {
                 if (err) throw err;
@@ -92,7 +92,7 @@ router.post('/login', async (req, res) => {
 
         jwt.sign(
             payload,
-            process.env.JWT_SECRET, // Secret is stored in an environment variable
+            process.env.JWT_SECRET_ADMIN, // Secret is stored in an environment variable
             { expiresIn: '1h' }, // Token validity
             (err, token) => {
                 if (err) throw err;

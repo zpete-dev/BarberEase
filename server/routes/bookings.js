@@ -7,14 +7,14 @@ const helmet = require('helmet');
 const router = express.Router();
 
 //Middleware Imports
-const auth = require('../middleware/auth');
+const { auth, validSession } = require('../middleware/auth');
 const apiLimiter = require('../middleware/rateLimit.js');
 const apiKeyAuth = require('../middleware/apiKeyAuth');
 
 // Apply Helmet to all routes in this router for security
 router.use(helmet());
 // Apply the rate limiting middleware to all routes
-router.use(apiLimiter(50));// max of 50 request every 15 minutes
+router.use(apiLimiter(25));// max of 25 request every 15 minutes
 // All routes require API Key
 router.use(apiKeyAuth);
 
@@ -22,7 +22,7 @@ router.use(apiKeyAuth);
 const validateBooking = [
     body('customerName').trim().notEmpty().withMessage('Customer name is required'),
     body('customerEmail').isEmail().withMessage('Invalid email format'),
-    body('customerPhone').trim().isMobilePhone('any', {strictMode: false}).withMessage('Invalid phone number format'),
+    body('customerPhone').trim().isMobilePhone('any', { strictMode: false }).withMessage('Invalid phone number format'),
     body('barberId').trim().notEmpty().withMessage('Barber ID is required'),
     body('date').isISO8601().withMessage('Invalid date format'),
     body('slotTime').trim().notEmpty().withMessage('Slot time is required'),
@@ -51,10 +51,9 @@ router.get('/', auth, async (req, res) => {
 });
 
 // POST - Create a new booking
-router.post('/', validateBooking, async (req, res) => {
+router.post('/', validateBooking, validSession, async (req, res) => {
     // Sanitize input to prevent NoSQL injection
     const sanitizedBody = sanitize(req.body);
-
     const {
         customerName,
         customerEmail,
@@ -86,52 +85,54 @@ router.post('/', validateBooking, async (req, res) => {
             slotTime,
             service
         });
-
         const savedBooking = newBooking;
 
         // Update barber availability
         const barber = await Barber.findById(barberId);
-        const availabilityForTheDay = barber.availability.find(avail => avail.date.toISOString() === standardizedDate.toISOString());
-
-        if (availabilityForTheDay) {
-            const slotIndex = availabilityForTheDay.slots.indexOf(slotTime);
-            if (slotIndex > -1) {
-                availabilityForTheDay.slots.splice(slotIndex, 1);
-                await newBooking.save();
-                await barber.save();
+        if (barber) {
+            const availabilityForTheDay = barber.availability.find(avail => avail.date.toISOString() === standardizedDate.toISOString());
+            if (availabilityForTheDay) {
+                const slotIndex = availabilityForTheDay.slots.indexOf(slotTime);
+                if (slotIndex > -1) {
+                    availabilityForTheDay.slots.splice(slotIndex, 1);
+                    await newBooking.save();
+                    await barber.save();
+                } else {
+                    successState = false;
+                    // logic for booking request for a time already booked
+                }
             } else {
-                successState = false;
-                // logic for booking request for a time already booked
+                // Create a default slots array for 9 AM to 3 PM
+                const defaultSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
+
+                // Remove the booked slot from the default slots
+                const bookedSlotIndex = defaultSlots.indexOf(slotTime);
+                if (bookedSlotIndex > -1) {
+                    defaultSlots.splice(bookedSlotIndex, 1);
+                }
+
+                // Append the new availability object with the default slots (minus the booked slot) for that date
+                barber.availability.push({
+                    date: standardizedDate,  // Assuming 'date' is a string in ISO format, we convert it to a Date object
+                    slots: defaultSlots
+                });
+
+                await newBooking.save();
+                // Save the updated barber object to the database
+                await barber.save();
             }
         } else {
-            // Create a default slots array for 9 AM to 3 PM
-            const defaultSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
-
-            // Remove the booked slot from the default slots
-            const bookedSlotIndex = defaultSlots.indexOf(slotTime);
-            if (bookedSlotIndex > -1) {
-                defaultSlots.splice(bookedSlotIndex, 1);
-            }
-
-            // Append the new availability object with the default slots (minus the booked slot) for that date
-            barber.availability.push({
-                date: standardizedDate,  // Assuming 'date' is a string in ISO format, we convert it to a Date object
-                slots: defaultSlots
-            });
-
-            await newBooking.save();
-            // Save the updated barber object to the database
-            await barber.save();
+            res.status(500).json({ msg: 'Barber not found with that ID' });
+            return;
         }
-
         res.json({ success: successState, booking: savedBooking });
     } catch (err) {
-        res.status(500).json({ msg: 'Server Error' });
+        res.status(500).json({ msg: 'Error occured when creating booking.' });
     }
 });
 
 // PUT - Update a booking by ID
-router.put('/:id', validateBookingId, auth, async (req, res) => {
+/* router.put('/:id', validateBookingId, auth, async (req, res) => {
 
     const sanitizedBody = sanitize(req.body);
 
@@ -182,6 +183,6 @@ router.delete('/:id', validateBookingId, auth, async (req, res) => {
     } catch (err) {
         res.status(500).json({ msg: 'Server Error' });
     }
-});
+}); */
 
 module.exports = router;

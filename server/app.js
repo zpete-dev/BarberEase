@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bookingsRoutes = require('./routes/bookings');
 const barbersRoutes = require('./routes/barbers');
+const sessionsRoutes = require('./routes/sessions');
 const usersRoutes = require('./routes/users');
 
 const app = express();
@@ -21,7 +22,7 @@ const corsOptions = {
     }
   },
   methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
-  allowedHeaders: ['x-auth-token', 'x-api-key'], // Allowed custom headers
+  allowedHeaders: ['x-auth-token', 'x-api-key', 'Content-Type'], // Allowed custom headers
   credentials: true, // Credentials are supported
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
   maxAge: 1000, // Cache pre-flight response for 1 second
@@ -47,7 +48,8 @@ mongoose.connect('mongodb://localhost:27017/barberease', {
 // API routes
 app.use('/api/bookings', bookingsRoutes);
 app.use('/api/barbers', barbersRoutes);
-app.use('/api/users', usersRoutes);
+app.use('/api/sessions', sessionsRoutes);
+//app.use('/api/users', usersRoutes); This route is intentionally not always on
 
 // Root route
 app.get('/', (req, res) => {
