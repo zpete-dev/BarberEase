@@ -4,11 +4,14 @@ const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 //Middleware Imports
 const apiLimiter = require('../middleware/rateLimit.js');
+const apiKeyAuth = require('../middleware/apiKeyAuth');
 
 // Apply Helmet to all routes in this router for security
 router.use(helmet());
 // Apply the rate limiting middleware to all routes
 router.use(apiLimiter(10));// max of 10 request every 15 minutes
+// All routes require API Key
+router.use(apiKeyAuth);
 
 // POST - Gives Users a timelimit to make a valid booking
 router.post('/', async (req, res) => {
@@ -19,7 +22,7 @@ router.post('/', async (req, res) => {
             { expiresIn: '10m' } // Token validity
         );
 
-        res.json({ token });
+        res.json({ success : true, token : token});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Error Generating Session Token');

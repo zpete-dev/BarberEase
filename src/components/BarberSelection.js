@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { DateTime } from 'luxon';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import axios from 'axios';
 
 export const BarberSelection = () => {
     const [barbers, setBarbers] = useState([]);
@@ -88,20 +89,39 @@ export const BarberSelection = () => {
     const confirmBooking = async () => {
         // Find the service object by its id
         const serviceObject = services.find(service => service.id === selectedService);
-
         // Check if the service was found
         if (serviceObject) {
             // If found, navigate to the BookingForm page with state including the service name
-            navigate('/booking-form', {
-                state: {
-                    selectedBarberName,
-                    selectedBarber,
-                    selectedDate,
-                    selectedSlot,
-                    selectedService: serviceObject.id, // This is the id of the service
-                    selectedServiceName: serviceObject.name // This is the name of the service
+            const BASE_URL = 'https://localhost:5000/api';
+            try {
+                const response = await axios.post(`${BASE_URL}/sessions`, {}, {
+                    headers: {
+                        'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                    }
+                });
+                const data = response.data;
+                // Check for success response and navigate with state
+                if (data.success) {
+                    const sessionToken = data.token;
+                    navigate('/booking-form', {
+                        state: {
+                            selectedBarberName,
+                            selectedBarber,
+                            selectedDate,
+                            selectedSlot,
+                            selectedService: serviceObject.id, // This is the id of the service
+                            selectedServiceName: serviceObject.name, // This is the name of the service
+                            sessionToken
+                        }
+                    });
+                } else {
+                    console.error('Could not generate JWT token.');
                 }
-            });
+            } catch (error) {
+                // Handle error (network error, server error, etc.)
+                console.error('Error navigating to BookingForm.');
+            }
+
         } else {
             // Handle the error in case the service ID does not match any service
             console.error('Selected service not found.');

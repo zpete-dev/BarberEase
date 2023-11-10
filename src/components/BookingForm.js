@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation hook
-import axios from 'axios'; // Make sure to install axios with npm install axios
+import axios from 'axios';
 
 const BookingForm = () => {
     const navigate = useNavigate(); // Initialize the useNavigate hook
     const location = useLocation(); // Access the location object
     const { selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName } = location.state || {};
+    const [sessionToken, setSessionToken] = useState(location.state?.sessionToken || null);
     const [selectedDateString, setSelectedDateString] = useState('');
 
     useEffect(() => {
@@ -17,7 +18,7 @@ const BookingForm = () => {
             });
             setSelectedDateString(dateString);
         }
-    }, [selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName]);
+    }, [selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName, sessionToken]);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -50,12 +51,15 @@ const BookingForm = () => {
         try {
             const response = await axios.post(`${BASE_URL}/bookings`, bookingData, {
                 headers: {
-                    'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                    'x-api-key': `${process.env.REACT_APP_API_KEY}`,
+                    'x-auth-token': sessionToken
                 }
             });
             // Check for success response and navigate with state
             if (response.data.success) {
                 //console.log(`Booking created for ${bookingData.customerName} on ${bookingData.date.split('T')[0]} at ${bookingData.slotTime}.`);
+                //console.log("Expiring token.");
+                //setSessionToken(null);
                 navigate('/', { state: { bookingConfirmed: true } });
             } else {
                 // Handle unsuccessful booking attempt
