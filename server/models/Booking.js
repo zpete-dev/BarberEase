@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const sanitize = require('mongo-sanitize');
+/* const CryptoJS = require('crypto-js');
+const secretKey = process.env.ENCRYPTION_SECRET_KEY; */
 
 const BookingSchema = new mongoose.Schema({
     customerName: {
@@ -47,6 +49,13 @@ BookingSchema.pre('save', function (next) {
     Object.keys(booking.toObject()).forEach((key) => {
         booking[key] = sanitize(booking[key]);
     });
+/*     console.log(secretKey);
+    if (booking.customerEmail) {
+        booking.customerEmail = CryptoJS.AES.encrypt(booking.customerEmail, secretKey).toString();
+    }
+    if (booking.customerPhone) {
+        booking.customerPhone = CryptoJS.AES.encrypt(booking.customerPhone, secretKey).toString();
+    } */
     next();
 });
 

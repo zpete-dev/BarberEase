@@ -19,7 +19,8 @@ router.post('/', async (req, res) => {
         const token = jwt.sign(
             {}, // Payload is empty as you are not using any request data
             process.env.JWT_SECRET, // Secret is stored in an environment variable
-            { expiresIn: '10m' } // Token validity
+            //{ expiresIn: '10m' } // Token validity
+            { expiresIn: '1h' } // Token validity
         );
 
         res.json({ success : true, token : token});

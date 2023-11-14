@@ -49,7 +49,7 @@ mongoose.connect('mongodb://localhost:27017/barberease', {
 app.use('/api/bookings', bookingsRoutes);
 app.use('/api/barbers', barbersRoutes);
 app.use('/api/sessions', sessionsRoutes);
-//app.use('/api/users', usersRoutes); This route is intentionally not always on
+app.use('/api/users', usersRoutes); //This route is intentionally not always on
 
 // Root route
 app.get('/', (req, res) => {

@@ -5,6 +5,8 @@ const Barber = require('../models/Barber');
 const sanitize = require('mongo-sanitize');
 const helmet = require('helmet');
 const router = express.Router();
+/* const CryptoJS = require('crypto-js');
+const secretKey = process.env.ENCRYPTION_SECRET_KEY; */
 
 //Middleware Imports
 const { auth, validSession } = require('../middleware/auth');
@@ -44,9 +46,20 @@ const validateBookingId = [
 router.get('/', auth, async (req, res) => {
     try {
         const bookings = await Booking.find();
+/*         const decryptedBookings = bookings.map(booking => {
+            console.log(CryptoJS.AES.decrypt(booking.customerEmail, secretKey).toString(CryptoJS.enc.Utf8));
+            console.log(CryptoJS.AES.decrypt(booking.customerPhone, secretKey).toString(CryptoJS.enc.Utf8));
+            return {
+                ...booking.toObject(),
+                customerEmail: CryptoJS.AES.decrypt(booking.customerEmail, secretKey).toString(CryptoJS.enc.Utf8),
+                customerPhone: CryptoJS.AES.decrypt(booking.customerPhone, secretKey).toString(CryptoJS.enc.Utf8)
+            };
+        }); */
         res.json({ success: true, bookings: bookings });
     } catch (err) {
-        res.status(500).json({ msg: 'Server Error' });
+        console.log(err);
+        res.status(500).json(err);
+        //res.status(500).json({ msg: 'Server Error' });
     }
 });
 
@@ -70,7 +83,7 @@ router.post('/', validateBooking, validSession, async (req, res) => {
     }
 
     try {
-        successState = true;
+        var successState = true;
 
         // Standardizing the date
         const standardizedDate = new Date(date);
