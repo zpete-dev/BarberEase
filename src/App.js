@@ -32,14 +32,16 @@ const HomePage = () => {
 };
 
 function App() {
+    const [sessionToken, setSessionToken] = useState(null);
+
     return (
         <Router>
             <div className="App">
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/book-appointment" element={<BarberSelection />} />
-                    <Route path="/booking-form" element={<BookingForm />} />
+                    <Route path="/book-appointment" element={<BarberSelection sessionToken={sessionToken} setSessionToken={setSessionToken} />} />
+                    <Route path="/booking-form" element={<BookingForm sessionToken={sessionToken} setSessionToken={setSessionToken} />} />
                 </Routes>
             </div>
         </Router>

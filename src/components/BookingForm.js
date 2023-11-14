@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation hook
 import axios from 'axios';
+import Popup from './Popup';
 
-const BookingForm = () => {
+const BookingForm = ({ sessionToken, setSessionToken }) => {
     const navigate = useNavigate(); // Initialize the useNavigate hook
     const location = useLocation(); // Access the location object
-    const { selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName } = location.state || {};
-    const [sessionToken, setSessionToken] = useState(location.state?.sessionToken || null);
+    const { selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedServiceName } = location.state || {};
     const [selectedDateString, setSelectedDateString] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+    const [timeoutId, setTimeoutId] = useState();
 
     useEffect(() => {
+        //let timeoutId;
+        if (!location.state) {
+            setSessionToken(null);
+            navigate('/', { state: { bookingConfirmed: false } });
+            return;
+        }
         if (selectedDate && selectedDate instanceof Date) {
             const dateString = selectedDate.toLocaleDateString(undefined, {
                 year: 'numeric',
@@ -18,7 +26,14 @@ const BookingForm = () => {
             });
             setSelectedDateString(dateString);
         }
-    }, [selectedBarberName, selectedBarber, selectedDate, selectedSlot, selectedService, selectedServiceName, sessionToken]);
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            console.log("Cleaning up BookingForm Component.");
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -45,32 +60,44 @@ const BookingForm = () => {
             slotTime: selectedSlot,
             service: selectedServiceName
         };
-        // Define the base URL for your backend server
-        const BASE_URL = 'https://localhost:5000/api';
 
         try {
-            const response = await axios.post(`${BASE_URL}/bookings`, bookingData, {
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/bookings`, bookingData, {
                 headers: {
                     'x-api-key': `${process.env.REACT_APP_API_KEY}`,
                     'x-auth-token': sessionToken
                 }
             });
+
             // Check for success response and navigate with state
             if (response.data.success) {
-                //console.log(`Booking created for ${bookingData.customerName} on ${bookingData.date.split('T')[0]} at ${bookingData.slotTime}.`);
-                //console.log("Expiring token.");
-                //setSessionToken(null);
+                console.log("Expiring token.");
+                setSessionToken(null);
                 navigate('/', { state: { bookingConfirmed: true } });
             } else {
                 // Handle unsuccessful booking attempt
             }
         } catch (error) {
-            // Handle error (network error, server error, etc.)
+            if (error.response && error.response.status === 401) {
+                setShowPopup(true);
+                // Set a timeout to redirect after 5 seconds
+                if (!timeoutId) {
+                    const newTimeoutId = setTimeout(() => {
+                        setShowPopup(false);
+                        navigate('/');
+                    }, 5000);
+                    setTimeoutId(newTimeoutId); // Update the timeoutId state
+                }
+            } else {
+                // Handle other types of errors (network error, server error, etc.)
+                console.error("Error during booking:", error.message);
+            }
         }
     };
 
     return (
         <div className="booking-layout">
+            {showPopup && <Popup message="Invalid session, redirecting to homepage" onClose={() => setShowPopup(false)} />}
             <div className="booking-info">
                 <p>Booking your <strong>{selectedServiceName}</strong> with <strong>{selectedBarberName}</strong> on <strong>{selectedDateString}</strong> at <strong>{selectedSlot}</strong>.</p>
             </div>

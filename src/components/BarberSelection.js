@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import axios from 'axios';
 
-export const BarberSelection = () => {
+export const BarberSelection = ({ sessionToken, setSessionToken }) => {
     const [barbers, setBarbers] = useState([]);
     const [selectedBarber, setSelectedBarber] = useState(null);
     const [selectedBarberName, setSelectedBarberName] = useState(null);
@@ -24,27 +24,31 @@ export const BarberSelection = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setSessionToken(null);
         // Fetch barbers from the backend (assuming an endpoint exists for this)
+        console.log("1234");
         async function fetchBarbers() {
-            const response = await fetch('https://localhost:5000/api/barbers', {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers`, {
                 headers: {
                     'x-api-key': `${process.env.REACT_APP_API_KEY}`
                 }
             });
             const data = await response.json();
-            //console.log(data);
             if (data.success && data.barbers) {
                 setBarbers(data.barbers);
             }
         }
         fetchBarbers();
-    }, []);
+        return () => {
+            console.log("Cleaning up BarberSelection Component.");
+        };
+    }, [setSessionToken]);
 
     const handleBarberSelection = async (event) => {
         const barberId = event.target.value;
         if (barberId) {
             // Fetch barber's availability (assuming an endpoint exists for this)
-            const response = await fetch(`https://localhost:5000/api/barbers/${barberId}/availability`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers/${barberId}/availability`, {
                 headers: {
                     'x-api-key': `${process.env.REACT_APP_API_KEY}`
                 }
@@ -65,7 +69,6 @@ export const BarberSelection = () => {
     const handleDateSelection = (date) => {
         setSelectedSlot(null); // Add logic to not clear selected slot when clicking the same date
         setSelectedDate(date);
-
         //Finding availability keeping everything in America/Denver Time Zone
         const availabilityForTheDay = availability.find(avail =>
             new Date(avail.date).toISOString().split('T')[0] ===
@@ -92,9 +95,8 @@ export const BarberSelection = () => {
         // Check if the service was found
         if (serviceObject) {
             // If found, navigate to the BookingForm page with state including the service name
-            const BASE_URL = 'https://localhost:5000/api';
             try {
-                const response = await axios.post(`${BASE_URL}/sessions`, {}, {
+                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/sessions`, {}, {
                     headers: {
                         'x-api-key': `${process.env.REACT_APP_API_KEY}`
                     }
@@ -102,16 +104,14 @@ export const BarberSelection = () => {
                 const data = response.data;
                 // Check for success response and navigate with state
                 if (data.success) {
-                    const sessionToken = data.token;
+                    await setSessionToken(data.token);
                     navigate('/booking-form', {
                         state: {
                             selectedBarberName,
                             selectedBarber,
                             selectedDate,
                             selectedSlot,
-                            selectedService: serviceObject.id, // This is the id of the service
-                            selectedServiceName: serviceObject.name, // This is the name of the service
-                            sessionToken
+                            selectedServiceName: serviceObject.name // This is the name of the service
                         }
                     });
                 } else {
