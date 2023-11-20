@@ -4,6 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import { DateTime } from 'luxon';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import axios from 'axios';
+import '../App.css'; // Adjust the path as necessary
 
 export const BarberSelection = ({ sessionToken, setSessionToken }) => {
     const [barbers, setBarbers] = useState([]);
@@ -26,16 +27,22 @@ export const BarberSelection = ({ sessionToken, setSessionToken }) => {
     useEffect(() => {
         setSessionToken(null);
         // Fetch barbers from the backend (assuming an endpoint exists for this)
-        console.log("1234");
+        //console.log("1234");
+
         async function fetchBarbers() {
-            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers`, {
-                headers: {
-                    'x-api-key': `${process.env.REACT_APP_API_KEY}`
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers`, {
+                    headers: {
+                        'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                    }
+                });
+                const data = await response.json();
+                if (data.success && data.barbers) {
+                    setBarbers(data.barbers);
                 }
-            });
-            const data = await response.json();
-            if (data.success && data.barbers) {
-                setBarbers(data.barbers);
+            } catch (error) {
+                // Handle error (network error, server error, etc.)
+                console.error('Error fetching barbers from backend.');
             }
         }
         fetchBarbers();
@@ -199,7 +206,7 @@ export const BarberSelection = ({ sessionToken, setSessionToken }) => {
                 <div className="confirmation-container">
                     <p>You have selected: {selectedSlot}</p>
                     {/* Add a confirm booking button or something similar */}
-                    <button onClick={() => confirmBooking()}>Confirm Booking</button>
+                    <button className="btn-red" onClick={() => confirmBooking()} >Confirm Booking</button>
                 </div>
             )}
         </div>
