@@ -2,6 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-red {
-  @apply bg-red-300 text-white py-2 px-4 rounded;
-}
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');

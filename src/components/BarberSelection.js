@@ -27,7 +27,6 @@ export const BarberSelection = ({ sessionToken, setSessionToken }) => {
     useEffect(() => {
         setSessionToken(null);
         // Fetch barbers from the backend (assuming an endpoint exists for this)
-        //console.log("1234");
 
         async function fetchBarbers() {
             try {
