@@ -74,9 +74,9 @@ const ServiceAndProviderForm = ({ nextStep }) => {
             <button
                 className={`${hideButton} ${buttonStyle} w-full flex flex-row p-2 rounded mb-2`}
                 onClick={() => toggleService(service._id)}>
-                <div className='flex flex-col w-2/3 justify-start truncate hover:overflow-visible hover:whitespace-normal'>
-                    <p className='font-bold text-left'>{name}</p>
-                    <p className='text-sm text-left'>{description}</p>
+                <div className='flex flex-col w-2/3 justify-start '>
+                    <p className='font-bold text-left truncate hover:overflow-visible hover:whitespace-normal'>{name}</p>
+                    <p className='text-sm text-left truncate hover:overflow-visible hover:whitespace-normal'>{description}</p>
                 </div>
                 <div className='flex flex-col w-1/3'>
                     <p className='flex text-base self-center'>{price}</p>
@@ -104,11 +104,26 @@ const ServiceAndProviderForm = ({ nextStep }) => {
         );
     };
 
+    // Function to parse price string and return numeric value
+    const parsePrice = (priceString) => {
+        return Number(priceString.replace(/[^0-9.-]+/g, ""));
+    };
+
+    // Function to calculate subtotal
+    const calculateSubtotal = () => {
+        return selectedServices.reduce((total, serviceId) => {
+            const service = serviceCategories.flatMap(category => category.services).find(service => service._id === serviceId);
+            return total + parsePrice(service?.price || '0');
+        }, 0);
+    };
+
+    const subtotal = calculateSubtotal();
+
     return (
-        <div className='grid grid-cols-2 grid-rows-2 space-y-6 gap-2 w-full'>
+        <div className='grid grid-cols-2 grid-rows-2 gap-2 w-full'>
             {/* Select Services Section*/}
             <div className='order-1 w-full'>
-                <h2 className='text-2xl text-center font-bold underline'>Select Service(s)</h2>
+                <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
                 {/* Filter Bar with Buttons*/}
                 <div className='flex flex-wrap rounded justify-around py-1 px-1 bg-licorice'>
                     <button
@@ -126,7 +141,7 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                     ))}
                 </div>
 
-                <div className='border w-full border-gray-300 rounded p-4'>
+                <div className='border w-full border-gray-300 rounded p-2'>
                     {serviceCategories.map(category => (
                         <div key={category._id} className={`${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? '' : 'hidden'}`}>
                             <h3 className='text-lg font-bold'>{category.name}</h3>
@@ -146,12 +161,12 @@ const ServiceAndProviderForm = ({ nextStep }) => {
 
             {/* Select Providers Section*/}
             <div className='order-3 w-full h-fit'>
-                <h2 className='text-2xl font-bold underline text-center'>Select Provider(s)</h2>
+                <h2 className='text-2xl font-bold underline text-center mb-3'>Select Provider(s)</h2>
                 <div className='flex flex-col border w-full border-gray-300 rounded p-4'>
                     <h3 className='text-xl font-bold underline text-center mb-2'>Provider(s)</h3>
-                    <div className='flex flex-wrap gap-2'>
+                    <div className='flex flex-wrap gap-2 justify-around'>
                         {providers.map(provider => (
-                            <div key={provider._id} className=''>
+                            <div key={provider._id} className='mb-2'>
                                 <ProviderButton
                                     key={provider._id}
                                     provider={provider}
@@ -166,18 +181,22 @@ const ServiceAndProviderForm = ({ nextStep }) => {
             </div>
 
             {/* Summary Section*/}
-            <div className='order-2 border-4 border-gray-800 rounded-[28px] p-4 row-span-2 h-fit w-full'>
-                <h2 className='text-2xl text-center font-bold underline mb-10'>Summary</h2>
-                <div className='flex flex-col items-center'>
-                    <h3 className='text-lg font-bold mb-2 text-center'>Service(s):</h3>
-                    <hr className='flex flex-row border-gray-400 mb-3 w-2/3' />
+            <div className='flex flex-col mt-8 order-2 border-4 border-gray-800 rounded-[28px] p-4 row-span-2 items-center h-fit w-full'>
+                <h2 className='text-2xl font-bold underline mb-10'>Summary</h2>
+                <div className='flex flex-col items-center w-full'>
+                    <h3 className='text-lg font-bold mb-2'>Service(s):</h3>
+                    <hr className='flex flex-row border-gray-400 mb-1 w-2/3' />
                     {selectedServices.length > 0 ? (
                         <ul className='w-full'>
                             {selectedServices.map(serviceId => (
-                                <li key={serviceId} className="flex mb-2 justify-between">
-                                    <span className='truncate pr-2'>+ {getServiceNameById(serviceId)}</span>
-                                    <span className='whitespace-nowrap'>---</span>
-                                    <span className='pl-2 text-end'>{getServicePriceById(serviceId)}</span>
+                                <li key={serviceId} className="flex mb-0.5 justify-between">
+                                    <span className='overflow-wrap pr-2'>+ {getServiceNameById(serviceId)}</span>
+                                    <span className='flex flex-row pl-2'>
+                                        <p className='mr-2 whitespace-nowrap self-center'>{"---"}
+                                        </p>
+                                        <p className='ml-2 self-center'>{getServicePriceById(serviceId)}
+                                        </p>
+                                    </span>
                                 </li>
                             ))}
                         </ul>
@@ -186,29 +205,52 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                     )}
                 </div>
 
-                <div className='flex flex-col items-start mt-8'>
-                    <h3 className='text-lg font-bold mb-2 text-center self-center'>Provider(s)</h3>
-                    <hr className='flex flex-row border-gray-400 mb-3 w-2/3 self-center' />
-                    {selectedProviders.length > 0 ? (
-                        <ul>
-                            {selectedProviders.map(providerId => (
-                                <li key={providerId} className="mb-2">+ {getProviderNameById(providerId)}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="mb-2">No providers selected</p>
-                    )}
-                </div>
-
-                <div className='flex flex-col items-start mt-12'>
-                    <hr className='flex flex-row border-gray-400 mb-3 w-1/3 self-end' />
-                    <div className='flex justify-between mb-4 w-full'>
-                        <p className='pl-4'>Subtotal:</p>
-                        <p className='pr-4'>$100</p>
+                <div className='flex flex-col items-center mt-8 w-full'>
+                    <h3 className='text-lg font-bold mb-2'>Provider(s)</h3>
+                    <hr className='flex flex-row border-gray-400 mb-1 w-2/3' />
+                    <div className='flex flex-col items-start w-full'>
+                        {selectedProviders.length > 0 ? (
+                            <ul>
+                                {selectedProviders.map(providerId => (
+                                    <li key={providerId} className="mb-0.5 w-full justify-start">+ {getProviderNameById(providerId)}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="mb-2 flex-wrap">No providers selected</p>
+                        )}
                     </div>
                 </div>
 
-                <button onClick={nextStep} className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'>Next</button>
+                <div className='flex flex-col items-start mt-12 w-full'>
+                    <hr className='flex flex-row border-gray-400 mb-2 w-1/3 self-end' />
+                    <div className='flex justify-between mb-4 w-full'>
+                        <p className='pl-2 truncate'>Subtotal:</p>
+                        <p className='pr-2 truncate'>${subtotal.toFixed(2)}</p>
+                    </div>
+                </div>
+
+                {/* Validation Message */}
+                {selectedServices.length === 0 ? (
+                    <p className="text-red-500 text-sm mt-2">
+                        {selectedServices.length === 0 && "Select at least one service. "}
+                    </p>
+                ) : null}
+
+                {selectedProviders.length === 0 ? (
+                    <p className="text-red-500 text-sm mt-2">
+                        {selectedProviders.length === 0 && "Select at least one provider."}
+                    </p>
+                ) : null}
+
+                {/* Continue Button */}
+                <button
+                    onClick={nextStep}
+                    disabled={selectedServices.length === 0 || selectedProviders.length === 0}
+                    className={`px-4 py-1 mt-2 text-white rounded 
+                    ${selectedServices.length > 0 && selectedProviders.length > 0 ? 'bg-barberRed hover:bg-hoverRed ' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}
+                >
+                    Continue
+                </button>
             </div>
         </div>
     );
