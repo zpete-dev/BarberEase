@@ -120,12 +120,12 @@ const ServiceAndProviderForm = ({ nextStep }) => {
     const subtotal = calculateSubtotal();
 
     return (
-        <div className='grid grid-cols-2 grid-rows-2 gap-2 w-full'>
+        <div className='flex flex-col w-full'>
             {/* Select Services Section*/}
-            <div className='order-1 w-full'>
+            <div className='w-full'>
                 <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
                 {/* Filter Bar with Buttons*/}
-                <div className='flex flex-wrap rounded justify-around py-1 px-1 bg-licorice'>
+                <div className='flex flex-wrap rounded-[28px] justify-around py-1 px-1 bg-licorice mb-2'>
                     <button
                         className={`rounded-full px-1 py-1 ${currentFilter === "all" ? 'bg-carrotOrange text-black' : 'text-white'}`}
                         onClick={() => setCurrentFilter("all")}>
@@ -160,7 +160,7 @@ const ServiceAndProviderForm = ({ nextStep }) => {
             </div>
 
             {/* Select Providers Section*/}
-            <div className='order-3 w-full h-fit'>
+            <div className='w-full h-fit'>
                 <h2 className='text-2xl font-bold underline text-center mb-3'>Select Provider(s)</h2>
                 <div className='flex flex-col border w-full border-gray-300 rounded p-4'>
                     <h3 className='text-xl font-bold underline text-center mb-2'>Provider(s)</h3>
@@ -180,8 +180,44 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                 </div>
             </div>
 
-            {/* Summary Section*/}
-            <div className='flex flex-col mt-8 order-2 border-4 border-gray-800 rounded-[28px] p-4 row-span-2 items-center h-fit w-full'>
+            <div className='fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center justify-between px-1 border-t-2 border-black'>
+                <div className='flex items-center'>
+                    {/* Back Button */}
+                    <button className='bg-licorice text-carrotOrange px-2 py-1 rounded' onClick={null}>Back</button>
+                    {/* Service and Provider Count */}
+                    <div className='text-sm ml-1'>
+                        {/* Validation Message */}
+                        {selectedServices.length === 0 ? (
+                            <p className="text-red-500">
+                                {selectedServices.length === 0 && "Select 1 or more services"}
+                            </p>
+                        ) : <p className='text-black'>Service(s) - {selectedServices.length} Selected</p>}
+
+                        {selectedProviders.length === 0 ? (
+                            <p className="text-red-500">
+                                {selectedProviders.length === 0 && "Select 1 or more providers"}
+                            </p>
+                        ) : <p className='text-black'>Provider(s) - {selectedProviders.length} Selected</p>}
+                    </div>
+                </div>
+
+                <div className='flex items-center'>
+                    {/* Subtotal Display */}
+                    <p className='text-black font-bold mr-1'>Subtotal: ${subtotal.toFixed(2)}</p>
+
+                    {/* Continue Button */}
+                    <button
+                        onClick={nextStep}
+                        disabled={selectedServices.length === 0 || selectedProviders.length === 0}
+                        className={`px-2 py-1 rounded text-white
+                    ${selectedServices.length > 0 && selectedProviders.length > 0 ? 'bg-barberRed hover:bg-hoverRed' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}
+                    >
+                        Continue</button>
+                </div>
+            </div>
+
+            {/* Summary Section
+            <div className='flex flex-col mt-8 border-4 border-gray-800 rounded-[28px] p-4 row-span-2 items-center h-fit w-full'>
                 <h2 className='text-2xl font-bold underline mb-10'>Summary</h2>
                 <div className='flex flex-col items-center w-full'>
                     <h3 className='text-lg font-bold mb-2'>Service(s):</h3>
@@ -220,38 +256,7 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                         )}
                     </div>
                 </div>
-
-                <div className='flex flex-col items-start mt-12 w-full'>
-                    <hr className='flex flex-row border-gray-400 mb-2 w-1/3 self-end' />
-                    <div className='flex justify-between mb-4 w-full'>
-                        <p className='pl-2 truncate'>Subtotal:</p>
-                        <p className='pr-2 truncate'>${subtotal.toFixed(2)}</p>
-                    </div>
-                </div>
-
-                {/* Validation Message */}
-                {selectedServices.length === 0 ? (
-                    <p className="text-red-500 text-sm mt-2">
-                        {selectedServices.length === 0 && "Select at least one service. "}
-                    </p>
-                ) : null}
-
-                {selectedProviders.length === 0 ? (
-                    <p className="text-red-500 text-sm mt-2">
-                        {selectedProviders.length === 0 && "Select at least one provider."}
-                    </p>
-                ) : null}
-
-                {/* Continue Button */}
-                <button
-                    onClick={nextStep}
-                    disabled={selectedServices.length === 0 || selectedProviders.length === 0}
-                    className={`px-4 py-1 mt-2 text-white rounded 
-                    ${selectedServices.length > 0 && selectedProviders.length > 0 ? 'bg-barberRed hover:bg-hoverRed ' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}
-                >
-                    Continue
-                </button>
-            </div>
+            </div>*/}
         </div>
     );
 };
