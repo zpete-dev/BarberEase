@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+//import 'react-calendar/dist/Calendar.css';
 import '../CalendarStyles.css';
 
 const DateAndTimeForm = ({ nextStep, prevStep }) => {
     const [date, setDate] = useState(new Date());
-    const times = ["10:00 am", "11:00 am", "12:00 pm", "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm"];
     const [selectedTime, setSelectedTime] = useState(null);
+
+
+
+    const times = ["10:00 am", "11:00 am", "12:00 pm", "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm"];
 
     const handleDateChange = (newDate) => {
         setDate(newDate);
-        // Reset the selected time when the date changes
         setSelectedTime(null);
     };
 
@@ -27,6 +29,8 @@ const DateAndTimeForm = ({ nextStep, prevStep }) => {
                 <Calendar
                     onChange={handleDateChange}
                     value={date}
+                    showNeighboringMonth={false}
+                    maxDetail="month"
                 />
             </div>
 
@@ -35,9 +39,8 @@ const DateAndTimeForm = ({ nextStep, prevStep }) => {
                 {times.map(time => (
                     <button
                         key={time}
-                        className={`p-2 border rounded ${selectedTime === time ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                        onClick={() => handleTimeSelect(time)}
-                    >
+                        className={`p-2 border rounded ${selectedTime === time ? 'bg-licorice text-white' : 'bg-carrotOrange text-black'}`}
+                        onClick={() => handleTimeSelect(time)}>
                         {time}
                     </button>
                 ))}

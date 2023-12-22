@@ -1,16 +1,117 @@
 .react-calendar {
-    width: 100%;
+    @apply w-fit h-fit border;
+    /*width: 100%;
     height: 100%;
-    border: none; /* Optional: removes the default border */
-}
-
-.react-calendar__navigation button {
-    color: black; /* Adjust the color of the navigation buttons */
+    border: none;
+    width: 350px;
+    max-width: 100%;
+    background: white;
+    border: 1px solid #a0a096;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.125em;*/
+  }
+  
+  /*.react-calendar,
+  .react-calendar *,
+  .react-calendar *:before,
+  .react-calendar *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }*/
+  
+  /*.react-calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+  }*/
+  
+  .react-calendar button:enabled:hover {
+    cursor: pointer;
+  }
+  
+  .react-calendar__navigation {
+    display: flex;
+    height: 44px;
+    margin-bottom: 1em;
+  }
+  
+  .react-calendar__navigation button {
+    @apply text-licorice min-w-[44px];
+    /*color: black;
     min-width: 44px;
     background: none;
-    font-size: 16px; /* Adjust the font size if necessary */
-}
+    font-size: 16px;*/
+  }
+  
+  .react-calendar__navigation__label {
+    @apply pointer-events-none;
+  }
 
-.react-calendar__month-view__days__day {
-    padding: 0.5em; /* Adjust the padding for day cells */
-}
+  .react-calendar__navigation__arrow {
+    @apply border-2 hover:bg-licorice hover:text-white mx-10 my-1 rounded-md border-licorice text-lg font-bold;
+  }
+
+  .react-calendar__navigation button:disabled {
+    background-color: #f0f0f0;
+  }
+  
+  .react-calendar__navigation__prev2-button {
+    @apply hidden;
+  }
+  
+  .react-calendar__navigation__next2-button {
+    @apply hidden;
+  }
+
+  .react-calendar__month-view__weekdays {
+    @apply text-center uppercase font-bold text-xs;
+  }
+  
+  .react-calendar__month-view__weekdays__weekday {
+    @apply p-0.5;
+  }
+
+  .react-calendar__month-view__weekdays__weekday abbr{
+    @apply no-underline;
+  }
+
+  .react-calendar__month-view__days__day--neighboringMonth {
+    @apply text-green-700;
+  }
+  
+  .react-calendar__tile {
+    @apply py-[10px] px-[6.6667px] text-center text-sm bg-white;
+    /*max-width: 100%;
+    padding: 10px 6.6667px;
+    background: none;
+    text-align: center;
+    line-height: 16px;
+    font: inherit;
+    font-size: 0.833em;*/
+  }
+  
+  .react-calendar__tile:disabled {
+    background-color: #f0f0f0;
+  }
+  
+  .react-calendar__tile:enabled:hover {
+    @apply bg-slate-400;
+  }
+  
+  .react-calendar__tile--hasActive {
+    background: #76baff;
+  }
+  
+  .react-calendar__tile--hasActive:enabled:hover {
+    background: #a9d4ff;
+  }
+  
+  .react-calendar__tile--active {
+    @apply bg-licorice text-white;
+  }
+  
+  .react-calendar__tile--active:enabled:hover {
+    @apply bg-licorice;
+  }
+  
