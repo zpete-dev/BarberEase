@@ -33,12 +33,12 @@ const HomePage = () => {
 };
 
 function App() {
-    const [sessionToken, setSessionToken] = useState(null);
+    //const [sessionToken, setSessionToken] = useState(null);
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/book-appointment" element={<BookAppointment />} />
+                <Route path="/book-appointment" element={<BookAppointment /*sessionToken={sessionToken} setSessionToken={setSessionToken} *//>} />
             </Routes>
         </Router>
     );

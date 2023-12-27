@@ -14,7 +14,7 @@ const apiKeyAuth = require('../middleware/apiKeyAuth');
 // Apply Helmet to all routes in this router for security
 router.use(helmet());
 // Apply the rate limiting middleware to all routes
-router.use(apiLimiter(25));// max of 25 request every 15 minutes
+router.use(apiLimiter(100));// max of 100 request every 15 minutes
 // All routes require API Key
 router.use(apiKeyAuth);
 

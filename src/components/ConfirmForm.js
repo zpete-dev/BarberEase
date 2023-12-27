@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConfirmForm = ({ prevStep }) => {
+const ConfirmForm = ({ prevStep, sessionToken, selectedServices, selectedProviders }) => {
     return (
         <div>
             <h2>Confirm Details</h2>

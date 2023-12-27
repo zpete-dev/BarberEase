@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { serviceCategories, providers } from '../data/data';
+import React, { useState, useEffect } from 'react';
+import { serviceCategories } from '../data/data';
 
-const ServiceAndProviderForm = ({ nextStep }) => {
+const ServiceAndProviderForm = ({ nextStep, providers, selectedServices, setSelectedServices, selectedProviders, setSelectedProviders }) => {
 
-    const [selectedServices, setSelectedServices] = useState([]);
-    const [selectedProviders, setSelectedProviders] = useState([]);
     const [currentFilter, setCurrentFilter] = useState("all");
 
     const toggleService = (serviceId) => {
@@ -16,13 +14,13 @@ const ServiceAndProviderForm = ({ nextStep }) => {
     };
 
     const toggleProvider = (providerId) => {
-        if (providerId === "0007") { // "0007" is the _id of "Any Provider"
-            setSelectedProviders(prevSelected => prevSelected.includes(providerId) ? [] : ["0007"]);
+        if (providerId === "Any") {
+            setSelectedProviders(prevSelected => prevSelected.includes(providerId) ? [] : ["Any"]);
         } else {
             // If selecting any other provider, unselect "Any Provider"
             setSelectedProviders(prevSelected => {
-                const isAnyProviderSelected = prevSelected.includes("0007");
-                const newSelection = prevSelected.filter(id => id !== "0007" && id !== providerId);
+                const isAnyProviderSelected = prevSelected.includes("Any");
+                const newSelection = prevSelected.filter(id => id !== "Any" && id !== providerId);
                 if (isAnyProviderSelected || !prevSelected.includes(providerId)) {
                     newSelection.push(providerId);
                 }
@@ -140,7 +138,7 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                         </button>
                     ))}
                 </div>
-
+                {/* Service Select Buttons*/}
                 <div className='border w-full border-gray-300 rounded p-2'>
                     {serviceCategories.map(category => (
                         <div key={category._id} className={`${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? '' : 'hidden'}`}>
@@ -186,18 +184,20 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                     <button className='bg-licorice text-carrotOrange px-2 py-1 rounded' onClick={null}>Back</button>
                     {/* Service and Provider Count */}
                     <div className='text-sm ml-1'>
-                        {/* Validation Message */}
+                        {/* Validation Messages */}
                         {selectedServices.length === 0 ? (
                             <p className="text-red-500">
-                                {selectedServices.length === 0 && "Select 1 or more services"}
+                                {"Select 1 or more services"}
                             </p>
                         ) : <p className='text-black'>Service(s) - {selectedServices.length} Selected</p>}
-
                         {selectedProviders.length === 0 ? (
                             <p className="text-red-500">
-                                {selectedProviders.length === 0 && "Select 1 or more providers"}
+                                {"Select 1 or more providers"}
                             </p>
-                        ) : <p className='text-black'>Provider(s) - {selectedProviders.length} Selected</p>}
+                        ) : selectedProviders.includes("Any") ?
+                            <p className='text-black'>Provider(s) - Any Provider Available</p> :
+                            <p className='text-black'>Provider(s) - {selectedProviders.length} Selected</p>
+                        }
                     </div>
                 </div>
 
@@ -210,53 +210,10 @@ const ServiceAndProviderForm = ({ nextStep }) => {
                         onClick={nextStep}
                         disabled={selectedServices.length === 0 || selectedProviders.length === 0}
                         className={`px-2 py-1 rounded text-white
-                    ${selectedServices.length > 0 && selectedProviders.length > 0 ? 'bg-barberRed hover:bg-hoverRed' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}
-                    >
+                    ${selectedServices.length > 0 && selectedProviders.length > 0 ? 'bg-barberRed hover:bg-hoverRed' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}>
                         Continue</button>
                 </div>
             </div>
-
-            {/* Summary Section
-            <div className='flex flex-col mt-8 border-4 border-gray-800 rounded-[28px] p-4 row-span-2 items-center h-fit w-full'>
-                <h2 className='text-2xl font-bold underline mb-10'>Summary</h2>
-                <div className='flex flex-col items-center w-full'>
-                    <h3 className='text-lg font-bold mb-2'>Service(s):</h3>
-                    <hr className='flex flex-row border-gray-400 mb-1 w-2/3' />
-                    {selectedServices.length > 0 ? (
-                        <ul className='w-full'>
-                            {selectedServices.map(serviceId => (
-                                <li key={serviceId} className="flex mb-0.5 justify-between">
-                                    <span className='overflow-wrap pr-2'>+ {getServiceNameById(serviceId)}</span>
-                                    <span className='flex flex-row pl-2'>
-                                        <p className='mr-2 whitespace-nowrap self-center'>{"---"}
-                                        </p>
-                                        <p className='ml-2 self-center'>{getServicePriceById(serviceId)}
-                                        </p>
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="mb-2">No services selected</p>
-                    )}
-                </div>
-
-                <div className='flex flex-col items-center mt-8 w-full'>
-                    <h3 className='text-lg font-bold mb-2'>Provider(s)</h3>
-                    <hr className='flex flex-row border-gray-400 mb-1 w-2/3' />
-                    <div className='flex flex-col items-start w-full'>
-                        {selectedProviders.length > 0 ? (
-                            <ul>
-                                {selectedProviders.map(providerId => (
-                                    <li key={providerId} className="mb-0.5 w-full justify-start">+ {getProviderNameById(providerId)}</li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p className="mb-2 flex-wrap">No providers selected</p>
-                        )}
-                    </div>
-                </div>
-            </div>*/}
         </div>
     );
 };

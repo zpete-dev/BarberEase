@@ -49,19 +49,17 @@ export const serviceCategories = [
 
 export const providers = [
     {
-        _id: "0007",
+        _id: 'Any',
         name: 'Any Provider',
         profilePicture: '/images/Memphis.jpg',
         instagramLink: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60',
     },
     {
-        _id: "0008",
         name: 'Memphis',
         profilePicture: '/images/Memphis.jpg',
         instagramLink: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60',
     },
     {
-        _id: "0009",
         name: 'Emy',
         profilePicture: '/images/Emy.png',
         instagramLink: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60',
