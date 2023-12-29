@@ -4,13 +4,9 @@ import { DateTime } from 'luxon';
 
 import '../CalendarStyles.css';
 
-const DateAndTimeForm = ({ nextStep, prevStep, sessionToken, selectedServices, selectedProviders }) => {
-    const [selectedTime, setSelectedTime] = useState(null);
+const DateAndTimeForm = ({ sessionToken, selectedServices, selectedProviders, selectedTime, setSelectedTime, selectedDate, setSelectedDate }) => {
     const [availability, setAvailability] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);
-
     const [timesForSelectedDate, setTimesForSelectedDate] = useState([]);
-    const [selectedSlot, setSelectedSlot] = useState(null);
 
     //const times = ["10:00 am", "11:00 am", "12:00 pm", "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm", "5:00 pm"];
 
@@ -40,10 +36,19 @@ const DateAndTimeForm = ({ nextStep, prevStep, sessionToken, selectedServices, s
                     }
                 }
             }
-            console.log(fullAvailability);
             setAvailability(fullAvailability);
-        };
 
+            const dstOffset = (DateTime.fromJSDate(selectedDate).toJSDate().getTimezoneOffset()) / 60;
+            const selectedDateMST = DateTime.fromJSDate(selectedDate).minus({ hours: dstOffset }).toJSDate().toISOString().split('T')[0] + 'T00:00:00.000Z';
+            const availabilityForTheDay = fullAvailability[selectedDateMST];
+            if (availabilityForTheDay) {
+                // If the day exists in the barber's availability
+                setTimesForSelectedDate(availabilityForTheDay);
+            } else {
+                // If the day doesn't exist in the barber's availability, assume full availability (e.g., 9 AM - 3 PM)
+                setTimesForSelectedDate(['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM']);
+            }
+        };
         if (selectedProviders.length > 0) {
             fetchAvailability();
         }
@@ -55,16 +60,19 @@ const DateAndTimeForm = ({ nextStep, prevStep, sessionToken, selectedServices, s
     const handleDateChange = (newDate) => {
         setSelectedTime(null);
         setSelectedDate(newDate);
-
-        const dstOffset = (DateTime.fromJSDate(newDate).toJSDate().getTimezoneOffset())/60;
+        const dstOffset = (DateTime.fromJSDate(newDate).toJSDate().getTimezoneOffset()) / 60;
         const selectedDateMST = DateTime.fromJSDate(newDate).minus({ hours: dstOffset }).toJSDate().toISOString().split('T')[0] + 'T00:00:00.000Z';
+        console.log(newDate);
+        
 
-        const availabilityForTheDay = availability[selectedDateMST];
-        //console.log(availabilityForTheDay);
+        setAvailabilityForTheDay(selectedDateMST);
+    };
+
+    const setAvailabilityForTheDay = (availabilityDate) => {
+        const availabilityForTheDay = availability[availabilityDate];
         if (availabilityForTheDay) {
             // If the day exists in the barber's availability
             setTimesForSelectedDate(availabilityForTheDay);
-
         } else {
             // If the day doesn't exist in the barber's availability, assume full availability (e.g., 9 AM - 3 PM)
             setTimesForSelectedDate(['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM']);
@@ -117,20 +125,7 @@ const DateAndTimeForm = ({ nextStep, prevStep, sessionToken, selectedServices, s
                 ) :
                     <h3>Please select a date.</h3>
                 }
-
-                {/*timesForSelectedDate.map(time => (
-                    <button
-                        key={time}
-                        className={`p-2 border rounded ${selectedTime === time ? 'bg-licorice text-white' : 'bg-carrotOrange text-black'}`}
-                        onClick={() => handleTimeSelect(time)}>
-                        {time}
-                    </button>
-                ))*/}
             </div>
-
-            {/* Navigation Buttons */}
-            <button onClick={prevStep} className='mr-2'>Back</button>
-            <button onClick={nextStep} disabled={!selectedTime} className='ml-2'>Next</button>
         </div>
     );
 };

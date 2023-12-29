@@ -1,16 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { serviceCategories } from '../data/data';
 
-const ServiceAndProviderForm = ({ nextStep, providers, selectedServices, setSelectedServices, selectedProviders, setSelectedProviders }) => {
+const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServices, selectedProviders, setSelectedProviders, setSubtotal }) => {
 
     const [currentFilter, setCurrentFilter] = useState("all");
 
     const toggleService = (serviceId) => {
-        setSelectedServices(prevSelected =>
-            prevSelected.includes(serviceId)
-                ? prevSelected.filter(id => id !== serviceId)
-                : [...prevSelected, serviceId]
-        );
+        //Set the list of Selected Services
+        const currentServices = selectedServices.includes(serviceId)
+            ? selectedServices.filter(id => id !== serviceId)
+            : [...selectedServices, serviceId];
+        setSelectedServices(currentServices);
+
+
+        //Calculate Subtotal
+        let mySubtotal = 0;
+        if (currentServices.length > 0) {
+            mySubtotal = currentServices.reduce((total, aServiceId) => {
+                const service = serviceCategories.flatMap(category => category.services).find(service => service._id === aServiceId);
+                return total + parsePrice(service?.price || '0');
+            }, 0);
+        }
+        setSubtotal(mySubtotal);
+    };
+
+    // Function to parse price string and return numeric value
+    const parsePrice = (priceString) => {
+        return Number(priceString.replace(/[^0-9.-]+/g, ""));
     };
 
     const toggleProvider = (providerId) => {
@@ -61,7 +77,7 @@ const ServiceAndProviderForm = ({ nextStep, providers, selectedServices, setSele
         return null;
     };
 
-    const ServiceButton = ({ service, toggleService, isSelected, categoryId }) => {
+    const ServiceButton = ({ service, isSelected, categoryId }) => {
         const { name, description, price } = service;
         const buttonStyle = isSelected ? 'bg-gray-400' : 'bg-gray-200 hover:bg-gray-300';
         const iconStyle = isSelected ? 'bg-barberRed' : 'bg-gray-500';
@@ -102,21 +118,6 @@ const ServiceAndProviderForm = ({ nextStep, providers, selectedServices, setSele
         );
     };
 
-    // Function to parse price string and return numeric value
-    const parsePrice = (priceString) => {
-        return Number(priceString.replace(/[^0-9.-]+/g, ""));
-    };
-
-    // Function to calculate subtotal
-    const calculateSubtotal = () => {
-        return selectedServices.reduce((total, serviceId) => {
-            const service = serviceCategories.flatMap(category => category.services).find(service => service._id === serviceId);
-            return total + parsePrice(service?.price || '0');
-        }, 0);
-    };
-
-    const subtotal = calculateSubtotal();
-
     return (
         <div className='flex flex-col w-full'>
             {/* Select Services Section*/}
@@ -147,7 +148,6 @@ const ServiceAndProviderForm = ({ nextStep, providers, selectedServices, setSele
                                 <ServiceButton
                                     key={service._id}
                                     service={service}
-                                    toggleService={toggleService}
                                     isSelected={selectedServices.includes(service._id)}
                                     categoryId={category._id}
                                 />
@@ -172,46 +172,8 @@ const ServiceAndProviderForm = ({ nextStep, providers, selectedServices, setSele
                                     isSelected={selectedProviders.includes(provider._id)}
                                 />
                             </div>
-
                         ))}
                     </div>
-                </div>
-            </div>
-
-            <div className='fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center justify-between px-1 border-t-2 border-black'>
-                <div className='flex items-center'>
-                    {/* Back Button */}
-                    <button className='bg-licorice text-carrotOrange px-2 py-1 rounded' onClick={null}>Back</button>
-                    {/* Service and Provider Count */}
-                    <div className='text-sm ml-1'>
-                        {/* Validation Messages */}
-                        {selectedServices.length === 0 ? (
-                            <p className="text-red-500">
-                                {"Select 1 or more services"}
-                            </p>
-                        ) : <p className='text-black'>Service(s) - {selectedServices.length} Selected</p>}
-                        {selectedProviders.length === 0 ? (
-                            <p className="text-red-500">
-                                {"Select 1 or more providers"}
-                            </p>
-                        ) : selectedProviders.includes("Any") ?
-                            <p className='text-black'>Provider(s) - Any Provider Available</p> :
-                            <p className='text-black'>Provider(s) - {selectedProviders.length} Selected</p>
-                        }
-                    </div>
-                </div>
-
-                <div className='flex items-center'>
-                    {/* Subtotal Display */}
-                    <p className='text-black font-bold mr-1'>Subtotal: ${subtotal.toFixed(2)}</p>
-
-                    {/* Continue Button */}
-                    <button
-                        onClick={nextStep}
-                        disabled={selectedServices.length === 0 || selectedProviders.length === 0}
-                        className={`px-2 py-1 rounded text-white
-                    ${selectedServices.length > 0 && selectedProviders.length > 0 ? 'bg-barberRed hover:bg-hoverRed' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}>
-                        Continue</button>
                 </div>
             </div>
         </div>
