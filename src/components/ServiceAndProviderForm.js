@@ -45,37 +45,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         }
     };
 
-    // A function to get service name by id
-    const getServiceNameById = (serviceId) => {
-        for (const category of serviceCategories) {
-            for (const service of category.services) {
-                if (service._id === serviceId) {
-                    return service.name;
-                }
-            }
-        }
-        return null;
-    };
 
-    const getServicePriceById = (serviceId) => {
-        for (const category of serviceCategories) {
-            for (const service of category.services) {
-                if (service._id === serviceId) {
-                    return service.price;
-                }
-            }
-        }
-        return null;
-    };
-
-    const getProviderNameById = (providerId) => {
-        for (const provider of providers) {
-            if (provider._id === providerId) {
-                return provider.name;
-            }
-        }
-        return null;
-    };
 
     const ServiceButton = ({ service, isSelected, categoryId }) => {
         const { name, description, price } = service;

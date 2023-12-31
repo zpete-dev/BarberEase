@@ -88,6 +88,12 @@ const BookAppointment = () => {
                 return (selectedServices.length > 0 && selectedProviders.length > 0);
         }
     }
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // This makes the scrolling smooth
+        });
+    };
 
     const nextStep = () => {
         setCurrentStep((currentStep + 1) % 3)
@@ -112,8 +118,9 @@ const BookAppointment = () => {
                     selectedTime={selectedTime} setSelectedTime={setSelectedTime}
                     selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
             case 2:
-                return <ConfirmForm prevStep={prevStep} sessionToken={sessionToken}
-                    selectedServices={selectedServices} selectedProviders={selectedProviders} />;
+                return <ConfirmForm providers={barbers} sessionToken={sessionToken}
+                    selectedServices={selectedServices} subtotal={subtotal} selectedProviders={selectedProviders}
+                    selectedDate={selectedDate} selectedTime={selectedTime} />;
             default:
                 setCurrentStep(1);
                 return <ServiceAndProviderForm providers={barbers} sessionToken={sessionToken}
@@ -153,7 +160,7 @@ const BookAppointment = () => {
                     {/* Back Button */}
                     <button className='bg-licorice text-carrotOrange px-2 py-1 rounded' onClick={prevStep}>Back</button>
                     {/* Service and Provider Count */}
-                    <div className='text-sm ml-1'>
+                    <div className={`${currentStep === 2 ? 'hidden' : ''} text-sm ml-1`}>
                         {/* Validation Messages */}
                         {selectedServices.length === 0 ? (
                             <p className="text-red-500">
@@ -173,7 +180,7 @@ const BookAppointment = () => {
 
                 <div className='flex items-center'>
                     {/* Subtotal Display */}
-                    <div className=''>
+                    <div className={`${currentStep === 2 ? 'hidden' : ''}`}>
                         <p className='text-black font-bold mr-1 text-end'>Subtotal: ${subtotal.toFixed(2)}</p>
                         <p className={`${selectedTime !== null ? 'text-black' : currentStep > 0 ? 'text-barberRed' : 'hidden'} mr-1 underline text-center text-sm`}>
                             {`${selectedTime !== null ? `${selectedDate.toLocaleString(undefined,
@@ -186,9 +193,15 @@ const BookAppointment = () => {
                     <button
                         onClick={nextStep}
                         disabled={!allowContinue()}
-                        className={`px-2 py-1 rounded text-white
+                        className={`${currentStep === 2 ? 'hidden' : ''} px-2 py-1 rounded text-white
                     ${allowContinue() ? 'bg-barberRed hover:bg-hoverRed' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}>
                         Continue</button>
+                    {/* Top of Page */}
+                    <button
+                        onClick={scrollToTop}
+                        className={`${currentStep === 2 ? '' : 'hidden'} h-10 w-10 rounded-full text-white bg-licorice`}>
+                        &#x2191; {/* Unicode for Up Arrow */}
+                    </button>
                 </div>
             </div>
         </div>
