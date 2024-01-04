@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DateTime } from 'luxon';
 
@@ -142,20 +143,20 @@ const BookAppointment = () => {
                         <div className={currentStep === 2 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Confirm</div>
 
                     </div>
-                    <div className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 rounded-bl-2xl'>
+                    <Link to="/" className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 rounded-bl-2xl'>
                         <div className='flex flex-col items-center'>
-                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px]' />
+                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px]'/>
                             <div className=''>
                                 <span className='text-white text-xl font-serif text-justify'>Barber</span>
                                 <span className='text-barberRed text-xl font-serif'>Dog</span>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
                 {renderStep()}
             </div>
 
-            <div className='fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center justify-between px-1 border-t-2 border-black'>
+            <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center ${currentStep === 2 ? 'justify-around' : 'justify-between'} px-1 border-t-2 border-black`}>
                 <div className='flex items-center'>
                     {/* Back Button */}
                     <button className='bg-licorice text-carrotOrange px-2 py-1 rounded' onClick={prevStep}>Back</button>

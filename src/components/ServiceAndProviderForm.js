@@ -76,13 +76,19 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
 
     const ProviderButton = ({ provider, toggleProvider, isSelected }) => {
         const { name, profilePicture } = provider;
-        const buttonStyle = isSelected ? 'bg-gray-400' : 'bg-gray-200 hover:bg-gray-300';
+        const buttonStyle = isSelected ? 'bg-gray-400 border-opacity-50 scale-105' :
+            'bg-gray-200 hover:bg-gray-300 border-opacity-0 hover:scale-105 hover:border-opacity-50';
 
+        console.log(provider._id);
+        console.log(selectedProviders);
         return (
             <div
-                className={`${buttonStyle} flex flex-col items-center p-2 rounded mb-2 w-full h-full place-content-between border-2 border-opacity-0 hover:border-opacity-100 hover:border-gray-800`}
+                className={`${buttonStyle} flex flex-col select-none items-center p-2 rounded mb-2 w-full h-full place-content-between border
+                transform transition duration-150 ease-in-out hover:border-gray-600`}
                 onClick={() => toggleProvider(provider._id)}>
                 <h3 className='text-sm break-words w-[60px] text-center'>{provider.name}</h3>
+                <p className={`${selectedProviders.includes(provider._id) ? '' : 'hidden'} fixed -right-2 -top-2 text-sm text-center h-6 w-6
+                bg-barberRed text-white rounded-full`}>{selectedProviders.includes(provider._id) ? '✓' : ''}</p>
                 <img src={profilePicture} alt={name} className='rounded-[50px] w-[50px] h-[50px] object-cover' />
             </div>
         );
@@ -128,7 +134,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
             </div>
 
             {/* Select Providers Section*/}
-            <div className='w-full h-fit'>
+            <div className='w-full h-fit mb-[80px]'>
                 <h2 className='text-2xl font-bold underline text-center mb-3'>Select Provider(s)</h2>
                 <div className='flex flex-col border w-full border-gray-300 rounded p-4'>
                     <h3 className='text-xl font-bold underline text-center mb-2'>Provider(s)</h3>

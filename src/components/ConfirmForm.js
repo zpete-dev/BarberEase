@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { BookingFormHelper } from './BookingFormHelper';
 
@@ -8,11 +8,53 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [isFormValid, setIsFormValid] = useState(false);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+    // Email and phone validation functions
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
+
+    const validatePhone = (phone) => {
+        const regex = /^[0-9]{10}$/; // Simple validation for 10 digit number
+        return regex.test(phone);
+    };
+
+    useEffect(() => {
+        const isValid = firstName.trim() !== '' && lastName.trim() !== '' &&
+            validateEmail(email) && validatePhone(phone);
+        setIsFormValid(isValid);
+    }, [firstName, lastName, email, phone]);
+
 
     // Function to handle form submission
     const handleConfirmBooking = () => {
+        if (!isFormValid) {
+            setShowErrorMessage(true);
+            return;
+        }
         // Implementation for booking confirmation goes here
         console.log('Booking confirmed with:', { firstName, lastName, email, phone });
+    };
+
+    const inputBorderColor = (value) => {
+        if (showErrorMessage) {
+            switch (value) {
+                case 0:
+                    return firstName.length >= 2 ? 'border-gray-300' : 'border-red-500';
+                case 1:
+                    return lastName.length >= 2 ? 'border-gray-300' : 'border-red-500';
+                case 2:
+                    return validateEmail(email) ? 'border-gray-300' : 'border-red-500';
+                case 3:
+                    return validatePhone(phone) ? 'border-gray-300' : 'border-red-500';
+                default:
+                    return 'border-red-500';
+            }
+        }
+        return 'border-gray-300';
     };
 
     return (
@@ -26,14 +68,14 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                     <input
                         type='text'
                         placeholder='First Name'
-                        className='p-2 border border-gray-300 rounded mb-2 w-full md:w-48'
+                        className={`p-2 border ${inputBorderColor(0)} rounded mb-2 w-full md:w-48`}
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                     />
                     <input
                         type='text'
                         placeholder='Last Name'
-                        className='p-2 border border-gray-300 rounded mb-2 w-full md:w-48'
+                        className={`p-2 border ${inputBorderColor(1)} rounded mb-2 w-full md:w-48`}
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
@@ -41,21 +83,26 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                 <input
                     type='email'
                     placeholder='Email'
-                    className='p-2 mb-4 border border-gray-300 rounded w-full'
+                    className={`p-2 mb-4 border ${inputBorderColor(2)} rounded w-full`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
                     type='tel'
                     placeholder='Phone'
-                    className='p-2 mb-4 border border-gray-300 rounded w-full'
+                    className={`p-2 mb-4 border ${inputBorderColor(3)} rounded w-full`}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                 />
+                {/* Error Message */}
+                {showErrorMessage && !isFormValid && (
+                    <p className="text-red-500 mb-2">Please complete the form above.</p>
+                )}
+
                 <button
                     onClick={handleConfirmBooking}
-                    className='bg-barberRed text-white p-2 rounded hover:bg-hoverRed'
-                >
+                    className={`bg-barberRed text-white p-2 rounded
+                                ${!isFormValid ? 'bg-gray-500 hover:bg-gray-400' : 'hover:bg-hoverRed'}`}>
                     Confirm Booking
                 </button>
             </div>

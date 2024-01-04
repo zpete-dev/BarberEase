@@ -61,7 +61,7 @@ const DateAndTimeForm = ({ sessionToken, selectedServices, selectedProviders, se
         const dstOffset = (DateTime.fromJSDate(newDate).toJSDate().getTimezoneOffset()) / 60;
         const selectedDateMST = DateTime.fromJSDate(newDate).minus({ hours: dstOffset }).toJSDate().toISOString().split('T')[0] + 'T00:00:00.000Z';
         console.log(newDate);
-        
+
 
         setAvailabilityForTheDay(selectedDateMST);
     };
@@ -113,9 +113,11 @@ const DateAndTimeForm = ({ sessionToken, selectedServices, selectedProviders, se
                     timesForSelectedDate.map(time => (
                         <button
                             key={time}
-                            className={`p-2 border rounded ${selectedTime === time ? 'bg-licorice text-white' : 'bg-carrotOrange text-black'}`}
+                            className={`p-2 border rounded transform transition duration-150 ease-in-out text-[14px]
+                            ${selectedTime === time ? 'bg-licorice text-carrotOrange' : 'bg-carrotOrange text-black'}
+                            ${selectedTime === time ? 'scale-105' : 'hover:bg-carrotOrangeHover hover:scale-105'}`}
                             onClick={() => handleTimeSelect(time)}>
-                            {time}
+                            {selectedTime === time ? `✓ ${time}` : time}
                         </button>
                     ))
                 ) : selectedDate ? (

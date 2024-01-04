@@ -19,6 +19,7 @@ module.exports = {
         hoverRed: '#8C0000',
         licorice: '#191516',
         carrotOrange: '#F9A03F',
+        carrotOrangeHover: '#B26006'
       },
       fontFamily: {
         serif: ["PT Serif", "serif"],
