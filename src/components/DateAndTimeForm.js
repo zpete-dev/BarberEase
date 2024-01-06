@@ -99,7 +99,7 @@ const DateAndTimeForm = ({ sessionToken, selectedServices, selectedProviders, se
             <div className='mx-auto mb-4' style={{ width: '424px', height: '324px' }}>
                 <Calendar
                     onChange={handleDateChange}
-                    tileContent={tileContent}
+                    /* tileContent={tileContent} */
                     minDate={DateTime.now().setZone('America/Denver').toJSDate()}
                     value={selectedDate}
                     showNeighboringMonth={false}
@@ -113,7 +113,7 @@ const DateAndTimeForm = ({ sessionToken, selectedServices, selectedProviders, se
                     timesForSelectedDate.map(time => (
                         <button
                             key={time}
-                            className={`p-2 border rounded transform transition duration-150 ease-in-out text-[14px]
+                            className={`shadow-md p-2 border rounded transform transition duration-150 ease-in-out text-[14px]
                             ${selectedTime === time ? 'bg-licorice text-carrotOrange' : 'bg-carrotOrange text-black'}
                             ${selectedTime === time ? 'scale-105' : 'hover:bg-carrotOrangeHover hover:scale-105'}`}
                             onClick={() => handleTimeSelect(time)}>

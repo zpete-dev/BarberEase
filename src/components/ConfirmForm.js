@@ -102,13 +102,13 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                 <button
                     onClick={handleConfirmBooking}
                     className={`bg-barberRed text-white p-2 rounded
-                                ${!isFormValid ? 'bg-gray-500 hover:bg-gray-400' : 'hover:bg-hoverRed'}`}>
+                                ${!isFormValid ? 'bg-gray-300 hover:bg-gray-200' : 'hover:bg-hoverRed shadow-md shadow-carrotOrangeHover'}`}>
                     Confirm Booking
                 </button>
             </div>
 
             {/* Summary Box */}
-            <div className='mx-auto p-4 mb-20 border-2 border-black rounded shadow-lg max-w-md text-[15px]'>
+            <div className='mx-auto p-4 mb-20 border border-black rounded shadow-lg max-w-md text-[15px]'>
                 <h3 className='text-xl font-bold underline mb-4'>Summary</h3>
 
                 {/* Providers Section */}

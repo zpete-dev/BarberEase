@@ -4,6 +4,7 @@ import { serviceCategories } from '../data/data';
 const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServices, selectedProviders, setSelectedProviders, setSubtotal }) => {
 
     const [currentFilter, setCurrentFilter] = useState("all");
+    const [showInfo, setShowInfo] = useState({}); // State to track which service info to show
 
     const toggleService = (serviceId) => {
         //Set the list of Selected Services
@@ -22,6 +23,11 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
             }, 0);
         }
         setSubtotal(mySubtotal);
+    };
+
+    const toggleInfo = (event, serviceId) => {
+        event.stopPropagation();
+        setShowInfo(prevInfo => ({ ...prevInfo, [serviceId]: !prevInfo[serviceId] }));
     };
 
     // Function to parse price string and return numeric value
@@ -49,23 +55,33 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
 
     const ServiceButton = ({ service, isSelected, categoryId }) => {
         const { name, description, price } = service;
-        const buttonStyle = isSelected ? 'bg-gray-400' : 'bg-gray-200 hover:bg-gray-300';
-        const iconStyle = isSelected ? 'bg-barberRed' : 'bg-gray-500';
+        const buttonStyle = isSelected ? 'bg-gray-400 border-opacity-50 scale-105' : 'bg-gray-200 hover:bg-gray-300 border-opacity-0 hover:scale-105 hover:border-opacity-50';
+        const iconStyle = isSelected ? 'bg-barberRed' : 'bg-gray-400 hover:bg-gray-500';
         const icon = isSelected ? '✓' : '+';
         const hideButton = (currentFilter === "all" || currentFilter === categoryId || selectedServices.includes(service._id)) ? '' : 'hidden';
 
         return (
             <button
-                className={`${hideButton} ${buttonStyle} w-full flex flex-row p-2 rounded mb-2`}
-                onClick={() => toggleService(service._id)}>
-                <div className='flex flex-col w-2/3 justify-start '>
-                    <p className='font-bold text-left truncate hover:overflow-visible hover:whitespace-normal'>{name}</p>
-                    <p className='text-sm text-left truncate hover:overflow-visible hover:whitespace-normal'>{description}</p>
+                className={`${hideButton} ${buttonStyle} w-11/12 h-full flex flex-row rounded mb-2 items-center justify-between shadow-md
+                transform transition duration-150 ease-in-out border hover:border-gray-600`}
+                onClick={() => toggleService(service._id)} >
+                <div className='flex flex-col w-2/3 pl-2'>
+                    <div className='flex flex-row'>
+                        <p className='text-left truncate'><strong>{`${name}`}</strong>{` - ${price}`}</p>
+                        {/* <p className='flex text-base self-center'>{" "} - {price + ' '}</p> */}
+                        <div
+                            onClick={(e) => toggleInfo(e, service._id)}
+                            className='text-xs rounded-full bg-blue-100 h-4 w-4 flex items-center justify-center self-center ml-2 text-blue-400 font-bold font-sans'>
+                            i
+                        </div>
+
+                    </div>
+                    <p className={`${showInfo[service._id] ? 'block' : 'hidden'} text-sm text-left`}>{description}</p>
                 </div>
-                <div className='flex flex-col w-1/3'>
-                    <p className='flex text-base self-center'>{price}</p>
+                <div className='flex flex-row w-1/4 py-3 justify-around'>
+                    {/* <p className='flex text-base self-center'>{price}</p> */}
                     <div className='flex self-center text-sm'>
-                        <div className={`flex ${iconStyle} w-5 h-5 rounded-full justify-center text-white`}>
+                        <div className={`flex ${iconStyle} w-7 h-7 rounded-full items-center justify-center text-white text-[18px]`}>
                             {icon}
                         </div>
                     </div>
@@ -83,13 +99,15 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         console.log(selectedProviders);
         return (
             <div
-                className={`${buttonStyle} flex flex-col select-none items-center p-2 rounded mb-2 w-full h-full place-content-between border
+                className={`${buttonStyle} flex flex-col items-center p-2 rounded mb-2 w-full h-full place-content-between border shadow-md
                 transform transition duration-150 ease-in-out hover:border-gray-600`}
                 onClick={() => toggleProvider(provider._id)}>
-                <h3 className='text-sm break-words w-[60px] text-center'>{provider.name}</h3>
-                <p className={`${selectedProviders.includes(provider._id) ? '' : 'hidden'} fixed -right-2 -top-2 text-sm text-center h-6 w-6
-                bg-barberRed text-white rounded-full`}>{selectedProviders.includes(provider._id) ? '✓' : ''}</p>
-                <img src={profilePicture} alt={name} className='rounded-[50px] w-[50px] h-[50px] object-cover' />
+                <h3 className='text-sm break-words w-[60px] text-center'>{name}</h3>
+                <div className={`${isSelected ? 'flex' : 'hidden'} absolute -right-2 -top-2 h-5 w-5 items-center justify-center
+                    bg-barberRed text-white rounded-full`}>
+                    ✓
+                </div>
+                <img src={profilePicture} alt={name} className='rounded-full w-[50px] h-[50px] object-cover' />
             </div>
         );
     };
@@ -97,7 +115,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     return (
         <div className='flex flex-col w-full'>
             {/* Select Services Section*/}
-            <div className='w-full'>
+            <div className='w-full shadow-lg'>
                 <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
                 {/* Filter Bar with Buttons*/}
                 <div className='flex flex-wrap rounded-[28px] justify-around py-1 px-1 bg-licorice mb-2'>
@@ -116,10 +134,10 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                     ))}
                 </div>
                 {/* Service Select Buttons*/}
-                <div className='border w-full border-gray-300 rounded p-2'>
+                <div className='border w-full h-fit border-gray-300 rounded p-2'>
                     {serviceCategories.map(category => (
-                        <div key={category._id} className={`${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? '' : 'hidden'}`}>
-                            <h3 className='text-lg font-bold'>{category.name}</h3>
+                        <div key={category._id} className={`h-fit flex flex-col items-center ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? '' : 'hidden'}`}>
+                            <h3 className='text-xl font-bold mb-2 self-start'>{category.name}</h3>
                             {category.services.map(service => (
                                 <ServiceButton
                                     key={service._id}
@@ -134,7 +152,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
             </div>
 
             {/* Select Providers Section*/}
-            <div className='w-full h-fit mb-[80px]'>
+            <div className='w-full h-fit mb-[80px] shadow-lg'>
                 <h2 className='text-2xl font-bold underline text-center mb-3'>Select Provider(s)</h2>
                 <div className='flex flex-col border w-full border-gray-300 rounded p-4'>
                     <h3 className='text-xl font-bold underline text-center mb-2'>Provider(s)</h3>

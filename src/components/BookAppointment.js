@@ -173,7 +173,7 @@ const BookAppointment = () => {
                                 {"Select 1 or more providers"}
                             </p>
                         ) : selectedProviders.includes("Any") ?
-                            <p className='text-black'>Provider(s) - Any Provider Available</p> :
+                            <p className='text-black'>Provider(s) - Any Provider</p> :
                             <p className='text-black'>Provider(s) - {selectedProviders.length} Selected</p>
                         }
                     </div>
