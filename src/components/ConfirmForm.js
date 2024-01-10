@@ -10,6 +10,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     const [phone, setPhone] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [formattedPhone, setFormattedPhone] = useState('');
 
     // Email and phone validation functions
     const validateEmail = (email) => {
@@ -20,6 +21,21 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     const validatePhone = (phone) => {
         const regex = /^[0-9]{10}$/; // Simple validation for 10 digit number
         return regex.test(phone);
+    };
+
+    // Function to format phone number
+    const formatPhoneNumber = (input) => {
+        // Remove all non-numeric characters
+        const numbers = input.replace(/[^\d]/g, '');
+
+        // Format phone number
+        if (numbers.length <= 3) {
+            return `${numbers}`;
+        } else if (numbers.length <= 6) {
+            return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
+        } else {
+            return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6, 10)}`;
+        }
     };
 
     useEffect(() => {
@@ -37,6 +53,12 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
         }
         // Implementation for booking confirmation goes here
         console.log('Booking confirmed with:', { firstName, lastName, email, phone });
+    };
+
+    const handlePhoneChange = (e) => {
+        const formattedInput = formatPhoneNumber(e.target.value);
+        setPhone(formattedInput.replace(/[^\d]/g, '')); // Update original phone state with numbers only
+        setFormattedPhone(formattedInput); // Update formatted phone state with formatted number
     };
 
     const inputBorderColor = (value) => {
@@ -62,53 +84,83 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
             <h2 className='text-3xl font-bold underline mb-4'>Confirm Appointment</h2>
 
             {/* Personal Information Form Box */}
-            <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg max-w-md'>
-                <p className='text-center mb-4'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
-                <div className='flex flex-wrap justify-between mb-4'>
-                    <input
-                        type='text'
-                        placeholder='First Name'
-                        className={`p-2 border ${inputBorderColor(0)} rounded mb-2 w-full md:w-48`}
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                    />
-                    <input
-                        type='text'
-                        placeholder='Last Name'
-                        className={`p-2 border ${inputBorderColor(1)} rounded mb-2 w-full md:w-48`}
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                    />
+            <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg w-5/6'>
+                <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
+                <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
+                    text-red-500 text-sm text-left`}>- Please enter 2 or more characters</span>
+                <div className='flex flex-wrap justify-between mb-2'>
+                    <label className='block w-[48%]'>
+                        <span className="block text-left">First Name</span>
+                        <input
+                            type='text'
+                            placeholder='First'
+                            className={`p-2 sm:p-3 border ${inputBorderColor(0)} rounded mb-2 w-full`}
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                        />
+                    </label>
+                    <label className='block w-[48%]'>
+                        <span className="block text-left">Last Name</span>
+                        <input
+                            type='text'
+                            placeholder='Surname'
+                            className={`p-2 sm:p-3 border ${inputBorderColor(1)} rounded mb-2 w-full`}
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                        />
+                    </label>
                 </div>
-                <input
-                    type='email'
-                    placeholder='Email'
-                    className={`p-2 mb-4 border ${inputBorderColor(2)} rounded w-full`}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type='tel'
-                    placeholder='Phone'
-                    className={`p-2 mb-4 border ${inputBorderColor(3)} rounded w-full`}
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                />
+                <label className='block w-full mb-2'>
+                    <div className="flex items-center">
+                        <span className="block text-left">Email</span>
+                        {showErrorMessage && !validateEmail(email) && (
+                            <span className="text-red-500 text-sm ml-2">- Please enter a valid email address</span>
+                        )}
+                    </div>
+                    <input
+                        type='email'
+                        placeholder='you@example.com'
+                        className={`p-2 sm:p-3 border ${inputBorderColor(2)} rounded w-full`}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+                <label className='block w-full mb-2'>
+                    <div className="flex items-center">
+                        <span className="block text-left">Phone</span>
+                        {showErrorMessage && !validatePhone(phone) && (
+                            <span className="text-red-500 text-sm ml-2">- Please enter a valid phone number</span>
+                        )}
+                    </div>
+                    <div className='relative'>
+                        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
+                            <span className='text-gray-500 text-sm'>+1</span>
+                        </div>
+                        <input
+                            type='text'
+                            placeholder='(xxx) xxx-xxxx'
+                            className={`pl-10 p-2 sm:p-3 sm:pl-10 border ${inputBorderColor(3)} rounded w-full`}
+                            value={formattedPhone}
+                            onChange={handlePhoneChange}
+                            maxLength={14}
+                        />
+                    </div>
+                </label>
                 {/* Error Message */}
                 {showErrorMessage && !isFormValid && (
-                    <p className="text-red-500 mb-2">Please complete the form above.</p>
+                    <p className="text-red-500 mt-4">Please complete the form above.</p>
                 )}
 
                 <button
                     onClick={handleConfirmBooking}
-                    className={`bg-barberRed text-white p-2 rounded
-                                ${!isFormValid ? 'bg-gray-300 hover:bg-gray-200' : 'hover:bg-hoverRed shadow-md shadow-carrotOrangeHover'}`}>
+                    className={`bg-barberRed text-white p-2 rounded mt-2
+                                ${!isFormValid ? 'bg-red-400 hover:bg-red-300' : 'hover:bg-hoverRed shadow-lg shadow-carrotOrangeHover/90'}`}>
                     Confirm Booking
                 </button>
             </div>
 
             {/* Summary Box */}
-            <div className='mx-auto p-4 mb-20 border border-black rounded shadow-lg max-w-md text-[15px]'>
+            <div className='mx-auto p-4 mb-20 border border-black rounded shadow-lg  w-5/6 text-[15px]'>
                 <h3 className='text-xl font-bold underline mb-4'>Summary</h3>
 
                 {/* Providers Section */}

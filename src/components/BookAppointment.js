@@ -112,9 +112,10 @@ const BookAppointment = () => {
                 return <ServiceAndProviderForm providers={barbers} sessionToken={sessionToken}
                     selectedServices={selectedServices} setSelectedServices={setSelectedServices}
                     selectedProviders={selectedProviders} setSelectedProviders={setSelectedProviders}
+                    setSelectedTime={setSelectedTime} setSelectedDate={setSelectedDate}
                     setSubtotal={setSubtotal} />;
             case 1:
-                return <DateAndTimeForm sessionToken={sessionToken}
+                return <DateAndTimeForm providers={barbers} sessionToken={sessionToken}
                     selectedServices={selectedServices} selectedProviders={selectedProviders}
                     selectedTime={selectedTime} setSelectedTime={setSelectedTime}
                     selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
@@ -123,19 +124,20 @@ const BookAppointment = () => {
                     selectedServices={selectedServices} subtotal={subtotal} selectedProviders={selectedProviders}
                     selectedDate={selectedDate} selectedTime={selectedTime} />;
             default:
-                setCurrentStep(1);
+                setCurrentStep(0);
                 return <ServiceAndProviderForm providers={barbers} sessionToken={sessionToken}
                     selectedServices={selectedServices} setSelectedServices={setSelectedServices}
                     selectedProviders={selectedProviders} setSelectedProviders={setSelectedProviders}
+                    setSelectedTime={setSelectedTime} setSelectedDate={setSelectedDate}
                     setSubtotal={setSubtotal} />;
         }
     };
 
     return (
         <div className=''>
-            <div className='container mx-auto py-4 px-6 font-serif'>
-                <div className='flex flex-row'>
-                    <div className='flex justify-center space-x-2 mb-10 text-[15px] pt-4'>
+            <div className='flex flex-col mx-auto py-4 px-2 font-serif w-full'>
+                <div className='flex flex-row sm:ml-4'>
+                    <div className='flex justify-center space-x-2 mb-10 sm:mb-16 text-[15px] sm:text-[16px] pt-4'>
                         <div className={currentStep === 0 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Service & Provider</div>
                         <div className='text-gray-400 font-bold'>{'>'}</div>
                         <div className={currentStep === 1 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Date & Time</div>
@@ -143,9 +145,9 @@ const BookAppointment = () => {
                         <div className={currentStep === 2 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Confirm</div>
 
                     </div>
-                    <Link to="/" className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 rounded-bl-2xl'>
+                    <Link to="/" className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 sm:px-5 sm:py-4 rounded-bl-2xl'>
                         <div className='flex flex-col items-center'>
-                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px]'/>
+                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px]' />
                             <div className=''>
                                 <span className='text-white text-xl font-serif text-justify'>Barber</span>
                                 <span className='text-barberRed text-xl font-serif'>Dog</span>
@@ -156,12 +158,12 @@ const BookAppointment = () => {
                 {renderStep()}
             </div>
 
-            <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center ${currentStep === 2 ? 'justify-around' : 'justify-between'} px-1 border-t-2 border-black`}>
-                <div className='flex items-center'>
+            <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center ${currentStep === 2 ? 'justify-around' : 'justify-around sm:justify-around'} p-1 border-t-2 border-black`}>
+                <div className='flex items-center w-full justify-around text-[13px]'>
                     {/* Back Button */}
-                    <button className='bg-licorice text-carrotOrange px-2 py-1 rounded' onClick={prevStep}>Back</button>
+                    <button className='flex bg-licorice text-carrotOrange px-2 py-1 rounded sm:mr-5' onClick={prevStep}>Back</button>
                     {/* Service and Provider Count */}
-                    <div className={`${currentStep === 2 ? 'hidden' : ''} text-sm ml-1`}>
+                    <div className={`${currentStep === 2 ? 'hidden' : ''} ml-0.5`}>
                         {/* Validation Messages */}
                         {selectedServices.length === 0 ? (
                             <p className="text-red-500">
@@ -177,13 +179,10 @@ const BookAppointment = () => {
                             <p className='text-black'>Provider(s) - {selectedProviders.length} Selected</p>
                         }
                     </div>
-                </div>
-
-                <div className='flex items-center'>
                     {/* Subtotal Display */}
-                    <div className={`${currentStep === 2 ? 'hidden' : ''}`}>
-                        <p className='text-black font-bold mr-1 text-end'>Subtotal: ${subtotal.toFixed(2)}</p>
-                        <p className={`${selectedTime !== null ? 'text-black' : currentStep > 0 ? 'text-barberRed' : 'hidden'} mr-1 underline text-center text-sm`}>
+                    <div className={`${currentStep === 2 ? 'hidden' : 'mr-0.5 sm:text-[17px]'}`}>
+                        <p className='text-black font-bold text-end'>Subtotal: ${subtotal.toFixed(2)}</p>
+                        <p className={`${selectedTime !== null ? 'text-black' : currentStep > 0 ? 'text-barberRed' : 'hidden'} underline text-center`}>
                             {`${selectedTime !== null ? `${selectedDate.toLocaleString(undefined,
                                 { month: "2-digit", day: "2-digit" })} @ ${selectedTime}` :
                                 currentStep > 0 ? 'Please select a date & time.' : ''}`}

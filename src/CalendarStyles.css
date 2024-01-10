@@ -1,5 +1,5 @@
 .react-calendar {
-    @apply w-fit h-fit border-2 border-slate-400 shadow-lg;
+    @apply w-full h-fit border-2 border-slate-400 shadow-lg;
     /*width: 100%;
     height: 100%;
     border: none;
@@ -31,15 +31,15 @@
   }
   
   .react-calendar__navigation {
-    @apply flex h-[52px] mb-[1rem] border-b-2 border-slate-400;
+    @apply flex h-[52px] sm:h-[60px] mb-[1rem] border-b-2 border-slate-400;
   }
   
   .react-calendar__navigation button {
-    @apply text-licorice min-w-[44px];
+    @apply text-licorice min-w-[44px] sm:min-w-[52px];
   }
   
   .react-calendar__navigation__label {
-    @apply pointer-events-none text-lg;
+    @apply pointer-events-none text-lg sm:text-xl;
   }
 
   .react-calendar__navigation__arrow {
@@ -80,7 +80,7 @@
   }
   
   .react-calendar__tile {
-    @apply py-[10px] px-[6.6667px] text-center text-sm bg-white;
+    @apply py-[10px] px-[6.6667px] sm:py-[15px] text-center text-sm bg-white;
     /*max-width: 100%;
     padding: 10px 6.6667px;
     background: none;
