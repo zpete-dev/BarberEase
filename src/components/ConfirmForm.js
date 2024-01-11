@@ -84,7 +84,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
             <h2 className='text-3xl font-bold underline mb-4'>Confirm Appointment</h2>
 
             {/* Personal Information Form Box */}
-            <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg w-5/6'>
+            <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg w-5/6 md:w-[640px]'>
                 <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
                 <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
                     text-red-500 text-sm text-left`}>- Please enter 2 or more characters</span>
@@ -160,7 +160,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
             </div>
 
             {/* Summary Box */}
-            <div className='mx-auto p-4 mb-20 border border-black rounded shadow-lg  w-5/6 text-[15px]'>
+            <div className='mx-auto p-4 border border-black rounded shadow-lg  w-5/6  md:w-[640px] text-[15px]'>
                 <h3 className='text-xl font-bold underline mb-4'>Summary</h3>
 
                 {/* Providers Section */}
@@ -208,7 +208,10 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                     </div>
                     <div className='flex flex-col mt-3 mx-4 items-end'>
                         <hr className='border-gray-300 w-1/6' />
-                        <p className='font-bold w-1/3 mt-1'>Subtotal: ${subtotal.toFixed(2)}</p>
+                        <div className='flex flex-row w-1/3 mt-1 font-bold'>
+                            <p className='w-1/2'>Subtotal:</p>
+                            <p className='flex w-1/2 justify-center'>${subtotal.toFixed(2)}</p>
+                        </div>
                     </div>
                 </div>
             </div>

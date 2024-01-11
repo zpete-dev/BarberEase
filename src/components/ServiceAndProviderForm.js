@@ -117,7 +117,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     };
 
     return (
-        <div className='flex flex-col w-5/6 mx-auto'>
+        <div className='flex flex-col w-5/6 md:w-[640px] mx-auto'>
             {/* Select Services Section*/}
             <div className='w-full shadow-lg'>
                 <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
@@ -157,7 +157,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
             </div>
 
             {/* Select Providers Section*/}
-            <div className='w-full h-fit mb-[80px] shadow-lg'>
+            <div className='w-full h-fit shadow-lg'>
                 <h2 className='text-2xl font-bold underline text-center my-3'>Select Provider(s)</h2>
                 <div className='flex flex-col border w-full border-gray-300 rounded p-4'>
                     <h3 className='text-xl font-bold underline text-center mb-4'>Provider(s)</h3>

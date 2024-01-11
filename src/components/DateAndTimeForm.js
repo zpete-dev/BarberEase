@@ -106,7 +106,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             <h2 className='text-2xl font-bold underline mb-4'>Select Date & Time</h2>
 
             {/* Calendar Element */}
-            <div className='mx-auto mb-6 sm:mb-10 h-fit w-5/6' >
+            <div className='mx-auto mb-6 sm:mb-10 h-fit w-5/6 md:w-[640px]' >
                 <Calendar
                     onChange={handleDateChange}
                     /* tileContent={tileContent} */
@@ -118,7 +118,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             </div>
 
             {/* Time Selection Buttons */}
-            <div className='grid grid-cols-4 gap-3 mb-4 w-5/6 mx-auto'>
+            <div className='grid grid-cols-4 gap-3 mb-4 w-5/6 mx-auto md:w-[640px]'>
                 {timesForSelectedDate.length > 0 ? (
                     timesForSelectedDate.map(time => (
                         <button

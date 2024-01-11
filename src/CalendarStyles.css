@@ -35,7 +35,7 @@
   }
   
   .react-calendar__navigation button {
-    @apply text-licorice min-w-[44px] sm:min-w-[52px];
+    @apply text-licorice min-w-[40px] sm:min-w-[52px];
   }
   
   .react-calendar__navigation__label {
@@ -80,7 +80,7 @@
   }
   
   .react-calendar__tile {
-    @apply py-[10px] px-[6.6667px] sm:py-[15px] text-center text-sm bg-white;
+    @apply py-[10px] px-[6.6667px] sm:py-[15px] md:py-[16px] text-center text-sm bg-white;
     /*max-width: 100%;
     padding: 10px 6.6667px;
     background: none;
