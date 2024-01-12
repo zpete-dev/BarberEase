@@ -137,7 +137,7 @@ const BookAppointment = () => {
     return (
         <div className=''>
             <div className='flex flex-col mx-auto py-4 px-2  mb-[80px] md:mb-[120px] font-serif w-full'>
-                <div className='flex flex-row sm:ml-4 md:self-center md:w-[700px] md:relative'>
+                <div className='flex flex-row sm:ml-4 md:self-center md:w-[700px] xl:w-[900px] md:relative'>
                     <div className='flex justify-center space-x-2 mb-10 mt-4 sm:mb-16 text-[15px] sm:text-[16px]'>
                         <div className={currentStep === 0 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Service & Provider</div>
                         <div className='text-gray-400 font-bold'>{'>'}</div>
@@ -162,7 +162,7 @@ const BookAppointment = () => {
             </div>
 
             <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center justify-around p-1 border-t-2 border-black 
-                            md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] md:border-x-2 md:rounded-t-2xl`}>
+                            md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] lg:w-[900px] md:border-x-2 md:rounded-t-2xl`}>
                 <div className='flex items-center w-full justify-around text-[14px] sm:text-[16px]'>
                     {/* Back Button */}
                     <button className='flex bg-licorice text-carrotOrange px-2 py-2 rounded-2xl md:px-4' onClick={prevStep}>Back</button>
@@ -214,15 +214,34 @@ const BookAppointment = () => {
                     <div className={`${currentStep === 2 ? 'hidden' : 'md:flex'} hidden h-[100px]`}>
                         <div className='flex flex-col text-center'>
                             <p className='underline font-semibold text-[17px] mb-0.5'>Service(s)</p>
-                            {selectedServices.map(serviceId => (
-                                <div key={serviceId} className='flex justify-around text-[15px] leading-[18px]'>
-                                    <p className=''>+ {BookingFormHelper(barbers).getServiceNameById(serviceId)}</p>
-                                    <p className='mx-1'>-</p>
-                                    <p className='w-fit text-center'>{BookingFormHelper(barbers).getServicePriceById(serviceId)}</p>
-                                </div>
-                            ))}
+                            {selectedServices.length <= 3 ?
+                                selectedServices.map(serviceId => (
+                                    <div key={serviceId} className='flex justify-around text-[15px] leading-[18px]'>
+                                        <p className=''>+ {BookingFormHelper(barbers).getServiceNameById(serviceId)}</p>
+                                        <p className='mx-1'>-</p>
+                                        <p className='w-fit text-center'>{BookingFormHelper(barbers).getServicePriceById(serviceId)}</p>
+                                    </div>
+                                )) :
+                                <>
+                                    {selectedServices.slice(0, 2).map(serviceId => (
+                                        <div key={serviceId} className='flex justify-around text-[15px] leading-[18px]'>
+                                            <p className=''>+ {BookingFormHelper(barbers).getServiceNameById(serviceId)}</p>
+                                            <p className='mx-1'>-</p>
+                                            <p className='w-fit text-center'>{BookingFormHelper(barbers).getServicePriceById(serviceId)}</p>
+                                        </div>
+                                    ))}
+                                    <div className='flex justify-around text-[15px] leading-[18px]'>
+                                        <p className=''>+ {`${selectedServices.length - 2} More Services`}</p>
+                                        <p className='mx-1'>-</p>
+                                        <p className='w-fit text-center'>
+                                            ${selectedServices.slice(2).reduce((acc, serviceId) => acc + parseFloat(BookingFormHelper(barbers).getServicePriceById(serviceId).replace(/[^0-9.-]+/g, "")), 0).toFixed(2)}
+                                        </p>
+                                    </div>
+                                </>
+                            }
                         </div>
                     </div>
+
                     {/* Vertical Break Line >= md*/}
                     <div className={`${currentStep === 2 || (currentStep === 0 && selectedTime === null) ? 'hidden' :
                         'md:flex hidden border-l-gray-300 border mx-2 h-[80px]'}`}>

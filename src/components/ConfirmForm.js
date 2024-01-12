@@ -83,134 +83,136 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
         <div className='text-center'>
             <h2 className='text-3xl font-bold underline mb-4'>Confirm Appointment</h2>
 
-            {/* Personal Information Form Box */}
-            <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg w-5/6 md:w-[640px]'>
-                <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
-                <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
+            <div className='flex flex-col mx-auto xl:flex-row w-full xl:w-[900px]'>
+                {/* Personal Information Form Box */}
+                <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg w-5/6 md:w-[640px] xl:w-[58%]'>
+                    <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
+                    <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
                     text-red-500 text-sm text-left`}>- Please enter 2 or more characters</span>
-                <div className='flex flex-wrap justify-between mb-2'>
-                    <label className='block w-[48%]'>
-                        <span className="block text-left">First Name</span>
-                        <input
-                            type='text'
-                            placeholder='First'
-                            className={`p-2 sm:p-3 border ${inputBorderColor(0)} rounded mb-2 w-full`}
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </label>
-                    <label className='block w-[48%]'>
-                        <span className="block text-left">Last Name</span>
-                        <input
-                            type='text'
-                            placeholder='Surname'
-                            className={`p-2 sm:p-3 border ${inputBorderColor(1)} rounded mb-2 w-full`}
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </label>
-                </div>
-                <label className='block w-full mb-2'>
-                    <div className="flex items-center">
-                        <span className="block text-left">Email</span>
-                        {showErrorMessage && !validateEmail(email) && (
-                            <span className="text-red-500 text-sm ml-2">- Please enter a valid email address</span>
-                        )}
+                    <div className='flex flex-wrap justify-between mb-2'>
+                        <label className='block w-[48%]'>
+                            <span className="block text-left">First Name</span>
+                            <input
+                                type='text'
+                                placeholder='First'
+                                className={`p-2 sm:p-3 border ${inputBorderColor(0)} rounded mb-2 w-full`}
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </label>
+                        <label className='block w-[48%]'>
+                            <span className="block text-left">Last Name</span>
+                            <input
+                                type='text'
+                                placeholder='Surname'
+                                className={`p-2 sm:p-3 border ${inputBorderColor(1)} rounded mb-2 w-full`}
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </label>
                     </div>
-                    <input
-                        type='email'
-                        placeholder='you@example.com'
-                        className={`p-2 sm:p-3 border ${inputBorderColor(2)} rounded w-full`}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </label>
-                <label className='block w-full mb-2'>
-                    <div className="flex items-center">
-                        <span className="block text-left">Phone</span>
-                        {showErrorMessage && !validatePhone(phone) && (
-                            <span className="text-red-500 text-sm ml-2">- Please enter a valid phone number</span>
-                        )}
-                    </div>
-                    <div className='relative'>
-                        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
-                            <span className='text-gray-500 text-sm'>+1</span>
+                    <label className='block w-full mb-2'>
+                        <div className="flex items-center">
+                            <span className="block text-left">Email</span>
+                            {showErrorMessage && !validateEmail(email) && (
+                                <span className="text-red-500 text-sm ml-2">- Please enter a valid email address</span>
+                            )}
                         </div>
                         <input
-                            type='text'
-                            placeholder='(xxx) xxx-xxxx'
-                            className={`pl-10 p-2 sm:p-3 sm:pl-10 border ${inputBorderColor(3)} rounded w-full`}
-                            value={formattedPhone}
-                            onChange={handlePhoneChange}
-                            maxLength={14}
+                            type='email'
+                            placeholder='you@example.com'
+                            className={`p-2 sm:p-3 border ${inputBorderColor(2)} rounded w-full`}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-                    </div>
-                </label>
-                {/* Error Message */}
-                {showErrorMessage && !isFormValid && (
-                    <p className="text-red-500 mt-4">Please complete the form above.</p>
-                )}
+                    </label>
+                    <label className='block w-full mb-2'>
+                        <div className="flex items-center">
+                            <span className="block text-left">Phone</span>
+                            {showErrorMessage && !validatePhone(phone) && (
+                                <span className="text-red-500 text-sm ml-2">- Please enter a valid phone number</span>
+                            )}
+                        </div>
+                        <div className='relative'>
+                            <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>
+                                <span className='text-gray-500 text-sm'>+1</span>
+                            </div>
+                            <input
+                                type='text'
+                                placeholder='(xxx) xxx-xxxx'
+                                className={`pl-10 p-2 sm:p-3 sm:pl-10 border ${inputBorderColor(3)} rounded w-full`}
+                                value={formattedPhone}
+                                onChange={handlePhoneChange}
+                                maxLength={14}
+                            />
+                        </div>
+                    </label>
+                    {/* Error Message */}
+                    {showErrorMessage && !isFormValid && (
+                        <p className="text-red-500 mt-4">Please complete the form above.</p>
+                    )}
 
-                <button
-                    onClick={handleConfirmBooking}
-                    className={`bg-barberRed text-white p-2 rounded mt-2
+                    <button
+                        onClick={handleConfirmBooking}
+                        className={`bg-barberRed text-white p-2 rounded mt-2
                                 ${!isFormValid ? 'bg-red-400 hover:bg-red-300' : 'hover:bg-hoverRed shadow-lg shadow-carrotOrangeHover/90'}`}>
-                    Confirm Booking
-                </button>
-            </div>
-
-            {/* Summary Box */}
-            <div className='mx-auto p-4 border border-black rounded shadow-lg  w-5/6  md:w-[640px] text-[15px]'>
-                <h3 className='text-xl font-bold underline mb-4'>Summary</h3>
-
-                {/* Providers Section */}
-                <div className='text-start'>
-                    <p className='font-bold text-lg my-1'>Provider(s):</p>
-
-                    {selectedProviders.map(providerId => (
-                        <div className='flex flex-row ml-4 mb-1'>
-                            <img src={BookingFormHelper(providers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
-                                className='h-[24px] w-[24px] rounded-full object-cover' />
-                            <p key={providerId} className='ml-1 text-md'>
-                                {BookingFormHelper(providers).getProviderNameById(providerId)}
-                            </p>
-                        </div>
-                    ))}
+                        Confirm Booking
+                    </button>
                 </div>
 
-                {/* When Section */}
-                <div className='text-start mt-4'>
-                    <p className='font-bold text-lg my-1'>When:</p>
-                    <div className='flex flex-row ml-4'>
-                        <p className=''>{selectedDate.toLocaleDateString()} at {selectedTime}</p>
-                    </div>
-                </div>
+                {/* Summary Box */}
+                <div className='mx-auto p-4 border border-black rounded shadow-lg w-5/6 lg md:w-[640px] text-[15px] xl:w-[40%]'>
+                    <h3 className='text-xl font-bold underline mb-4'>Summary</h3>
 
-                {/* Where Section */}
-                <div className='text-start mt-4'>
-                    <p className='font-bold text-lg my-1'>Where:</p>
-                    <div className='flex flex-col ml-4 w-fit'>
-                        <p className='text-md text-center'>12345 W Main St. STE 1000</p>
-                        <p className='text-md text-center'>Denver, CO 80246</p>
-                    </div>
-                </div>
+                    {/* Providers Section */}
+                    <div className='text-start'>
+                        <p className='font-bold text-lg my-1'>Provider(s):</p>
 
-                {/* Services Section */}
-                <div className='text-start mt-4'>
-                    <p className='font-bold text-lg my-1'>Service(s):</p>
-                    <div className='mx-4'>
-                        {selectedServices.map(serviceId => (
-                            <div key={serviceId} className='flex justify-between my-1'>
-                                <p className='text-md'>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
-                                <p className='w-1/6 text-center text-md'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
+                        {selectedProviders.map(providerId => (
+                            <div className='flex flex-row ml-4 mb-1'>
+                                <img src={BookingFormHelper(providers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
+                                    className='h-[24px] w-[24px] rounded-full object-cover' />
+                                <p key={providerId} className='ml-1 text-md'>
+                                    {BookingFormHelper(providers).getProviderNameById(providerId)}
+                                </p>
                             </div>
                         ))}
                     </div>
-                    <div className='flex flex-col mt-3 mx-4 items-end'>
-                        <hr className='border-gray-300 w-1/6' />
-                        <div className='flex flex-row w-1/3 mt-1 font-bold'>
-                            <p className='w-1/2'>Subtotal:</p>
-                            <p className='flex w-1/2 justify-center'>${subtotal.toFixed(2)}</p>
+
+                    {/* When Section */}
+                    <div className='text-start mt-4'>
+                        <p className='font-bold text-lg my-1'>When:</p>
+                        <div className='flex flex-row ml-4'>
+                            <p className=''>{selectedDate.toLocaleDateString()} at {selectedTime}</p>
+                        </div>
+                    </div>
+
+                    {/* Where Section */}
+                    <div className='text-start mt-4'>
+                        <p className='font-bold text-lg my-1'>Where:</p>
+                        <div className='flex flex-col ml-4 w-fit'>
+                            <p className='text-md text-center'>12345 W Main St. STE 1000</p>
+                            <p className='text-md text-center'>Denver, CO 80246</p>
+                        </div>
+                    </div>
+
+                    {/* Services Section */}
+                    <div className='text-start mt-4'>
+                        <p className='font-bold text-lg my-1'>Service(s):</p>
+                        <div className='mx-4'>
+                            {selectedServices.map(serviceId => (
+                                <div key={serviceId} className='flex justify-between my-1'>
+                                    <p className='text-md'>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
+                                    <p className='w-1/6 text-center text-md'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className='flex flex-col mt-3 mx-4 items-end'>
+                            <hr className='border-gray-300 w-1/6' />
+                            <div className='flex flex-row w-full mt-1 font-bold justify-end'>
+                                <p className='w-fit mr-2'>Subtotal:</p>
+                                <p className='flex w-1/6 justify-center'>${subtotal.toFixed(2)}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
