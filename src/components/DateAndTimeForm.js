@@ -102,11 +102,13 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
     };
 
     return (
-        <div className='text-center'>
+        <div className='flex flex-col w-full text-center'>
             <h2 className='text-2xl font-bold underline mb-4'>Select Date & Time</h2>
 
             {/* Calendar Element */}
-            <div className='mx-auto mb-6 sm:mb-10 h-fit w-5/6 md:w-[640px]' >
+            <div className='mx-auto mb-6 sm:mb-10 h-fit w-5/6
+            md:w-[640px]
+            lg:w-full' >
                 <Calendar
                     onChange={handleDateChange}
                     /* tileContent={tileContent} */
@@ -118,7 +120,9 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             </div>
 
             {/* Time Selection Buttons */}
-            <div className='grid grid-cols-4 gap-3 sm:gap-4 mb-4 w-5/6 mx-auto md:w-[640px]'>
+            <div className='grid grid-cols-4 gap-3 sm:gap-4 mb-4 w-5/6 mx-auto
+            md:w-[640px]
+            lg:w-11/12'>
                 {timesForSelectedDate.length > 0 ? (
                     timesForSelectedDate.map(time => (
                         <button

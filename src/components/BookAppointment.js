@@ -136,19 +136,32 @@ const BookAppointment = () => {
 
     return (
         <div className=''>
-            <div className='flex flex-col mx-auto py-4 px-2  mb-[80px] md:mb-[120px] font-serif w-full'>
-                <div className='flex flex-row sm:ml-4 md:self-center md:w-[700px] xl:w-[900px] md:relative'>
-                    <div className='flex justify-center space-x-2 mb-10 mt-4 sm:mb-16 text-[15px] sm:text-[16px]'>
+            <div className='flex flex-col mx-auto p-4 mb-[80px] font-serif w-full
+                            md:mb-[120px]
+                            lg:mb-[20px]'>
+                <div className='flex flex-row mb-4 h-fit
+                                sm:ml-4
+                                md:w-full md:relative
+                                lg:ml-0 lg:items-center'>
+                    <button
+                        onClick={prevStep}
+                        className={`hidden lg:flex h-8 w-8 rounded-full text-white bg-licorice text-[20px] place-content-center mr-6`}>
+                        &#x2190;{/* Left Arrow */}
+                    </button>
+                    {/* Progress Bar*/}
+                    <div className='flex justify-center space-x-2 text-[15px]
+                                    sm:text-[16px]
+                                    lg:text-[18px]'>
                         <div className={currentStep === 0 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Service & Provider</div>
                         <div className='text-gray-400 font-bold'>{'>'}</div>
                         <div className={currentStep === 1 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Date & Time</div>
                         <div className='text-gray-400 font-bold'>{'>'}</div>
                         <div className={currentStep === 2 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Confirm</div>
-
                     </div>
                     <Link to="/" className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 rounded-bl-2xl 
                                             sm:px-5 sm:py-4
-                                            md:-top-4 md:rounded-br-2xl'>
+                                            md:-top-8 md:rounded-br-2xl md:ml-auto
+                                            lg:relative lg:right-[10%]'>
                         <div className='flex flex-col md:flex-row items-center'>
                             <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2' />
                             <div className=''>
@@ -158,11 +171,111 @@ const BookAppointment = () => {
                         </div>
                     </Link>
                 </div>
-                {renderStep()}
+                <div className='flex'>
+                    <div className='flex w-full lg:w-[58%] mx-auto lg:px-5'>
+                        {renderStep()}
+                    </div>
+                    <div className='hidden lg:flex flex-col w-[40%] h-fit'>
+                        {/* Summary Box lg */}
+                        <div className='flex flex-col w-full mx-auto px-4 pt-2 pb-8 border border-black rounded shadow-lg text-[15px] bg-[#F4E1CD]'>
+                            <h3 className='text-[24px] font-bold underline mb-3 text-center'>Summary</h3>
+                            {/* Services Section lg */}
+                            <div className='text-start'>
+                                <p className='font-bold text-[20px] mt-1'>Service(s)</p>
+                                <hr className='border-gray-400 w-1/2 mb-1' />
+                                <div className='mx-4'>
+                                    {selectedServices.length === 0 ?
+                                        (<div className="text-red-500 text-[18px] text-center my-4">
+                                            {"* Select 1 or more services *"}
+                                        </div>)
+                                        : (selectedServices.map(serviceId => (
+                                            <div key={serviceId} className='flex justify-between mb-0.5 text-[18px]'>
+                                                <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
+                                                <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
+                                            </div>
+                                        )))}
+                                </div>
+                                <div className='flex flex-col mt-3 mx-4 items-end'>
+                                    <hr className='border-gray-400 w-2/3' />
+                                    <div className='flex flex-row w-full mt-1 font-bold text-[18px] justify-end'>
+                                        <p className='w-fit mr-8'>Subtotal:</p>
+                                        <p className='flex w-1/6 justify-center'>${subtotal.toFixed(2)}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Providers Section lg */}
+                            <div className='text-start'>
+                                <p className='font-bold text-[20px] mt-4'>Provider(s)</p>
+                                <hr className='border-gray-400 w-1/2 mb-1.5' />
+                                {selectedProviders.length === 0 ?
+                                    (<div className="text-red-500 text-[18px] text-center my-4">
+                                        {"* Select 1 or more providers *"}
+                                    </div>)
+                                    : (selectedProviders.map(providerId => (
+                                        <div className='flex flex-row ml-4 mb-1 items-center'>
+                                            <img src={BookingFormHelper(barbers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
+                                                className='h-[30px] w-[30px] rounded-full object-cover' />
+                                            <p key={providerId} className='ml-2 text-[17px]'>
+                                                {BookingFormHelper(barbers).getProviderNameById(providerId)}
+                                            </p>
+                                        </div>
+                                    )))}
+                            </div>
+                            {/* When Section lg */}
+                            <div className={`${(currentStep === 0 && selectedTime === null) ? 'hidden' : ''} text-start mt-4`}>
+                                <p className='font-bold text-[20px] mt-2'>When</p>
+                                <hr className='border-gray-400 w-1/2 mb-1' />
+                                <div className='w-fit text-center'>
+                                    {selectedDate !== null ? (
+                                        <p className='text-black'>
+                                            <span>{selectedDate.toLocaleString(undefined, { weekday: "long" })} </span>
+                                            {/* <br /> */}
+                                            <span>{selectedDate.toLocaleString(undefined, { month: "2-digit", day: "2-digit" })}</span>
+                                        </p>
+                                    ) : (
+                                        <p className='text-barberRed mt-2 text-center'>Select a date.</p>
+                                    )}
+                                </div>
+                                <div className='w-fit text-center'>
+                                    {selectedTime !== null ? (
+                                        <p className='text-black'>
+                                            <span>@</span>
+                                            <br />
+                                            <span>{selectedTime}</span>
+                                        </p>
+                                    ) : (
+                                        <p className='text-barberRed mt-2 text-center'>Select a time for your appointment.</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Where Section lg */}
+                            <div className={`${currentStep === 2 ? '' : 'hidden'} text-start mt-4`}>
+                                <p className='font-bold text-[20px] mt-1'>Where</p>
+                                <hr className='border-gray-400 w-1/2 mb-1' />
+                                <div className='flex flex-col ml-4 w-fit'>
+                                    <p className='text-md text-center'>12345 W Main St. STE 1000</p>
+                                    <p className='text-md text-center'>Denver, CO 80246</p>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Continue Button lg */}
+                        <div className='flex w-5/6 items-center mx-auto mt-10'>
+                            <button
+                                onClick={nextStep}
+                                disabled={!allowContinue()}
+                                className={`${currentStep === 2 ? 'hidden' : ''} w-full px-2 py-4 rounded-lg text-white text-[18px]  shadow-lg
+                            ${allowContinue() ? 'bg-barberRed hover:bg-hoverRed' : 'bg-gray-500 hover:bg-gray-400 cursor-not-allowed'}`}>
+                                Continue
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex items-center justify-around p-1 border-t-2 border-black 
-                            md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] lg:w-[900px] md:border-x-2 md:rounded-t-2xl`}>
+            <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex lg:hidden items-center justify-around p-1 border-t-2 border-black 
+                            md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] md:border-x-2 md:rounded-t-2xl`}>
                 <div className='flex items-center w-full justify-around text-[14px] sm:text-[16px]'>
                     {/* Back Button */}
                     <button className='flex bg-licorice text-carrotOrange px-2 py-2 rounded-2xl md:px-4' onClick={prevStep}>Back</button>
@@ -193,7 +306,7 @@ const BookAppointment = () => {
 
                         </p>
                     </div>
-                    {/* Provider Summary >= md*/}
+                    {/* Provider Summary md*/}
                     <div className={`${currentStep === 2 ? 'hidden' : 'md:flex'} hidden h-[100px]`}>
                         <div className='flex flex-col text-center'>
                             <p className='font-semibold underline text-[17px] mb-0.5'>Provider(s)</p>
@@ -279,7 +392,7 @@ const BookAppointment = () => {
                     <button
                         onClick={scrollToTop}
                         className={`${currentStep === 2 ? '' : 'hidden'} h-10 w-10 rounded-full text-white bg-licorice`}>
-                        &#x2191; {/* Unicode for Up Arrow */}
+                        &#x2191; {/* Up Arrow */}
                     </button>
                 </div>
             </div>

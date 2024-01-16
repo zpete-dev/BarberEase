@@ -145,23 +145,23 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
             <div className='w-full xl:w-[46%]'>
                 <h2 className='text-2xl text-center font-bold underline mb-3' ref={servicesSectionRef}>Select Service(s)</h2>
                 {/* Filter Bar with Buttons*/}
-                <div className='flex flex-wrap rounded-[28px] justify-around py-1 px-1 bg-licorice mb-2'>
+                <div className='flex gap-2 relative'>
                     <button
-                        className={`rounded-full p-1 sm:p-1.5 ${currentFilter === "all" ? 'bg-carrotOrange text-black' : 'text-white'}`}
+                        className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === "all" ? 'bg-white text-black border border-b-0 border-gray-300' : 'text-white bg-licorice'}`}
                         onClick={() => setCurrentFilter("all")}>
                         <p className='text-sm sm:text-[15px]'>Show All</p>
                     </button>
                     {serviceCategories.map(category => (
                         <button
                             key={category._id}
-                            className={`rounded-full p-1 sm:p-1.5 ${currentFilter === category._id ? 'bg-carrotOrange text-black' : 'text-white'}`}
+                            className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === category._id ? 'bg-white text-black border border-b-0 border-gray-300' : 'text-white bg-licorice'}`}
                             onClick={() => setCurrentFilter(category._id)}>
                             <p className='text-sm sm:text-[15px]'>{category.name}</p>
                         </button>
                     ))}
                 </div>
                 {/* Service Select Buttons*/}
-                <div className='border w-full h-fit border-gray-300 rounded p-2 shadow-lg' ref={buttonContainerRef}>
+                <div className='border w-full h-fit border-gray-300 rounded-tl-none rounded p-2 shadow-lg' ref={buttonContainerRef}>
                     {serviceCategories.map(category => (
                         <div key={category._id} className={`h-fit flex flex-col items-center ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? ''
                             : 'hidden'}`}>

@@ -80,12 +80,12 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     };
 
     return (
-        <div className='text-center'>
+        <div className='text-center w-full'>
             <h2 className='text-3xl font-bold underline mb-4'>Confirm Appointment</h2>
 
-            <div className='flex flex-col mx-auto xl:flex-row w-full xl:w-[900px]'>
+            <div className='flex flex-col mx-auto w-full'>
                 {/* Personal Information Form Box */}
-                <div className='mx-auto p-4 mb-4 border border-gray-300 rounded shadow-lg w-5/6 md:w-[640px] xl:w-[58%]'>
+                <div className='mx-auto w-full p-4 mb-4 border border-gray-300 rounded shadow-lg'>
                     <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
                     <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
                     text-red-500 text-sm text-left`}>- Please enter 2 or more characters</span>
@@ -161,7 +161,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                 </div>
 
                 {/* Summary Box */}
-                <div className='mx-auto p-4 border border-black rounded shadow-lg w-5/6 lg md:w-[640px] text-[15px] xl:w-[40%]'>
+                <div className='hidden mx-auto p-4 border border-black rounded shadow-lg w-5/6 lg md:w-[640px] text-[15px] xl:w-[40%]'>
                     <h3 className='text-xl font-bold underline mb-4'>Summary</h3>
 
                     {/* Providers Section */}
