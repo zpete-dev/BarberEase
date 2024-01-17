@@ -7,29 +7,6 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     const [currentFilter, setCurrentFilter] = useState("all");
     const [showInfo, setShowInfo] = useState({}); // State to track which service info to show
 
-
-    const servicesSectionRef = useRef(null); // Ref for the "Select Services" section
-    const buttonContainerRef = useRef(null); // Ref for the services button container
-    const [topDistance, setTopDistance] = useState(0); // State to store the distance
-
-    useEffect(() => {
-        const calculateDistance = () => {
-            if (servicesSectionRef.current && buttonContainerRef.current) {
-                const servicesSectionTop = servicesSectionRef.current.getBoundingClientRect().bottom;
-                const buttonContainerTop = buttonContainerRef.current.getBoundingClientRect().top;
-                setTopDistance(buttonContainerTop - servicesSectionTop);
-            }
-        };
-
-        // Calculate the distance initially and on window resize
-        calculateDistance();
-        window.addEventListener('resize', calculateDistance);
-
-        return () => {
-            window.removeEventListener('resize', calculateDistance);
-        };
-    }, []);
-
     const toggleService = (serviceId) => {
         //Set the list of Selected Services
         const currentServices = selectedServices.includes(serviceId)
@@ -144,7 +121,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         <div className='flex flex-col mx-auto w-5/6 md:w-[640px] xl:w-[900px] xl:flex-row xl:justify-around'>
             {/* Select Services Section*/}
             <div className='w-full xl:w-[46%]'>
-                <h2 className='text-2xl text-center font-bold underline mb-3' ref={servicesSectionRef}>Select Service(s)</h2>
+                <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
                 {/* Filter Bar with Buttons*/}
                 <div className='flex gap-2 relative'>
                     <button
@@ -164,7 +141,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                     ))}
                 </div>
                 {/* Service Select Buttons*/}
-                <div className='border w-full h-fit border-gray-300 rounded-tl-none rounded p-2 shadow-lg' ref={buttonContainerRef}>
+                <div className='border w-full h-fit border-gray-300 rounded-tl-none rounded p-2 shadow-lg'>
                     {serviceCategories.map(category => (
                         <div key={category._id} className={`transition-[max-height] duration-500 overflow-hidden h-fit flex flex-col items-center
                         ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? 'max-h-[50em]' : 'max-h-[0em]'}`}>
@@ -185,7 +162,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
 
             {/* Select Providers Section*/}
             <div className='w-full h-fit xl:w-[46%]'>
-                <h2 className={`text-2xl font-bold underline text-center my-3 xl:my-0 xl:mb-[${topDistance}px]`}>Select Provider(s)</h2>
+                <h2 className={`text-2xl font-bold underline text-center my-3`}>Select Provider(s)</h2>
                 <div className='flex flex-col border border-gray-300 w-full rounded p-4 shadow-lg'>
                     <h3 className='text-xl font-bold underline text-center mb-4'>Provider(s)</h3>
                     <div className='flex flex-wrap gap-2 justify-around'>
