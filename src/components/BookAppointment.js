@@ -226,27 +226,33 @@ const BookAppointment = () => {
                             <div className={`${(currentStep === 0 && selectedTime === null) ? 'hidden' : ''} text-start mt-4`}>
                                 <p className='font-bold text-[20px] mt-2'>When</p>
                                 <hr className='border-gray-400 w-1/2 mb-1' />
-                                <div className='w-fit text-center'>
-                                    {selectedDate !== null ? (
-                                        <p className='text-black'>
-                                            <span>{selectedDate.toLocaleString(undefined, { weekday: "long" })} </span>
-                                            {/* <br /> */}
-                                            <span>{selectedDate.toLocaleString(undefined, { month: "2-digit", day: "2-digit" })}</span>
-                                        </p>
-                                    ) : (
-                                        <p className='text-barberRed mt-2 text-center'>Select a date.</p>
-                                    )}
-                                </div>
-                                <div className='w-fit text-center'>
-                                    {selectedTime !== null ? (
-                                        <p className='text-black'>
-                                            <span>@</span>
-                                            <br />
-                                            <span>{selectedTime}</span>
-                                        </p>
-                                    ) : (
-                                        <p className='text-barberRed mt-2 text-center'>Select a time for your appointment.</p>
-                                    )}
+                                <div className='flex ml-3'>
+                                    <img src='/images/calendar_icon.png' alt='Calendar Icon'
+                                        className='h-[30px] w-[30px] rounded-full object-cover mr-2' />
+                                    <div className='flex flex-col text-[17px] items-start'>
+                                        <div className='w-fit text-center'>
+                                            {selectedDate !== null ? (
+                                                <p className='text-black underline'>
+                                                    <span>{selectedDate.toLocaleString(undefined, { weekday: "long" })} ~ </span>
+                                                    {/* <br /> */}
+                                                    <span>{selectedDate.toLocaleString(undefined, { month: "2-digit", day: "2-digit" })}</span>
+                                                </p>
+                                            ) : (
+                                                <p className='text-barberRed mt-2 text-center'>Select a date.</p>
+                                            )}
+                                        </div>
+                                        <div className='w-fit text-center self-center'>
+                                            {selectedTime !== null ? (
+                                                <p className='text-black'>
+                                                    <span>@</span>
+                                                    <br />
+                                                    <span className='underline'>{selectedTime}</span>
+                                                </p>
+                                            ) : (
+                                                <p className='text-barberRed mt-2 text-center'>Select a time for your appointment.</p>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -254,10 +260,15 @@ const BookAppointment = () => {
                             <div className={`${currentStep === 2 ? '' : 'hidden'} text-start mt-4`}>
                                 <p className='font-bold text-[20px] mt-1'>Where</p>
                                 <hr className='border-gray-400 w-1/2 mb-1' />
-                                <div className='flex flex-col ml-4 w-fit'>
-                                    <p className='text-md text-center'>12345 W Main St. STE 1000</p>
-                                    <p className='text-md text-center'>Denver, CO 80246</p>
+                                <div className='flex ml-3'>
+                                    <img src='/images/pin_icon.png' alt='Calendar Icon'
+                                        className='h-[30px] w-[30px] rounded-full object-cover mr-2' />
+                                    <div className='flex flex-col w-fit text-[17px]'>
+                                        <p className='text-md text-center'>12345 W Main St. STE 1000</p>
+                                        <p className='text-md text-center'>Denver, CO 80246</p>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                         {/* Continue Button lg */}

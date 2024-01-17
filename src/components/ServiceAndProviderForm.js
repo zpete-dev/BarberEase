@@ -79,19 +79,20 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
 
 
 
-    const ServiceButton = ({ service, isSelected, categoryId }) => {
+    const ServiceButton = ({ service, isSelected, categoryId, category }) => {
         const { name, description, price } = service;
         const buttonStyle = isSelected ? 'bg-gray-400 border-opacity-50 scale-105' : 'bg-gray-200 hover:bg-gray-300 border-opacity-0 hover:scale-105 hover:border-opacity-50';
         const iconStyle = isSelected ? 'bg-barberRed' : 'bg-gray-400 hover:bg-gray-500';
         const icon = isSelected ? '✓' : '+';
-        const hideButton = (currentFilter === "all" || currentFilter === categoryId || selectedServices.includes(service._id)) ?
-            'transform transition duration-150 ease-in-out' :
-            'hidden';
+        /*         const hideButton = (currentFilter === "all" || currentFilter === categoryId || selectedServices.includes(service._id)) ?
+                    'max-h-96' : 'max-h-0'; */
+        const hideButton = (currentFilter !== "all" && currentFilter !== categoryId && (selectedServices.some(id => category.services.some(service => service._id === id)) && !(selectedServices.includes(service._id)))) ?
+            'max-h-[0em] border-0' : 'max-h-[8em] border hover:border-gray-600';
 
         return (
             <button
-                className={`${hideButton} ${buttonStyle} w-11/12 h-full flex flex-row rounded mb-2 sm:mb-3 items-center justify-between shadow-md
-                 border hover:border-gray-600`}
+                className={`transition-[max-height] duration-1000 overflow-hidden ${hideButton} ${buttonStyle} w-11/12 h-afit flex flex-row rounded mb-2 sm:mb-3 items-center justify-between shadow-md
+                aborder ahover:aborder-gray-600`}
                 onClick={() => toggleService(service._id)} >
                 <div className='flex flex-col w-2/3 pl-2 sm:pl-4'>
                     <div className='flex flex-row'>
@@ -147,14 +148,16 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                 {/* Filter Bar with Buttons*/}
                 <div className='flex gap-2 relative'>
                     <button
-                        className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === "all" ? 'bg-white text-black border border-b-0 border-gray-300' : 'text-white bg-licorice'}`}
+                        className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === "all" ? 'bg-white text-black border border-b-0 border-gray-300' :
+                            'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-1'}`}
                         onClick={() => setCurrentFilter("all")}>
                         <p className='text-sm sm:text-[15px]'>Show All</p>
                     </button>
                     {serviceCategories.map(category => (
                         <button
                             key={category._id}
-                            className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === category._id ? 'bg-white text-black border border-b-0 border-gray-300' : 'text-white bg-licorice'}`}
+                            className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === category._id ? 'bg-white text-black border border-b-0 border-gray-300' :
+                                'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-1'}`}
                             onClick={() => setCurrentFilter(category._id)}>
                             <p className='text-sm sm:text-[15px]'>{category.name}</p>
                         </button>
@@ -163,8 +166,8 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                 {/* Service Select Buttons*/}
                 <div className='border w-full h-fit border-gray-300 rounded-tl-none rounded p-2 shadow-lg' ref={buttonContainerRef}>
                     {serviceCategories.map(category => (
-                        <div key={category._id} className={`h-fit flex flex-col items-center ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? ''
-                            : 'hidden'}`}>
+                        <div key={category._id} className={`transition-[max-height] duration-500 overflow-hidden h-fit flex flex-col items-center
+                        ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? 'max-h-[50em]' : 'max-h-[0em]'}`}>
                             <h3 className='text-xl font-bold mb-2 self-start'>{category.name}</h3>
                             {category.services.map(service => (
                                 <ServiceButton
@@ -172,6 +175,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                                     service={service}
                                     isSelected={selectedServices.includes(service._id)}
                                     categoryId={category._id}
+                                    category={category}
                                 />
                             ))}
                         </div>

@@ -122,14 +122,14 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             {/* Time Selection Buttons */}
             <div className='grid grid-cols-4 gap-3 sm:gap-4 mb-4 w-5/6 mx-auto
             md:w-[640px]
-            lg:w-11/12'>
+            lg:w-11/12 lg:gap-5'>
                 {timesForSelectedDate.length > 0 ? (
                     timesForSelectedDate.map(time => (
                         <button
                             key={time}
-                            className={`shadow-md p-2 border rounded transform transition duration-150 ease-in-out text-[13px] sm:text-[14px]
+                            className={`shadow-md p-2 border border-[#381E02] rounded transform transition duration-150 ease-in-out text-[13px] sm:text-[14px]
                             ${selectedTime === time ? 'bg-carrotOrangeHover text-black' : 'bg-carrotOrange text-black'}
-                            ${selectedTime === time ? 'scale-105' : 'hover:bg-carrotOrangeHover hover:scale-105'}`}
+                            ${selectedTime === time ? 'scale-110 border-opacity-50' : 'hover:bg-carrotOrangeHover border-opacity-0 hover:border-opacity-50 hover:scale-110'}`}
                             onClick={() => handleTimeSelect(time)}>
                             {time}
                             <div className={`${selectedTime === time ? 'flex' : 'hidden'} absolute -right-2 -top-2 h-5 w-5 items-center justify-center
