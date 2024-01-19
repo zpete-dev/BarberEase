@@ -122,7 +122,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             {/* Time Selection Buttons */}
             <div className='grid grid-cols-4 gap-3 sm:gap-4 mb-4 w-5/6 mx-auto
             md:w-[640px]
-            lg:w-11/12 lg:gap-5'>
+            lg:w-11/12 lg:gap-6'>
                 {timesForSelectedDate.length > 0 ? (
                     timesForSelectedDate.map(time => (
                         <button

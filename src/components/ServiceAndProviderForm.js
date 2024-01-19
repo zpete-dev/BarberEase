@@ -61,15 +61,11 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         const buttonStyle = isSelected ? 'bg-gray-400 border-opacity-50 scale-105' : 'bg-gray-200 hover:bg-gray-300 border-opacity-0 hover:scale-105 hover:border-opacity-50';
         const iconStyle = isSelected ? 'bg-barberRed' : 'bg-gray-400 hover:bg-gray-500';
         const icon = isSelected ? '✓' : '+';
-        /*         const hideButton = (currentFilter === "all" || currentFilter === categoryId || selectedServices.includes(service._id)) ?
-                    'max-h-96' : 'max-h-0'; */
-        const hideButton = (currentFilter !== "all" && currentFilter !== categoryId && (selectedServices.some(id => category.services.some(service => service._id === id)) && !(selectedServices.includes(service._id)))) ?
-            'max-h-[0em] border-0' : 'max-h-[8em] border hover:border-gray-600';
 
         return (
             <button
-                className={`transition-[max-height] duration-1000 overflow-hidden ${hideButton} ${buttonStyle} w-11/12 h-afit flex flex-row rounded mb-2 sm:mb-3 items-center justify-between shadow-md
-                aborder ahover:aborder-gray-600`}
+                className={`${buttonStyle} w-11/12 h-fit flex flex-row rounded mb-2 sm:mb-3 items-center justify-between shadow-md
+                border hover:border-gray-600`}
                 onClick={() => toggleService(service._id)} >
                 <div className='flex flex-col w-2/3 pl-2 sm:pl-4'>
                     <div className='flex flex-row'>
@@ -118,9 +114,9 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     };
 
     return (
-        <div className='flex flex-col mx-auto w-5/6 md:w-[640px] xl:w-[900px] xl:flex-row xl:justify-around'>
+        <div className='flex flex-col mx-auto w-5/6 md:w-[640px]'>
             {/* Select Services Section*/}
-            <div className='w-full xl:w-[46%]'>
+            <div className='w-full'>
                 <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
                 {/* Filter Bar with Buttons*/}
                 <div className='flex gap-2 relative'>
@@ -143,17 +139,22 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                 {/* Service Select Buttons*/}
                 <div className='border w-full h-fit border-gray-300 rounded-tl-none rounded p-2 shadow-lg'>
                     {serviceCategories.map(category => (
-                        <div key={category._id} className={`transition-[max-height] duration-500 overflow-hidden h-fit flex flex-col items-center
-                        ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ? 'max-h-[50em]' : 'max-h-[0em]'}`}>
+                        <div key={category._id} className={`transition-[max-height] duration-500 ease-in-out overflow-hidden h-fit flex flex-col items-center
+                        ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ?
+                                'max-h-[50em]' : 'max-h-[0em]'}`}>
                             <h3 className='text-xl font-bold mb-2 self-start'>{category.name}</h3>
                             {category.services.map(service => (
-                                <ServiceButton
-                                    key={service._id}
-                                    service={service}
-                                    isSelected={selectedServices.includes(service._id)}
-                                    categoryId={category._id}
-                                    category={category}
-                                />
+                                <div className={`w-full transition-[max-height] duration-500 ease-in-out overflow-hidden
+                                ${(currentFilter !== "all" && currentFilter !== category._id && (selectedServices.some(id => category.services.some(service => service._id === id)) && !(selectedServices.includes(service._id)))) ?
+                                        'max-h-[0em]' : 'max-h-[8em]'}`}>
+                                    <ServiceButton
+                                        key={service._id}
+                                        service={service}
+                                        isSelected={selectedServices.includes(service._id)}
+                                        categoryId={category._id}
+                                        category={category}
+                                    />
+                                </div>
                             ))}
                         </div>
                     ))}
@@ -161,7 +162,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
             </div>
 
             {/* Select Providers Section*/}
-            <div className='w-full h-fit xl:w-[46%]'>
+            <div className='w-full h-fit'>
                 <h2 className={`text-2xl font-bold underline text-center my-3`}>Select Provider(s)</h2>
                 <div className='flex flex-col border border-gray-300 w-full rounded p-4 shadow-lg'>
                     <h3 className='text-xl font-bold underline text-center mb-4'>Provider(s)</h3>

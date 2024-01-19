@@ -35,7 +35,7 @@
   }
   
   .react-calendar__navigation button {
-    @apply text-licorice min-w-[40px] sm:min-w-[52px];
+    @apply text-licorice min-w-[40px] sm:min-w-[52px] transition-colors duration-100 ease-in-out;
   }
   
   .react-calendar__navigation__label {
@@ -80,37 +80,29 @@
   }
   
   .react-calendar__tile {
-    @apply py-[10px] px-[6.6667px] sm:py-[15px] md:py-[16px] text-center text-sm bg-white;
-    /*max-width: 100%;
-    padding: 10px 6.6667px;
-    background: none;
-    text-align: center;
-    line-height: 16px;
-    font: inherit;
-    font-size: 0.833em;*/
+    @apply py-[10px] px-[6.6667px] sm:py-[15px] md:py-[16px] lg:md:py-[6px] pointer-events-none text-center text-sm bg-white transition-colors duration-150 ease-in-out;
   }
-  
+    
+  .react-calendar__tile:enabled abbr {
+    @apply flex border-slate-400 border-2 text-black rounded-full h-10 w-10 items-center justify-center mx-auto pointer-events-auto;
+  }
+
+  .react-calendar__tile:enabled:hover abbr{
+    @apply bg-slate-300;
+  }
+
+  .react-calendar__tile--active:enabled:hover abbr{
+    @apply bg-licorice;
+  }
+
+   .react-calendar__tile--active:enabled abbr{
+    @apply bg-licorice text-white border-licorice;
+  }
+
   .react-calendar__tile:disabled {
     @apply bg-gray-200 text-gray-400;
   }
-  
-  .react-calendar__tile:enabled:hover {
-    @apply bg-slate-400;
+
+  .react-calendar__tile:disabled abbr {
+    @apply flex border-gray-200 border-2 text-gray-400 rounded-full h-10 w-10 items-center justify-center mx-auto;
   }
-  
-  .react-calendar__tile--hasActive {
-    background: #76baff;
-  }
-  
-  .react-calendar__tile--hasActive:enabled:hover {
-    background: #a9d4ff;
-  }
-  
-  .react-calendar__tile--active {
-    @apply bg-licorice text-white;
-  }
-  
-  .react-calendar__tile--active:enabled:hover {
-    @apply bg-licorice;
-  }
-  
