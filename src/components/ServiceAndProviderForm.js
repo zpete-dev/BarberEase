@@ -64,7 +64,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
 
         return (
             <button
-                className={`${buttonStyle} w-11/12 h-fit flex flex-row rounded mb-2 sm:mb-3 items-center justify-between shadow-md
+                className={`${buttonStyle} transition w-11/12 h-fit flex flex-row rounded mt-1 mb-1 sm:mb-2 items-center justify-between shadow-md mx-auto
                 border hover:border-gray-600`}
                 onClick={() => toggleService(service._id)} >
                 <div className='flex flex-col w-2/3 pl-2 sm:pl-4'>
@@ -77,10 +77,9 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                         </div>
 
                     </div>
-                    <p className={`${showInfo[service._id] ? 'block' : 'hidden'} text-sm text-left`}>{description}</p>
+                    <p className={`text-sm text-left ${showInfo[service._id] ? 'max-h-12' : 'max-h-0'} transition-[max-height] duration-500 ease-in-out overflow-hidden`}>{description}</p>
                 </div>
                 <div className='flex flex-row w-1/4 py-3 justify-around'>
-                    {/* <p className='flex text-base self-center'>{price}</p> */}
                     <div className='flex self-center text-sm'>
                         <div className={`flex ${iconStyle} w-7 h-7 rounded-full items-center justify-center text-white text-[18px]`}>
                             {icon}
@@ -114,7 +113,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     };
 
     return (
-        <div className='flex flex-col mx-auto w-5/6 md:w-[640px]'>
+        <div className='flex flex-col mx-auto w-5/6 md:w-[640px] lg:w-full'>
             {/* Select Services Section*/}
             <div className='w-full'>
                 <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>

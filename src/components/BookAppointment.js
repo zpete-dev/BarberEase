@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DateTime } from 'luxon';
@@ -108,17 +108,6 @@ const BookAppointment = () => {
         }
     };
 
-
-    const ServiceSummary = ({ serviceId }) => {
-        console.log(serviceId);
-        return (
-            <div className={`flex justify-between mb-0.5 text-[18px] max-h-7`}>
-                <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
-                <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)} poo</p>
-            </div>
-        );
-    };
-
     const renderStep = () => {
         //console.log("Running renderStep. Current step: " + currentStep);
         switch (currentStep) {
@@ -155,13 +144,14 @@ const BookAppointment = () => {
                 <div className='flex flex-row mb-4 h-fit
                                 sm:ml-4
                                 md:w-full md:relative
-                                lg:ml-0 lg:items-center'>
+                                lg:mx-auto lg:items-center
+                                xl:max-w-[1390px] xl:mx-auto'>
                     <button
                         onClick={prevStep}
                         className={`hidden lg:flex h-8 w-8 rounded-full text-white bg-licorice text-[20px] place-content-center mr-6`}>
                         &#x2190;{/* Left Arrow */}
                     </button>
-                    {/* Progress Bar*/}
+                    {/* Progress Bar TODO: MAKE WODS CLICKABLE TO HEAD TO THAT STEP*/}
                     <div className='flex justify-center space-x-2 text-[15px]
                                     sm:text-[16px]
                                     lg:text-[18px]'>
@@ -174,9 +164,10 @@ const BookAppointment = () => {
                     <Link to="/" className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 rounded-bl-2xl 
                                             sm:px-5 sm:py-4
                                             md:-top-8 md:rounded-br-2xl md:ml-auto
-                                            lg:relative lg:right-[10%]'>
+                                            lg:relative lg:right-[10%]
+                                            xl:px-8 xl:py-6'>
                         <div className='flex flex-col md:flex-row items-center'>
-                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2' />
+                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2 xl:h-[64px] xl:w-[64px] ' />
                             <div className=''>
                                 <span className='text-white text-xl font-serif text-justify'>Barber</span>
                                 <span className='text-barberRed text-xl font-serif'>Dog</span>
@@ -184,11 +175,11 @@ const BookAppointment = () => {
                         </div>
                     </Link>
                 </div>
-                <div className='flex'>
-                    <div className='flex w-full lg:w-[58%] mx-auto lg:px-5'>
+                <div className='flex w-full justify-center'>
+                    <div className='flex w-full lg:w-[58%] lg:px-5 xl:max-w-[900px]'>
                         {renderStep()}
                     </div>
-                    <div className='hidden lg:flex flex-col w-[40%] h-fit'>
+                    <div className='hidden lg:flex flex-col w-[40%] xl:w-[490px] h-fit'>
                         {/* Summary Box lg */}
                         <div className='flex flex-col w-full mx-auto px-4 pt-2 pb-8 border border-black rounded shadow-lg text-[15px] bg-[#F4E1CD]'>
                             <h3 className='text-[24px] font-bold underline mb-3 text-center'>Summary</h3>
@@ -197,12 +188,16 @@ const BookAppointment = () => {
                                 <p className='font-bold text-[20px] mt-1'>Service(s)</p>
                                 <hr className='border-gray-400 w-1/2 mb-3' />
                                 <div className='mx-4 overflow-hidden'>
+                                    <div className={`${selectedServices.length === 0 ? 'max-h-7' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
+                                    text-red-500 font-semibold text-[18px] text-center`}>
+                                        {"* Select 1 or more services *"}
+                                    </div>
                                     <TransitionGroup className='service-summary'>
                                         {selectedServices.map(serviceId => (
                                             <CSSTransition
                                                 key={serviceId}
                                                 timeout={500}
-                                                classNames="item">
+                                                classNames="service-item">
                                                 <div className={`flex justify-between mb-0.5 text-[18px] overflow-hidden`}>
                                                     <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
                                                     <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
@@ -210,16 +205,6 @@ const BookAppointment = () => {
                                             </CSSTransition>
                                         ))}
                                     </TransitionGroup>
-                                    {/* <div className={`${selectedServices.length === 0 ? 'max-h-7' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
-                                    text-red-500 font-semibold text-[18px] text-center`}>
-                                        {"* Select 1 or more services *"}
-                                    </div>
-                                    {selectedServices.map(serviceId => (
-                                        <div className={`flex justify-between mb-0.5 text-[18px] max-h-7`}>
-                                            <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
-                                            <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
-                                        </div>
-                                    ))}*/}
                                 </div>
                                 <div className='flex flex-col mt-3 mx-4 items-end'>
                                     <hr className='border-gray-400 w-2/3' />
@@ -234,19 +219,28 @@ const BookAppointment = () => {
                             <div className='text-start'>
                                 <p className='font-bold text-[20px] mt-4'>Provider(s)</p>
                                 <hr className='border-gray-400 w-1/2 mb-1.5' />
-                                {selectedProviders.length === 0 ?
-                                    (<div className="text-red-500 text-[18px] font-semibold text-center my-4">
+                                <div className='mx-4 overflow-hidden'>
+                                    <div className={`${selectedProviders.length === 0 ? 'max-h-7' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
+                                    text-red-500 font-semibold text-[18px] text-center`}>
                                         {"* Select 1 or more providers *"}
-                                    </div>)
-                                    : (selectedProviders.map(providerId => (
-                                        <div className='flex flex-row ml-4 mb-1 items-center'>
-                                            <img src={BookingFormHelper(barbers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
-                                                className='h-[30px] w-[30px] rounded-full object-cover' />
-                                            <p key={providerId} className='ml-2 text-[17px]'>
-                                                {BookingFormHelper(barbers).getProviderNameById(providerId)}
-                                            </p>
-                                        </div>
-                                    )))}
+                                    </div>
+                                    <TransitionGroup className='provider-summary'>
+                                        {selectedProviders.map(providerId => (
+                                            <CSSTransition
+                                                key={providerId}
+                                                timeout={300}
+                                                classNames="provider-item">
+                                                <div className='flex flex-row ml-4 mb-1 items-center overflow-hidden'>
+                                                    <img src={BookingFormHelper(barbers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
+                                                        className='h-[30px] w-[30px] rounded-full object-cover' />
+                                                    <p key={providerId} className='ml-2 text-[17px]'>
+                                                        {BookingFormHelper(barbers).getProviderNameById(providerId)}
+                                                    </p>
+                                                </div>
+                                            </CSSTransition>
+                                        ))}
+                                    </TransitionGroup>
+                                </div>
                             </div>
                             {/* When Section lg */}
                             <div className={`text-start mt-4 ${(currentStep === 0 && selectedTime === null) ? 'max-h-0' : 'max-h-36'} transition-[max-height] duration-500 ease-in-out overflow-hidden`}>
@@ -278,7 +272,7 @@ const BookAppointment = () => {
                             </div>
 
                             {/* Where Section lg */}
-                            <div className={`${currentStep === 2 ? '' : 'hidden'} text-start mt-4`}>
+                            <div className={`text-start mt-4 ${(currentStep === 2) ? 'max-h-36' : 'max-h-0'} transition-[max-height] duration-500 ease-in-out overflow-hidden`}>
                                 <p className='font-bold text-[20px] mt-1'>Where</p>
                                 <hr className='border-gray-400 w-1/2 mb-1' />
                                 <div className='flex ml-3'>
