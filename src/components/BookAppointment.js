@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { DateTime } from 'luxon';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import ServiceAndProviderForm from './ServiceAndProviderForm';
 import DateAndTimeForm from './DateAndTimeForm';
 import ConfirmForm from './ConfirmForm';
 import { providers } from '../data/data';
 import { BookingFormHelper } from './BookingFormHelper';
+import '../Styles.css';
 
 const BookAppointment = () => {
     const [sessionToken, setSessionToken] = useState(null);
@@ -108,10 +110,11 @@ const BookAppointment = () => {
 
 
     const ServiceSummary = ({ serviceId }) => {
+        console.log(serviceId);
         return (
             <div className={`flex justify-between mb-0.5 text-[18px] max-h-7`}>
                 <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
-                <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
+                <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)} poo</p>
             </div>
         );
     };
@@ -194,15 +197,29 @@ const BookAppointment = () => {
                                 <p className='font-bold text-[20px] mt-1'>Service(s)</p>
                                 <hr className='border-gray-400 w-1/2 mb-3' />
                                 <div className='mx-4 overflow-hidden'>
-                                    <div className={`${selectedServices.length === 0 ? 'max-h-7' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
+                                    <TransitionGroup className='service-summary'>
+                                        {selectedServices.map(serviceId => (
+                                            <CSSTransition
+                                                key={serviceId}
+                                                timeout={500}
+                                                classNames="item">
+                                                <div className={`flex justify-between mb-0.5 text-[18px] overflow-hidden`}>
+                                                    <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
+                                                    <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
+                                                </div>
+                                            </CSSTransition>
+                                        ))}
+                                    </TransitionGroup>
+                                    {/* <div className={`${selectedServices.length === 0 ? 'max-h-7' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
                                     text-red-500 font-semibold text-[18px] text-center`}>
                                         {"* Select 1 or more services *"}
                                     </div>
-                                    <div className={`max-h-[${27*selectedServices.length}px] delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden`}>
-                                        {(selectedServices.map(serviceId => (
-                                                <ServiceSummary serviceId={serviceId} />
-                                        )))}
-                                    </div>
+                                    {selectedServices.map(serviceId => (
+                                        <div className={`flex justify-between mb-0.5 text-[18px] max-h-7`}>
+                                            <p className=''>{BookingFormHelper(providers).getServiceNameById(serviceId)}</p>
+                                            <p className='w-1/6 text-center'>{BookingFormHelper(providers).getServicePriceById(serviceId)}</p>
+                                        </div>
+                                    ))}*/}
                                 </div>
                                 <div className='flex flex-col mt-3 mx-4 items-end'>
                                     <hr className='border-gray-400 w-2/3' />

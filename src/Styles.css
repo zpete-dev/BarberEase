@@ -1,0 +1,13 @@
+.item-enter {
+  @apply max-h-0;
+}
+.item-enter-active {
+  @apply max-h-7 transition-[max-height] duration-500 ease-in-out;
+}
+.item-exit {
+  @apply max-h-7;
+}
+.item-exit-active {
+  @apply max-h-0 transition-[max-height] duration-500 ease-in-out;
+
+}
