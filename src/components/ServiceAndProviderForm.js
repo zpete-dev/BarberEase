@@ -121,7 +121,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                 <div className='flex gap-2 relative'>
                     <button
                         className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === "all" ? 'bg-white text-black border border-b-0 border-gray-300' :
-                            'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-1'}`}
+                            'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-2'}`}
                         onClick={() => setCurrentFilter("all")}>
                         <p className='text-sm sm:text-[15px]'>Show All</p>
                     </button>
@@ -129,7 +129,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                         <button
                             key={category._id}
                             className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === category._id ? 'bg-white text-black border border-b-0 border-gray-300' :
-                                'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-1'}`}
+                                'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-2'}`}
                             onClick={() => setCurrentFilter(category._id)}>
                             <p className='text-sm sm:text-[15px]'>{category.name}</p>
                         </button>

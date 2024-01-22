@@ -151,7 +151,7 @@ const BookAppointment = () => {
                         className={`hidden lg:flex h-8 w-8 rounded-full text-white bg-licorice text-[20px] place-content-center mr-6`}>
                         &#x2190;{/* Left Arrow */}
                     </button>
-                    {/* Progress Bar TODO: MAKE WODS CLICKABLE TO HEAD TO THAT STEP*/}
+                    {/* Progress Bar TODO: MAKE WORDS CLICKABLE TO HEAD TO THAT STEP*/}
                     <div className='flex justify-center space-x-2 text-[15px]
                                     sm:text-[16px]
                                     lg:text-[18px]'>

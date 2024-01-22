@@ -6,7 +6,8 @@ import '../CalendarStyles.css';
 
 const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedProviders, selectedTime, setSelectedTime, selectedDate, setSelectedDate }) => {
     const [availability, setAvailability] = useState([]);
-    const [timesForSelectedDate, setTimesForSelectedDate] = useState([]);
+    const [amTimes, setAmTimes] = useState([]);
+    const [pmTimes, setPmTimes] = useState([]);
 
     useEffect(() => {
         const fetchAvailability = async () => {
@@ -21,26 +22,43 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             } else {
                 providerList = selectedProviders;
             }
-            for (const provider of providerList) {
-                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers/${provider}/availability`, {
-                    headers: {
-                        'x-api-key': `${process.env.REACT_APP_API_KEY}`
-                    }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        data.availability.map(availability => {
-                            if (availability.date in fullAvailability) {
-                                availability.slots.map(timeSlot => {
-                                    if (fullAvailability[availability.date].indexOf(timeSlot) === -1) {
-                                        fullAvailability[availability.date].push(timeSlot);
-                                    }
-                                });
-                            } else {
-                                fullAvailability[availability.date] = availability.slots;
+            for (let i = 0; i < 2; i++) {
+                for (const provider of providerList) {
+                    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers/${provider}/availability`, {
+                        headers: {
+                            'x-api-key': `${process.env.REACT_APP_API_KEY}`
+                        }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            data.availability.map(availability => {
+                                if (availability.date in fullAvailability) {
+                                    availability.slots.map(timeSlot => {
+                                        if (fullAvailability[availability.date].indexOf(timeSlot) === -1) {
+                                            fullAvailability[availability.date].push(timeSlot);
+                                        }
+                                    });
+                                } else {
+                                    fullAvailability[availability.date] = availability.slots;
+                                }
+                            });
+
+                            //console.log(fullAvailability);
+                            let asdfasdf = [];
+                            //console.log(data.availability);
+                            for (const myAvailability in data.availability) {
+                                asdfasdf.push(data.availability[myAvailability].date);
                             }
-                        });
+                            //console.log(asdfasdf);
+                            for (const myDate in fullAvailability) {
+                                //console.log(`Date: ${myDate}`);
+                                if (asdfasdf.indexOf(myDate) === -1) {
+                                    fullAvailability[myDate] = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
+                                }
+
+                            }
+                        }
                     }
                 }
             }
@@ -48,18 +66,13 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
 
             const dstOffset = (DateTime.fromJSDate(selectedDate).toJSDate().getTimezoneOffset()) / 60;
             const selectedDateMST = DateTime.fromJSDate(selectedDate).minus({ hours: dstOffset }).toJSDate().toISOString().split('T')[0] + 'T00:00:00.000Z';
-            const availabilityForTheDay = fullAvailability[selectedDateMST];
-            if (availabilityForTheDay) {
-                // If the day exists in the barber's availability
-                setTimesForSelectedDate(availabilityForTheDay);
-            } else {
-                // If the day doesn't exist in the barber's availability, assume full availability (e.g., 9 AM - 3 PM)
-                setTimesForSelectedDate(['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM']);
-            }
+            setTimeButtonsByTimeArray(fullAvailability[selectedDateMST]);
         };
+
         if (selectedProviders.length > 0) {
             fetchAvailability();
         }
+
         return () => {
             console.log("Cleaning up DateAndTimeForm Component.");
         };
@@ -70,35 +83,48 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
         setSelectedDate(newDate);
         const dstOffset = (DateTime.fromJSDate(newDate).toJSDate().getTimezoneOffset()) / 60;
         const selectedDateMST = DateTime.fromJSDate(newDate).minus({ hours: dstOffset }).toJSDate().toISOString().split('T')[0] + 'T00:00:00.000Z';
-        console.log(newDate);
+        //console.log(newDate);
 
-
-        setAvailabilityForTheDay(selectedDateMST);
+        setTimeButtonsByTimeArray(availability[selectedDateMST]);
     };
 
-    const setAvailabilityForTheDay = (availabilityDate) => {
-        const availabilityForTheDay = availability[availabilityDate];
+    const setTimeButtonsByTimeArray = (availabilityForTheDay) => {
+        //console.log(availabilityForTheDay);
+        let myTimesForSelectedDate = [];
         if (availabilityForTheDay) {
             // If the day exists in the barber's availability
-            setTimesForSelectedDate(availabilityForTheDay);
+            myTimesForSelectedDate = availabilityForTheDay;
         } else {
             // If the day doesn't exist in the barber's availability, assume full availability (e.g., 9 AM - 3 PM)
-            setTimesForSelectedDate(['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM']);
+            myTimesForSelectedDate = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
         }
+        const sortedTimes = myTimesForSelectedDate.sort((a, b) => DateTime.fromFormat(a, "h:mm a").toMillis() - DateTime.fromFormat(b, "h:mm a").toMillis());
+        setAmTimes(sortedTimes.filter(time => time.includes("AM")));
+        setPmTimes(sortedTimes.filter(time => time.includes("PM")));
     };
 
     const handleTimeSelect = (time) => {
         setSelectedTime(time);
     };
 
-    const tileContent = ({ date, view }) => {
-        if (view === 'month' && date > new Date()) {
-            const dayAvailability = availability.find(avail => new Date(avail.date).toDateString() === date.toDateString());
-
-            if (!dayAvailability) return <div style={{ backgroundColor: 'blue' }}></div>;
-            if (dayAvailability && dayAvailability.slots.length > 0) return <div style={{ backgroundColor: 'blue' }}></div>;
-            if (dayAvailability && dayAvailability.slots.length === 0) return <div style={{ backgroundColor: 'red' }}></div>;
-        }
+    const renderTimeButtons = (times) => {
+        return (
+            <div className='flex flex-wrap gap-4'>
+                {times.map(time => (
+                    <button
+                        key={time}
+                        className={`shadow-md p-2 border border-[#381E02] rounded transform transition duration-150 ease-in-out text-[13px] sm:text-[14px]
+                ${selectedTime === time ? 'bg-carrotOrangeHover text-black' : 'bg-carrotOrange text-black'}
+                ${selectedTime === time ? 'scale-110 border-opacity-50' : 'hover:bg-carrotOrangeHover border-opacity-0 hover:border-opacity-50 hover:scale-110'}`}
+                        onClick={() => handleTimeSelect(time)}>
+                        {time}
+                        <div className={`${selectedTime === time ? 'flex' : 'hidden'} absolute -right-2 -top-2 h-5 w-5 items-center justify-center
+                    bg-licorice text-carrotOrange rounded-full sm:text-lg sm:w-6 sm:h-6`}>
+                            ✓
+                        </div>
+                    </button>
+                ))}
+            </div>);
     };
 
     return (
@@ -111,38 +137,22 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             lg:w-full' >
                 <Calendar
                     onChange={handleDateChange}
-                    /* tileContent={tileContent} */
                     minDate={DateTime.now().setZone('America/Denver').toJSDate()}
                     value={selectedDate}
                     showNeighboringMonth={false}
                     maxDetail="month"
                 />
             </div>
+            {/* AM Time Selection Buttons */}
+            <div className="time-selection-container">
+                <h3 className="time-selection-header">Morning</h3>
+                {renderTimeButtons(amTimes)}
+            </div>
 
-            {/* Time Selection Buttons */}
-            <div className='grid grid-cols-4 gap-3 sm:gap-4 mb-4 w-5/6 mx-auto
-            md:w-[640px]
-            lg:w-11/12 lg:gap-6'>
-                {timesForSelectedDate.length > 0 ? (
-                    timesForSelectedDate.map(time => (
-                        <button
-                            key={time}
-                            className={`shadow-md p-2 border border-[#381E02] rounded transform transition duration-150 ease-in-out text-[13px] sm:text-[14px]
-                            ${selectedTime === time ? 'bg-carrotOrangeHover text-black' : 'bg-carrotOrange text-black'}
-                            ${selectedTime === time ? 'scale-110 border-opacity-50' : 'hover:bg-carrotOrangeHover border-opacity-0 hover:border-opacity-50 hover:scale-110'}`}
-                            onClick={() => handleTimeSelect(time)}>
-                            {time}
-                            <div className={`${selectedTime === time ? 'flex' : 'hidden'} absolute -right-2 -top-2 h-5 w-5 items-center justify-center
-                    bg-licorice text-carrotOrange rounded-full sm:text-lg sm:w-6 sm:h-6`}>
-                                ✓
-                            </div>
-                        </button>
-                    ))
-                ) : selectedDate ? (
-                    <h3>No available time slots for {selectedDate.toDateString()}.</h3>
-                ) :
-                    <h3>Please select a date.</h3>
-                }
+            {/* PM Time Selection Buttons */}
+            <div className="time-selection-container">
+                <h3 className="time-selection-header">Afternoon</h3>
+                {renderTimeButtons(pmTimes)}
             </div>
         </div>
     );
