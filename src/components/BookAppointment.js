@@ -235,7 +235,7 @@ const BookAppointment = () => {
                                         {/* Top of Page */}
                                         <button
                                             onClick={scrollToBottom}
-                                            className={`${currentStep === 0 ? '' : 'hidden'} h-10 w-10 rounded-full text-white bg-licorice self-center mt-4 animate-bounce`}>
+                                            className={`${currentStep === 0 ? '' : 'hidden'} h-7 w-7 rounded-full text-white bg-licorice self-center mt-4 animate-bounce`}>
                                             &#x2193; {/* Down Arrow */}
                                         </button>
                                     </div>
@@ -314,7 +314,7 @@ const BookAppointment = () => {
                         {/* Top of Page */}
                         <button
                             onClick={scrollToTop}
-                            className={`${currentStep === 0 ? '' : 'hidden'} h-10 w-10 rounded-full text-white bg-licorice self-center mt-auto animate-bounce`}>
+                            className={`${currentStep === 0 ? '' : 'hidden'} h-7 w-7 rounded-full text-white bg-licorice self-center content-center mt-auto`}>
                             &#x2191; {/* Up Arrow */}
                         </button>
                     </div>

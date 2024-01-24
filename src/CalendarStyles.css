@@ -1,5 +1,5 @@
 .react-calendar {
-    @apply w-full h-fit border-2 border-slate-400 shadow-lg lg:pb-4;
+    @apply w-full h-fit border-2 border-gray-300 shadow-lg lg:pb-4;
     /*width: 100%;
     height: 100%;
     border: none;
@@ -31,7 +31,7 @@
   }
   
   .react-calendar__navigation {
-    @apply flex h-[52px] sm:h-[60px] mb-[1rem] border-b-2 border-slate-400;
+    @apply flex h-[52px] sm:h-[60px] mb-[1rem] border-b-2 border-gray-300;
   }
   
   .react-calendar__navigation button {

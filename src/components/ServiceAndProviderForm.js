@@ -100,7 +100,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         //console.log(selectedProviders);
         return (
             <div
-                className={`${buttonStyle} flex flex-col items-center py-2 sm:py-4 px-4 rounded mb-2 w-full h-full place-content-between border shadow-md
+                className={`${buttonStyle} flex flex-col items-center py-2 sm:py-4 xl:px-6 px-4 rounded mb-2 w-full h-full place-content-between border shadow-md
                 transform transition duration-150 ease-in-out hover:border-gray-600`}
                 onClick={() => toggleProvider(provider._id)}>
                 <h3 className='text-sm break-normal w-[60px] text-center sm:text-base'>{name}</h3>
@@ -108,7 +108,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                     bg-barberRed text-white rounded-full sm:text-lg sm:w-6 sm:h-6`}>
                     ✓
                 </div>
-                <img src={profilePicture} alt={name} className='rounded-full w-[60px] h-[60px] object-cover sm:w-[75px] sm:h-[75px]' />
+                <img src={profilePicture} alt={name} className='rounded-full w-[60px] h-[60px] object-cover sm:w-[75px] sm:h-[75px] xl:w-[90px] xl:h-[90px]' />
             </div>
         );
     };
@@ -174,10 +174,10 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                 lg:text-3xl lg:text-left lg:no-underline lg:mb-1 lg:mt-6'>
                     Select Provider(s)</h2>
                 <hr className='hidden lg:flex border-black w-7/12 mb-8' />
-                <div className='flex flex-col border border-gray-300 w-full rounded p-4 shadow-lg'>
+                <div className='flex flex-col border border-gray-300 w-full rounded p-4 shadow-lg xl:py-6'>
                     <h3 className='text-xl font-bold underline text-center mb-4
                     lg:hidden'>Provider(s)</h3>
-                    <div className='flex flex-wrap gap-2 justify-around'>
+                    <div className='flex flex-wrap gap-2 justify-around xl:max-w-3xl xl:mx-auto xl:gap-24'>
                         {providers.map(provider => (
                             <div key={provider._id} className='mb-2'>
                                 <ProviderButton

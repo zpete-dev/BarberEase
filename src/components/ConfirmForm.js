@@ -81,8 +81,9 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
 
     return (
         <div className='text-center w-full'>
-            <h2 className='text-3xl font-bold underline mb-4'>Confirm Appointment</h2>
-
+            <h2 className='text-2xl text-center font-bold underline mb-3
+                lg:text-3xl lg:text-left lg:no-underline lg:mb-1'>Confirm Appointment</h2>
+            <hr className='hidden lg:flex border-black w-7/12 mb-8' />
             <div className='flex flex-col mx-auto w-full'>
                 {/* Personal Information Form Box */}
                 <div className='mx-auto w-full p-4 mb-4 border border-gray-300 rounded shadow-lg'>
@@ -155,6 +156,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                     <button
                         onClick={handleConfirmBooking}
                         className={`bg-barberRed text-white p-2 rounded mt-2
+                                    lg:px-4 lg:py-3 lg:mt-4
                                 ${!isFormValid ? 'bg-red-400 hover:bg-red-300' : 'hover:bg-hoverRed shadow-lg shadow-carrotOrangeHover/90'}`}>
                         Confirm Booking
                     </button>
