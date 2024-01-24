@@ -1,4 +1,3 @@
-/* @type {import('tailwindcss').Config}  */
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -10,8 +9,9 @@ module.exports = {
       center: true,
     },
     screens: {
-      'xs': {'min': '475px'},
       ...defaultTheme.screens,
+      'xs': '475px',
+      /* 'lg': {'min': '950px', 'max': '1279px'}, */
     },
     extend: {
       colors: {
@@ -23,7 +23,7 @@ module.exports = {
       },
       fontFamily: {
         serif: ["PT Serif", "serif"],
-       },
+      },
     },
   },
   plugins: [],

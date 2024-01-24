@@ -100,7 +100,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         //console.log(selectedProviders);
         return (
             <div
-                className={`${buttonStyle} flex flex-col items-center py-2 sm:py-4 xl:px-6 px-4 rounded mb-2 w-full h-full place-content-between border shadow-md
+                className={`${buttonStyle} flex flex-col items-center py-2 sm:py-4 md:px-5 xl:px-6 px-4 rounded mb-2 w-full h-full place-content-around border shadow-md
                 transform transition duration-150 ease-in-out hover:border-gray-600`}
                 onClick={() => toggleProvider(provider._id)}>
                 <h3 className='text-sm break-normal w-[60px] text-center sm:text-base'>{name}</h3>
@@ -108,7 +108,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                     bg-barberRed text-white rounded-full sm:text-lg sm:w-6 sm:h-6`}>
                     ✓
                 </div>
-                <img src={profilePicture} alt={name} className='rounded-full w-[60px] h-[60px] object-cover sm:w-[75px] sm:h-[75px] xl:w-[90px] xl:h-[90px]' />
+                <img src={profilePicture} alt={name} className='mt-2 rounded-full w-[60px] h-[60px] object-cover sm:w-[75px] sm:h-[75px] md:w-[80px] md:h-[80px] xl:w-[90px] xl:h-[90px]' />
             </div>
         );
     };

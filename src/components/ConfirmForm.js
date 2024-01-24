@@ -80,7 +80,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     };
 
     return (
-        <div className='text-center w-full'>
+        <div className='text-center w-full md:w-[640px] md:mx-auto'>
             <h2 className='text-2xl text-center font-bold underline mb-3
                 lg:text-3xl lg:text-left lg:no-underline lg:mb-1'>Confirm Appointment</h2>
             <hr className='hidden lg:flex border-black w-7/12 mb-8' />

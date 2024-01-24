@@ -1,5 +1,5 @@
 .react-calendar {
-    @apply w-full h-fit border-2 border-gray-300 shadow-lg lg:pb-4;
+    @apply w-full h-fit border-2 border-gray-300 shadow-lg lg:pb-4 lg:max-w-[900px];
     /*width: 100%;
     height: 100%;
     border: none;

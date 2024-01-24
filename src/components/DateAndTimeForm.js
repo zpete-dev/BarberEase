@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { DateTime } from 'luxon';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import '../CalendarStyles.css';
+import '../Styles.css';
 
 const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedProviders, selectedTime, setSelectedTime, selectedDate, setSelectedDate }) => {
     const [availability, setAvailability] = useState([]);
@@ -107,27 +109,50 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
         setSelectedTime(time);
     };
 
+    /*<TransitionGroup className='provider-summary'>
+            {selectedProviders.map(providerId => (
+                <CSSTransition
+                    key={providerId}
+                    timeout={300}
+                    classNames="provider-item">
+                    <div className='flex flex-row ml-4 mb-1 items-center overflow-hidden'>
+                        <img src={BookingFormHelper(barbers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
+                            className='h-[30px] w-[30px] rounded-full object-cover' />
+                        <p key={providerId} className='ml-2 text-[17px]'>
+                            {BookingFormHelper(barbers).getProviderNameById(providerId)}
+                        </p>
+                    </div>
+                </CSSTransition>
+            ))}
+        </TransitionGroup> */
+
     const renderTimeButtons = (times) => {
         return (
-            <div className='flex flex-wrap gap-4 text-[13px]
+            <TransitionGroup className='flex flex-wrap text-[13px] h-fit
             sm:text-[14px]
-            md:text-[15px] md:gap-5
-            lg:text-[16px] lg:gap-6'>
+            md:text-[15px]
+            lg:text-[16px]'>
                 {times.map(time => (
-                    <button
+                    <CSSTransition
                         key={time}
-                        className={`shadow-md p-2 md:px-3 lg:px-4 lg:py-3 border border-[#381E02] rounded transform transition duration-150 ease-in-out
+                        timeout={500}
+                        classNames="time-button">
+                        <button
+                            key={time}
+                            className={`h-fit mb-1 mr-4 md:mr-5 lg:mr-6 p-2 md:px-3 lg:px-4 lg:py-3 border border-[#381E02] shadow-md rounded transition duration-150 ease-in-out
                 ${selectedTime === time ? 'bg-carrotOrangeHover text-black' : 'bg-carrotOrange text-black'}
                 ${selectedTime === time ? 'scale-110 border-opacity-50' : 'hover:bg-carrotOrangeHover border-opacity-0 hover:border-opacity-50 hover:scale-110'}`}
-                        onClick={() => handleTimeSelect(time)}>
-                        {time}
-                        <div className={`${selectedTime === time ? 'flex' : 'hidden'} absolute -right-2 -top-2 h-5 w-5 items-center justify-center
+                            onClick={() => handleTimeSelect(time)}>
+                            {time}
+                            <div className={`${selectedTime === time ? 'flex' : 'hidden'} absolute -right-2 -top-2 h-5 w-5 items-center justify-center 
                     bg-licorice text-carrotOrange rounded-full sm:text-lg sm:w-6 sm:h-6`}>
-                            ✓
-                        </div>
-                    </button>
+                                ✓
+                            </div>
+                        </button>
+                    </CSSTransition>
                 ))}
-            </div>);
+            </TransitionGroup>
+        );
     };
 
     return (
@@ -149,13 +174,12 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                 />
             </div>
             {/* Date Selected Text */}
-            <div className='mx-auto mb-6 h-fit w-5/6 items-center
+            <div className='flex mx-auto mb-6 h-fit w-5/6 items-center
             md:w-[640px]
-            lg:w-full flex'>
+            lg:w-full lg:max-w-[900px] lg:mx-0'>
                 <hr className='border-gray-500 w-full mx-4' />
                 {selectedDate !== null ? (
                     <p className='text-black text-xl w-fit whitespace-nowrap'>
-                        {/* TODO: ADD TRANSITIONS TO DIFFERENT PARTS WHEN DATE SELECTED IS CHANGED */}
                         <span className=''>{selectedDate.toLocaleString(undefined, { weekday: "long" })}</span>
                         <span>, </span>
                         <span>{selectedDate.toLocaleString(undefined, { month: "long" })} </span>
@@ -169,23 +193,44 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
 
                 <hr className='border-gray-500 w-full mx-4' />
             </div>
-            {/* TODO: ADD TRANSITIONS FOR BUTTONS WHEN DATE SELECTED CHANGES*/}
             {/* AM Time Selection Buttons */}
-            <div className='mx-auto mb-4 lg:mb-8 h-fit w-5/6
+            <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
             md:w-[640px]
             lg:w-full'>
                 <h3 className="text-left text-lg my-2 font-semibold">Morning</h3>
                 <hr className='border-black w-7/12 mb-3' />
-                {renderTimeButtons(amTimes)}
+                <div className='flex flex-row'>
+                    <div className='w-0 h-12 lg:h-16' />
+                    <CSSTransition
+                        in={(amTimes.length === 0)}
+                        timeout={500}
+                        classNames="time-button-empty">
+                        <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
+                            {"* No time slots available for morning *"}
+                        </div>
+                    </CSSTransition>
+                    {renderTimeButtons(amTimes)}
+                </div>
             </div>
 
             {/* PM Time Selection Buttons */}
-            <div className='mx-auto mb-4 lg:mb-8  h-fit w-5/6
+            <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
             md:w-[640px]
             lg:w-full'>
                 <h3 className="text-left text-lg my-2 font-semibold">Afternoon</h3>
                 <hr className='border-black w-7/12 mb-3' />
-                {renderTimeButtons(pmTimes)}
+                <div className='flex flex-row'>
+                    <div className='w-0 h-12 lg:h-16' />
+                    <CSSTransition
+                        in={(pmTimes.length === 0)}
+                        timeout={500}
+                        classNames="time-button-empty">
+                        <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
+                            {"* No time slots available for afternoon *"}
+                        </div>
+                    </CSSTransition>
+                    {renderTimeButtons(pmTimes)}
+                </div>
             </div>
         </div>
     );
