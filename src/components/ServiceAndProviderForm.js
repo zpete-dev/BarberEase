@@ -65,11 +65,12 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         return (
             <button
                 className={`${buttonStyle} transition w-11/12 h-fit flex flex-row rounded mt-1 mb-1 sm:mb-2 items-center justify-between shadow-md mx-auto
-                border hover:border-gray-600`}
+                border hover:border-gray-600
+                lg:py-3`}
                 onClick={() => toggleService(service._id)} >
                 <div className='flex flex-col w-2/3 pl-2 sm:pl-4'>
                     <div className='flex flex-row'>
-                        <p className='text-left truncate'><strong>{`${name}`}</strong>{` - ${price}`}</p>
+                        <p className='text-left truncate lg:text-lg'><strong>{`${name}`}</strong>{` - ${price}`}</p>
                         <div
                             onClick={(e) => toggleInfo(e, service._id)}
                             className='text-xs rounded-full bg-blue-100 h-4 w-4 flex items-center justify-center self-center ml-2 text-blue-400 font-bold font-sans'>
@@ -116,14 +117,18 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
         <div className='flex flex-col mx-auto w-5/6 md:w-[640px] lg:w-full'>
             {/* Select Services Section*/}
             <div className='w-full'>
-                <h2 className='text-2xl text-center font-bold underline mb-3'>Select Service(s)</h2>
+                <h2 className='text-2xl text-center font-bold underline mb-3
+                lg:text-3xl lg:text-left lg:no-underline lg:mb-1'>
+                    Select Service(s)
+                </h2>
+                <hr className='hidden lg:flex border-black w-7/12 mb-8' />
                 {/* Filter Bar with Buttons*/}
                 <div className='flex gap-2 relative'>
                     <button
                         className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === "all" ? 'bg-white text-black border border-b-0 border-gray-300' :
                             'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-2'}`}
                         onClick={() => setCurrentFilter("all")}>
-                        <p className='text-sm sm:text-[15px]'>Show All</p>
+                        <p className='text-sm sm:text-[15px] lg:text-[16px]'>Show All</p>
                     </button>
                     {serviceCategories.map(category => (
                         <button
@@ -131,7 +136,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                             className={`rounded-t-lg p-1 sm:p-1.5 -bottom-[1px] relative ${currentFilter === category._id ? 'bg-white text-black border border-b-0 border-gray-300' :
                                 'text-white bg-licorice hover:bg-gray-400 transform transition-all duration-100 ease-in-out hover:px-2'}`}
                             onClick={() => setCurrentFilter(category._id)}>
-                            <p className='text-sm sm:text-[15px]'>{category.name}</p>
+                            <p className='text-sm sm:text-[15px] lg:text-[16px]'>{category.name}</p>
                         </button>
                     ))}
                 </div>
@@ -141,7 +146,10 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
                         <div key={category._id} className={`transition-[max-height] duration-500 ease-in-out overflow-hidden h-fit flex flex-col items-center
                         ${currentFilter === "all" || currentFilter === category._id || selectedServices.some(id => category.services.some(service => service._id === id)) ?
                                 'max-h-[50em]' : 'max-h-[0em]'}`}>
-                            <h3 className='text-xl font-bold mb-2 self-start'>{category.name}</h3>
+                            <h3 className='text-xl lg:text-2xl font-bold mb-2 self-start lg:my-4 lg:ml-1 w-full'>
+                                {category.name}
+                                <hr className='hidden lg:flex border-gray-400 w-5/12' />
+                            </h3>
                             {category.services.map(service => (
                                 <div className={`w-full transition-[max-height] duration-500 ease-in-out overflow-hidden
                                 ${(currentFilter !== "all" && currentFilter !== category._id && (selectedServices.some(id => category.services.some(service => service._id === id)) && !(selectedServices.includes(service._id)))) ?
@@ -162,9 +170,13 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
 
             {/* Select Providers Section*/}
             <div className='w-full h-fit'>
-                <h2 className={`text-2xl font-bold underline text-center my-3`}>Select Provider(s)</h2>
+                <h2 className='text-2xl font-bold underline text-center my-3
+                lg:text-3xl lg:text-left lg:no-underline lg:mb-1 lg:mt-6'>
+                    Select Provider(s)</h2>
+                <hr className='hidden lg:flex border-black w-7/12 mb-8' />
                 <div className='flex flex-col border border-gray-300 w-full rounded p-4 shadow-lg'>
-                    <h3 className='text-xl font-bold underline text-center mb-4'>Provider(s)</h3>
+                    <h3 className='text-xl font-bold underline text-center mb-4
+                    lg:hidden'>Provider(s)</h3>
                     <div className='flex flex-wrap gap-2 justify-around'>
                         {providers.map(provider => (
                             <div key={provider._id} className='mb-2'>

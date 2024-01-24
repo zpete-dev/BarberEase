@@ -99,6 +99,12 @@ const BookAppointment = () => {
         });
     };
 
+    const scrollToBottom = () => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth' // This makes the scrolling smooth
+        });
+    };
     const nextStep = () => {
         setCurrentStep((currentStep + 1) % 3)
     };
@@ -141,47 +147,50 @@ const BookAppointment = () => {
             <div className='flex flex-col mx-auto p-4 mb-[80px] font-serif w-full
                             md:mb-[120px]
                             lg:mb-[20px]'>
-                <div className='flex flex-row mb-4 h-fit
-                                sm:ml-4
-                                md:w-full md:relative
-                                lg:mx-auto lg:items-center
-                                xl:max-w-[1390px] xl:mx-auto'>
-                    <button
-                        onClick={prevStep}
-                        className={`hidden lg:flex h-8 w-8 rounded-full text-white bg-licorice text-[20px] place-content-center mr-6`}>
-                        &#x2190;{/* Left Arrow */}
-                    </button>
-                    {/* Progress Bar TODO: MAKE WORDS CLICKABLE TO HEAD TO THAT STEP*/}
-                    <div className='flex justify-center space-x-2 text-[15px]
-                                    sm:text-[16px]
+                <div className='flex flex-row h-fit
+                                sm:items-center
+                                md:w-[700px] md:relative md:self-center
+                                lg:mx-auto lg:w-full lg:items-center'>
+                    <div className='flex flex-row lg:w-[58%] lg:ml-auto'>
+                        <button
+                            onClick={prevStep}
+                            className={`hidden sm:flex h-8 w-8 rounded-full text-white bg-licorice text-[20px] place-content-center mr-4`}>
+                            &#x2190;{/* Left Arrow */}
+                        </button>
+                        {/* Progress Bar TODO: MAKE WORDS CLICKABLE TO HEAD TO THAT STEP*/}
+                        <div className='flex justify-center space-x-1 text-[15px] items-center
+                                    sm:text-[16px] sm:space-x-2
                                     lg:text-[18px]'>
-                        <div className={currentStep === 0 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Service & Provider</div>
-                        <div className='text-gray-400 font-bold'>{'>'}</div>
-                        <div className={currentStep === 1 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Date & Time</div>
-                        <div className='text-gray-400 font-bold'>{'>'}</div>
-                        <div className={currentStep === 2 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Confirm</div>
-                    </div>
-                    <Link to="/" className='flex bg-licorice absolute top-0 right-0 px-3 pb-3 pt-2 rounded-bl-2xl 
-                                            sm:px-5 sm:py-4
-                                            md:-top-8 md:rounded-br-2xl md:ml-auto
-                                            lg:relative lg:right-[10%]
-                                            xl:px-8 xl:py-6'>
-                        <div className='flex flex-col md:flex-row items-center'>
-                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2 xl:h-[64px] xl:w-[64px] ' />
-                            <div className=''>
-                                <span className='text-white text-xl font-serif text-justify'>Barber</span>
-                                <span className='text-barberRed text-xl font-serif'>Dog</span>
-                            </div>
+                            <div className={currentStep === 0 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Service & Provider</div>
+                            <div className='text-gray-400 font-bold'>{'>'}</div>
+                            <div className={currentStep === 1 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Date & Time</div>
+                            <div className='text-gray-400 font-bold'>{'>'}</div>
+                            <div className={currentStep === 2 ? 'text-black font-bold underline' : 'text-gray-400 underline'}>Confirm</div>
                         </div>
-                    </Link>
+                    </div>
+                    <div className='ml-auto lg:w-[40%]'>
+                        <Link to="/" className='flex bg-licorice relative ml-auto -top-4 -right-4 px-3 pb-3 pt-2 rounded-bl-2xl 
+                                            sm:px-5 sm:py-4
+                                            md:-top-4 md:ml-auto md:rounded-br-2xl md:pb-6
+                                            lg:relative lg:right-[10%] lg:w-fit
+                                            xl:px-8 xl:py-6'>
+                            <div className='flex flex-col md:flex-row items-center'>
+                                <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2 xl:h-[64px] xl:w-[64px] ' />
+                                <div className=''>
+                                    <span className='text-white text-xl font-serif text-justify'>Barber</span>
+                                    <span className='text-barberRed text-xl font-serif'>Dog</span>
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
                 </div>
                 <div className='flex w-full justify-center'>
-                    <div className='flex w-full lg:w-[58%] lg:px-5 xl:max-w-[900px]'>
+                    <div className='flex w-full lg:w-[58%] lg:px-5'>
                         {renderStep()}
                     </div>
-                    <div className='hidden lg:flex flex-col w-[40%] xl:w-[490px] h-fit'>
+                    <div className='hidden lg:flex flex-col w-[40%] h-[vmax]'>
                         {/* Summary Box lg */}
-                        <div className='flex flex-col w-full mx-auto px-4 pt-2 pb-8 border border-black rounded shadow-lg text-[15px] bg-[#F4E1CD]'>
+                        <div className='flex flex-col w-full mx-auto h-fit px-4 pt-2 pb-8 border border-black rounded shadow-lg text-[15px] bg-[#F4E1CD]'>
                             <h3 className='text-[24px] font-bold underline mb-3 text-center'>Summary</h3>
                             {/* Services Section lg */}
                             <div className='text-start'>
@@ -220,9 +229,15 @@ const BookAppointment = () => {
                                 <p className='font-bold text-[20px] mt-4'>Provider(s)</p>
                                 <hr className='border-gray-400 w-1/2 mb-1.5' />
                                 <div className='mx-4 overflow-hidden'>
-                                    <div className={`${selectedProviders.length === 0 ? 'max-h-7' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
-                                    text-red-500 font-semibold text-[18px] text-center`}>
+                                    <div className={`${selectedProviders.length === 0 ? 'max-h-28' : 'max-h-0'} delay-200 transition-[max-height] duration-500 ease-in-out overflow-hidden
+                                    text-red-500 font-semibold text-[18px] text-center flex flex-col `}>
                                         {"* Select 1 or more providers *"}
+                                        {/* Top of Page */}
+                                        <button
+                                            onClick={scrollToBottom}
+                                            className={`${currentStep === 0 ? '' : 'hidden'} h-10 w-10 rounded-full text-white bg-licorice self-center mt-4 animate-bounce`}>
+                                            &#x2193; {/* Down Arrow */}
+                                        </button>
                                     </div>
                                     <TransitionGroup className='provider-summary'>
                                         {selectedProviders.map(providerId => (
@@ -296,6 +311,12 @@ const BookAppointment = () => {
                                 Continue
                             </button>
                         </div>
+                        {/* Top of Page */}
+                        <button
+                            onClick={scrollToTop}
+                            className={`${currentStep === 0 ? '' : 'hidden'} h-10 w-10 rounded-full text-white bg-licorice self-center mt-auto animate-bounce`}>
+                            &#x2191; {/* Up Arrow */}
+                        </button>
                     </div>
                 </div>
             </div>
