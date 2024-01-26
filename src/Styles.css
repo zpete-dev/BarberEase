@@ -42,7 +42,6 @@
 }
 .time-button-enter-active {
   @apply max-w-[124px] mb-1 mr-4 md:mr-5 lg:mr-6 p-2 md:px-3 lg:px-4 lg:py-3 border border-opacity-0 overflow-hidden whitespace-nowrap transition-all duration-200 ease-linear delay-200;
-  
 }
 .time-button-exit {
   @apply max-w-[124px] mb-1 mr-4 md:mr-5 lg:mr-6 p-2 md:px-3 lg:px-4 lg:py-3 overflow-hidden whitespace-nowrap;
@@ -65,4 +64,53 @@
 }
 .time-button-empty-exit-done {
   @apply max-w-0;
+}
+
+.md-summary-message-enter {
+  @apply max-w-0 max-h-0;
+}
+.md-summary-message-enter-active {
+  @apply max-w-[172px] max-h-8 transition-all duration-200 ease-linear delay-300;
+}
+.md-summary-message-exit {
+  @apply max-w-[172px] max-h-8;
+}
+.md-summary-message-exit-active {
+  @apply max-w-0 max-h-0 transition-all duration-200 ease-linear;
+}
+.md-summary-message-exit-done {
+  @apply max-w-0 max-h-0;
+}
+
+.summary-date-time-enter {
+  @apply max-h-0;
+}
+.summary-date-time-enter-active {
+  @apply max-h-8 transition-all duration-200 ease-linear delay-300;
+}
+.summary-date-time-exit {
+  @apply max-h-8;
+}
+.summary-date-time-exit-active {
+  @apply max-h-0 transition-all duration-200 ease-linear;
+}
+.summary-date-time-exit-done {
+  @apply max-h-0;
+}
+
+
+.md-provider-item-enter {
+  @apply max-h-0;
+}
+.md-provider-item-enter-active {
+  @apply max-h-8 transition-all duration-200 ease-linear delay-200;
+}
+.md-provider-item-exit {
+  @apply max-h-8;
+}
+.md-provider-item-exit-active {
+  @apply max-h-0 scale-y-90 transition-all duration-200 ease-linear;
+}
+.md-provider-item-exit-done {
+  @apply scale-y-0 m-0;
 }

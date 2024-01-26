@@ -1,30 +1,6 @@
 .react-calendar {
-    @apply w-full h-fit border-2 border-gray-300 shadow-lg lg:pb-4 lg:max-w-[900px];
-    /*width: 100%;
-    height: 100%;
-    border: none;
-    width: 350px;
-    max-width: 100%;
-    background: white;
-    border: 1px solid #a0a096;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.125em;*/
+    @apply w-full h-fit border-2 border-gray-300 shadow-lg lg:pb-4;
   }
-  
-  /*.react-calendar,
-  .react-calendar *,
-  .react-calendar *:before,
-  .react-calendar *:after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }*/
-  
-  /*.react-calendar button {
-    margin: 0;
-    border: 0;
-    outline: none;
-  }*/
   
   .react-calendar button:enabled:hover {
     cursor: pointer;

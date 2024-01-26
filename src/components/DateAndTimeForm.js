@@ -176,7 +176,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             {/* Date Selected Text */}
             <div className='flex mx-auto mb-6 h-fit w-5/6 items-center
             md:w-[640px]
-            lg:w-full lg:max-w-[900px] lg:mx-0'>
+            lg:w-full lg:mx-0'>
                 <hr className='border-gray-500 w-full mx-4' />
                 {selectedDate !== null ? (
                     <p className='text-black text-xl w-fit whitespace-nowrap'>
