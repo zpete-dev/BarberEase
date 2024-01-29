@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { DateTime } from 'luxon';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import Skeleton from 'react-loading-skeleton';
 
+import 'react-loading-skeleton/dist/skeleton.css'
 import '../CalendarStyles.css';
 import '../Styles.css';
 
@@ -11,6 +13,9 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
     const [amTimes, setAmTimes] = useState([]);
     const [pmTimes, setPmTimes] = useState([]);
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    const skeletonTimeout = 5000; // timeout in ms
     useEffect(() => {
         const fetchAvailability = async () => {
             let fullAvailability = [];
@@ -74,6 +79,14 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
         if (selectedProviders.length > 0) {
             fetchAvailability();
         }
+
+        const loadData = async () => {
+            setIsLoading(true);
+            await new Promise(resolve => setTimeout(resolve, skeletonTimeout));
+            setIsLoading(false);
+        };
+
+        loadData();
 
         return () => {
             console.log("Cleaning up DateAndTimeForm Component.");
@@ -155,84 +168,152 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
         );
     };
 
-    return (
-        <div className='flex flex-col w-full text-center'>
-            <h2 className='text-2xl font-bold underline mb-4
+    const renderDateAndTimeForm = () => {
+        if (isLoading) {
+            return (
+                <div className='flex flex-col w-full text-center'>
+                    <h2 className='mb-3 lg:mb-1 lg:mt-0'>
+                        <Skeleton className='h-8 max-w-[200px] lg:h-[40px] animate-pulse' />
+                    </h2>
+                    <hr className='hidden lg:flex border-black w-7/12 mb-8' />
+                    {/* Calendar Element */}
+                    <div className='mx-auto mb-6 h-[410px] w-5/6 
+                    sm:mb-8
+                    md:w-[640px]
+                    lg:w-full lg:mb-6'>
+                        <Skeleton className='w-full h-full animate-pulse' />
+                    </div>
+                    {/* Date Selected Text */}
+                    <div className='flex mx-auto mb-6 h-fit w-5/6 items-center
+                md:w-[640px]
+                lg:w-full lg:mx-0'>
+                        <hr className='border-gray-500 w-full mx-4' />
+                        <div className='h-[28px] w-[220px]'>
+                            <Skeleton className='w-full h-full animate-pulse' />
+                        </div>
+                        <hr className='border-gray-500 w-full mx-4' />
+                    </div>
+                    {/* AM Time Selection Buttons */}
+                    <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
+                md:w-[640px]
+                lg:w-full'>
+                        <h3 className="text-left my-2">
+                            <Skeleton className='h-[28px] max-w-[100px] lg:h-[40px] animate-pulse' />
+                        </h3>
+                        <hr className='border-black w-7/12 mb-3' />
+                        <div className='flex flex-row gap-4'>
+                            <div className='h-[36px] w-[64px]'>
+                                <Skeleton className='w-full h-full animate-pulse' />
+                            </div>
+                            <div className='h-[36px] w-[64px]'>
+                                <Skeleton className='w-full h-full animate-pulse' />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* PM Time Selection Buttons */}
+                    <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
+                md:w-[640px]
+                lg:w-full'>
+                        <h3 className="text-left my-2">
+                            <Skeleton className='h-[28px] max-w-[100px] lg:h-[40px] animate-pulse' />
+                        </h3>
+                        <hr className='border-black w-7/12 mb-3' />
+                        <div className='flex flex-row gap-4'>
+                            <div className='h-[36px] w-[64px]'>
+                                <Skeleton className='w-full h-full animate-pulse' />
+                            </div>
+                            <div className='h-[36px] w-[64px]'>
+                                <Skeleton className='w-full h-full animate-pulse' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <div className='flex flex-col w-full text-center'>
+                <h2 className='text-2xl font-bold underline mb-4
             lg:text-3xl lg:text-left lg:no-underline lg:mb-1 lg:mt-0'>
-                Select Date & Time</h2>
-            <hr className='hidden lg:flex border-black w-7/12 mb-8' />
-            {/* Calendar Element */}
-            <div className='mx-auto mb-6 sm:mb-8 h-fit w-5/6
+                    Select Date & Time</h2>
+                <hr className='hidden lg:flex border-black w-7/12 mb-8' />
+                {/* Calendar Element */}
+                <div className='mx-auto mb-6 sm:mb-8 h-fit w-5/6
             md:w-[640px]
             lg:w-full lg:mb-6' >
-                <Calendar
-                    onChange={handleDateChange}
-                    minDate={DateTime.now().setZone('America/Denver').toJSDate()}
-                    value={selectedDate}
-                    showNeighboringMonth={false}
-                    maxDetail="month"
-                />
-            </div>
-            {/* Date Selected Text */}
-            <div className='flex mx-auto mb-6 h-fit w-5/6 items-center
+                    <Calendar
+                        onChange={handleDateChange}
+                        minDate={DateTime.now().setZone('America/Denver').toJSDate()}
+                        value={selectedDate}
+                        showNeighboringMonth={false}
+                        maxDetail="month"
+                    />
+                </div>
+                {/* Date Selected Text */}
+                <div className='flex mx-auto mb-6 h-fit w-5/6 items-center
             md:w-[640px]
             lg:w-full lg:mx-0'>
-                <hr className='border-gray-500 w-full mx-4' />
-                {selectedDate !== null ? (
-                    <p className='text-black text-xl w-fit whitespace-nowrap'>
-                        <span className=''>{selectedDate.toLocaleString(undefined, { weekday: "long" })}</span>
-                        <span>, </span>
-                        <span>{selectedDate.toLocaleString(undefined, { month: "long" })} </span>
-                        <span>{selectedDate.toLocaleString(undefined, { day: "2-digit" })}</span>
-                        <span>, </span>
-                        <span>{selectedDate.toLocaleString(undefined, { year: "numeric" })}</span>
-                    </p>
-                ) : (
-                    <p className='text-barberRed mt-2 text-center'>Select a date.</p>
-                )}
+                    <hr className='border-gray-500 w-full mx-4' />
+                    {selectedDate !== null ? (
+                        <p className='text-black text-xl w-fit whitespace-nowrap'>
+                            <span className=''>{selectedDate.toLocaleString(undefined, { weekday: "long" })}</span>
+                            <span>, </span>
+                            <span>{selectedDate.toLocaleString(undefined, { month: "long" })} </span>
+                            <span>{selectedDate.toLocaleString(undefined, { day: "2-digit" })}</span>
+                            <span>, </span>
+                            <span>{selectedDate.toLocaleString(undefined, { year: "numeric" })}</span>
+                        </p>
+                    ) : (
+                        <p className='text-barberRed mt-2 text-center'>Select a date.</p>
+                    )}
 
-                <hr className='border-gray-500 w-full mx-4' />
-            </div>
-            {/* AM Time Selection Buttons */}
-            <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
+                    <hr className='border-gray-500 w-full mx-4' />
+                </div>
+                {/* AM Time Selection Buttons */}
+                <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
             md:w-[640px]
             lg:w-full'>
-                <h3 className="text-left text-lg my-2 font-semibold">Morning</h3>
-                <hr className='border-black w-7/12 mb-3' />
-                <div className='flex flex-row'>
-                    <div className='w-0 h-12 lg:h-16' />
-                    <CSSTransition
-                        in={(amTimes.length === 0)}
-                        timeout={500}
-                        classNames="time-button-empty">
-                        <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
-                            {"* No time slots available for morning *"}
-                        </div>
-                    </CSSTransition>
-                    {renderTimeButtons(amTimes)}
+                    <h3 className="text-left text-lg my-2 font-semibold">Morning</h3>
+                    <hr className='border-black w-7/12 mb-3' />
+                    <div className='flex flex-row'>
+                        <div className='w-0 h-12 lg:h-16' />
+                        <CSSTransition
+                            in={(amTimes.length === 0)}
+                            timeout={500}
+                            classNames="time-button-empty">
+                            <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
+                                {"* No time slots available for morning *"}
+                            </div>
+                        </CSSTransition>
+                        {renderTimeButtons(amTimes)}
+                    </div>
                 </div>
-            </div>
 
-            {/* PM Time Selection Buttons */}
-            <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
+                {/* PM Time Selection Buttons */}
+                <div className='mx-auto mb-4 lg:mb-2 h-fit w-5/6
             md:w-[640px]
             lg:w-full'>
-                <h3 className="text-left text-lg my-2 font-semibold">Afternoon</h3>
-                <hr className='border-black w-7/12 mb-3' />
-                <div className='flex flex-row'>
-                    <div className='w-0 h-12 lg:h-16' />
-                    <CSSTransition
-                        in={(pmTimes.length === 0)}
-                        timeout={500}
-                        classNames="time-button-empty">
-                        <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
-                            {"* No time slots available for afternoon *"}
-                        </div>
-                    </CSSTransition>
-                    {renderTimeButtons(pmTimes)}
+                    <h3 className="text-left text-lg my-2 font-semibold">Afternoon</h3>
+                    <hr className='border-black w-7/12 mb-3' />
+                    <div className='flex flex-row'>
+                        <div className='w-0 h-12 lg:h-16' />
+                        <CSSTransition
+                            in={(pmTimes.length === 0)}
+                            timeout={500}
+                            classNames="time-button-empty">
+                            <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
+                                {"* No time slots available for afternoon *"}
+                            </div>
+                        </CSSTransition>
+                        {renderTimeButtons(pmTimes)}
+                    </div>
                 </div>
             </div>
-        </div>
+        );
+    };
+
+    return (
+        renderDateAndTimeForm()
     );
 };
 

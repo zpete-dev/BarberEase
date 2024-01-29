@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
 import { BookingFormHelper } from './BookingFormHelper';
+import Skeleton from 'react-loading-skeleton';
+
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, selectedProviders, selectedDate, selectedTime }) => {
     // State for form inputs
@@ -12,6 +14,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [formattedPhone, setFormattedPhone] = useState('');
 
+    const [isLoading, setIsLoading] = useState(true);
     // Email and phone validation functions
     const validateEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,6 +80,19 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
             }
         }
         return 'border-gray-300';
+    };
+
+    const renderPAGESECTION = () => {
+        if (isLoading) {
+            return (
+                <div className='w-full h-fit'>
+                </div>
+            );
+        }
+        return (
+            <div className='w-full h-fit'>
+            </div>
+        );
     };
 
     return (
