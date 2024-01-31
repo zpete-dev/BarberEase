@@ -107,7 +107,7 @@ const LandingServices = () => {
         );
     };
 
-    console.log(serviceCategories.find(service => service._id === '0000').name);
+    //console.log(serviceCategories.find(service => service._id === '0000').name);
     //console.log(barbers);
 
     const handleDivClick = (selectedService) => {

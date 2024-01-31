@@ -1,35 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import { Loader } from '@googlemaps/js-api-loader';
 
 import 'react-loading-skeleton/dist/skeleton.css';
+
 const LandingContact = () => {
-    const loader = new Loader({
-        apiKey: "",
-        version: "weekly",
-        libraries: ["places"]
-    });
-
-    const mapOptions = {
-        center: {
-            lat: 0,
-            lng: 0
-        },
-        zoom: 4
-    };
-
     const [isLoading, setIsLoading] = useState(true);
-
     const skeletonTimeout = 500; // timeout in ms
-    useEffect(() => {
-        loader.load()
-            .then((google) => {
-                new google.maps.Map(document.getElementById("map"), mapOptions);
-            })
-            .catch(e => {
-                // do something
-            });
 
+    useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
             await new Promise(resolve => setTimeout(resolve, skeletonTimeout));
@@ -113,15 +91,16 @@ const LandingContact = () => {
                                 <p className='justify-self-end'>8am - 5pm</p>
                             </div>
                             <h3 className='text-lg font-semibold text-[#4B4B4B]'>Phone</h3>
-                            <p className='text-xl mt-1 mb-5'>(123) 456-7890</p>
+                            <p className='text-xl mt-1 mb-5'>(555) 555-5555</p>
                             <h3 className='text-lg font-semibold text-[#4B4B4B]'>Address</h3>
                             <p className='text-xl mt-1 mb-5'>1234 W Main St. Denver, CO 80123</p>
                         </div>
                         {/* Right Column - Google Maps */}
                         <div>
                             <iframe
+                                async
                                 title='BarberDog Location'
-                                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3067.768647708823!2d-104.93952468462147!3d39.69449897945412!2m3!1f0!2f0!3f0!3m2!1i1024!1i768!4f13.1!3m3!1m2!1s0x876c7e5c3f4b43f5%3A0x11f6b6dfc8a48265!2s1150%20S%20Cherry%20St%2C%20Denver%2C%20CO%2080246%2C%20USA!5e0!3m2!1sen!2s!4v1658493710582!5m2!1sen!2s'
+                                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12271.352271222568!2d-104.99775260216704!3d39.743288172302194!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c78d5472cf5a3%3A0x40482bfb29562d8c!2sCivic%20Center%20Park!5e0!3m2!1sen!2sus!4v1706732855675!5m2!1sen!2sus'
                                 width='100%'
                                 height='450'
                                 style={{ border: 0 }}
