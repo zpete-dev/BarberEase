@@ -27,7 +27,7 @@ const BookAppointment = () => {
     const [isScrolledDown, setIsScrolledDown] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const skeletonTimeout = 1000; // timeout in ms
+    const skeletonTimeout = 500; // timeout in ms
 
     useEffect(() => {
         console.log("Running useEffect.");
@@ -83,17 +83,19 @@ const BookAppointment = () => {
             }
         }
 
-        fetchBarbers();
-        aquireSessionToken();
-        // Simulate data fetching
         const loadData = async () => {
+            // Start loading and fetch data
             setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, skeletonTimeout)); // 2 seconds delay
+            
+            const fetchBarbersPromise = fetchBarbers();
+            const fetchSessionTokenPromise = aquireSessionToken();
+            const timeoutPromise = new Promise(resolve => setTimeout(resolve, skeletonTimeout));
+    
+            // Wait for both data fetching and timeout to complete
+            await Promise.all([fetchBarbersPromise, fetchSessionTokenPromise, timeoutPromise]);
             setIsLoading(false);
         };
-
         loadData();
-        //TODO Function to check backend pulse check??
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
@@ -690,7 +692,7 @@ const BookAppointment = () => {
             </div>
 
             <div className={`fixed bottom-0 left-0 right-0 bg-white h-[60px] flex lg:hidden items-center justify-around p-1 border-t-2 border-black 
-                            md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] md:border-x-2 md:rounded-t-2xl`}>
+                            md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] md:border-x-2 md:rounded-t-2xl z-50`}>
                 {renderSummaryBar()}
             </div>
         </div >

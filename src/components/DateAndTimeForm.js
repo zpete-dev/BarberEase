@@ -15,7 +15,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const skeletonTimeout = 5000; // timeout in ms
+    const skeletonTimeout = 500; // timeout in ms
     useEffect(() => {
         const fetchAvailability = async () => {
             let fullAvailability = [];
@@ -76,17 +76,20 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             setTimeButtonsByTimeArray(fullAvailability[selectedDateMST]);
         };
 
-        if (selectedProviders.length > 0) {
-            fetchAvailability();
-        }
-
         const loadData = async () => {
+            // Start loading and fetch data
             setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, skeletonTimeout));
+            const fetchDataPromise = fetchAvailability();
+            const timeoutPromise = new Promise(resolve => setTimeout(resolve, skeletonTimeout));
+    
+            // Wait for both data fetching and timeout to complete
+            await Promise.all([fetchDataPromise, timeoutPromise]);
             setIsLoading(false);
         };
-
-        loadData();
+    
+        if (selectedProviders.length > 0) {
+            loadData();
+        }
 
         return () => {
             console.log("Cleaning up DateAndTimeForm Component.");
@@ -122,23 +125,6 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
         setSelectedTime(time);
     };
 
-    /*<TransitionGroup className='provider-summary'>
-            {selectedProviders.map(providerId => (
-                <CSSTransition
-                    key={providerId}
-                    timeout={300}
-                    classNames="provider-item">
-                    <div className='flex flex-row ml-4 mb-1 items-center overflow-hidden'>
-                        <img src={BookingFormHelper(barbers).getProviderPictureById(providerId)} alt={BookingFormHelper(providers).getProviderNameById(providerId)}
-                            className='h-[30px] w-[30px] rounded-full object-cover' />
-                        <p key={providerId} className='ml-2 text-[17px]'>
-                            {BookingFormHelper(barbers).getProviderNameById(providerId)}
-                        </p>
-                    </div>
-                </CSSTransition>
-            ))}
-        </TransitionGroup> */
-
     const renderTimeButtons = (times) => {
         return (
             <TransitionGroup className='flex flex-wrap text-[13px] h-fit
@@ -149,6 +135,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                     <CSSTransition
                         key={time}
                         timeout={500}
+                        unmountOnExit
                         classNames="time-button">
                         <button
                             key={time}
@@ -172,16 +159,16 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
         if (isLoading) {
             return (
                 <div className='flex flex-col w-full text-center'>
-                    <h2 className='mb-3 lg:mb-1 lg:mt-0'>
-                        <Skeleton className='h-8 max-w-[200px] lg:h-[40px] animate-pulse' />
+                    <h2 className='mb-3 lg:mb-1 lg:mt-0 lg:text-start'>
+                        <Skeleton className='h-8 max-w-[200px] lg:h-[40px] animate-pulse z-0' />
                     </h2>
                     <hr className='hidden lg:flex border-black w-7/12 mb-8' />
                     {/* Calendar Element */}
                     <div className='mx-auto mb-6 h-[410px] w-5/6 
-                    sm:mb-8
+                    sm:mb-8 sm:h-[450px]
                     md:w-[640px]
-                    lg:w-full lg:mb-6'>
-                        <Skeleton className='w-full h-full animate-pulse' />
+                    lg:w-full lg:mb-6 lg:h-[375px]'>
+                        <Skeleton className='w-full h-full animate-pulse z-0' />
                     </div>
                     {/* Date Selected Text */}
                     <div className='flex mx-auto mb-6 h-fit w-5/6 items-center
@@ -189,7 +176,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                 lg:w-full lg:mx-0'>
                         <hr className='border-gray-500 w-full mx-4' />
                         <div className='h-[28px] w-[220px]'>
-                            <Skeleton className='w-full h-full animate-pulse' />
+                            <Skeleton className='w-full h-full animate-pulse z-0' />
                         </div>
                         <hr className='border-gray-500 w-full mx-4' />
                     </div>
@@ -198,15 +185,15 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                 md:w-[640px]
                 lg:w-full'>
                         <h3 className="text-left my-2">
-                            <Skeleton className='h-[28px] max-w-[100px] lg:h-[40px] animate-pulse' />
+                            <Skeleton className='h-[28px] max-w-[75px] lg:h-[40px] animate-pulse z-0' />
                         </h3>
                         <hr className='border-black w-7/12 mb-3' />
                         <div className='flex flex-row gap-4'>
-                            <div className='h-[36px] w-[64px]'>
-                                <Skeleton className='w-full h-full animate-pulse' />
+                            <div className='h-[36px] w-[64px] sm:h-[40px] sm:w-[80px] md:w-[90px] lg:h-[50px] lg:w-[95px]'>
+                                <Skeleton className='w-full h-full animate-pulse z-0' />
                             </div>
-                            <div className='h-[36px] w-[64px]'>
-                                <Skeleton className='w-full h-full animate-pulse' />
+                            <div className='h-[36px] w-[64px] sm:h-[40px] sm:w-[80px] md:w-[90px] lg:h-[50px] lg:w-[95px]'>
+                                <Skeleton className='w-full h-full animate-pulse z-0' />
                             </div>
                         </div>
                     </div>
@@ -216,14 +203,14 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                 md:w-[640px]
                 lg:w-full'>
                         <h3 className="text-left my-2">
-                            <Skeleton className='h-[28px] max-w-[100px] lg:h-[40px] animate-pulse' />
+                            <Skeleton className='h-[28px] max-w-[75px] lg:h-[40px] animate-pulse z-0' />
                         </h3>
                         <hr className='border-black w-7/12 mb-3' />
                         <div className='flex flex-row gap-4'>
-                            <div className='h-[36px] w-[64px]'>
+                            <div className='h-[36px] w-[64px] sm:h-[40px] sm:w-[80px] md:w-[90px] lg:h-[50px] lg:w-[95px]'>
                                 <Skeleton className='w-full h-full animate-pulse' />
                             </div>
-                            <div className='h-[36px] w-[64px]'>
+                            <div className='h-[36px] w-[64px] sm:h-[40px] sm:w-[80px] md:w-[90px] lg:h-[50px] lg:w-[95px]'>
                                 <Skeleton className='w-full h-full animate-pulse' />
                             </div>
                         </div>
@@ -280,6 +267,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                         <CSSTransition
                             in={(amTimes.length === 0)}
                             timeout={500}
+                            unmountOnExit
                             classNames="time-button-empty">
                             <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
                                 {"* No time slots available for morning *"}
@@ -300,6 +288,7 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                         <CSSTransition
                             in={(pmTimes.length === 0)}
                             timeout={500}
+                            unmountOnExit
                             classNames="time-button-empty">
                             <div className={`overflow-hidden whitespace-nowrap text-gray-400 font-semibold text-[16px] lg:text-[18px] text-center h-fit`}>
                                 {"* No time slots available for afternoon *"}

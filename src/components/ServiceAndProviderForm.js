@@ -10,9 +10,8 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     const [showInfo, setShowInfo] = useState({}); // State to track which service info to show
     const [isLoading, setIsLoading] = useState(true);
 
-    const skeletonTimeout = 1000; // timeout in ms
+    const skeletonTimeout = 500; // timeout in ms
     useEffect(() => {
-        // Simulate data fetching
         const loadData = async () => {
             setIsLoading(true);
             await new Promise(resolve => setTimeout(resolve, skeletonTimeout)); 
