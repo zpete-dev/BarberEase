@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { serviceCategories, barbers } from '../data/data';
 
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';

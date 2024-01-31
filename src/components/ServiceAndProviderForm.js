@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { serviceCategories } from '../data/data';
 import { DateTime } from 'luxon';
 import Skeleton from 'react-loading-skeleton';
