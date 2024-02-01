@@ -2,7 +2,7 @@
 export const serviceCategories = [
     {
         _id: "0000",
-        name: 'Haircut',
+        name: 'Haircuts',
         categoryImage: '/images/Memphis.jpg',
         services: [
             {
@@ -27,7 +27,7 @@ export const serviceCategories = [
     },
     {
         _id: "0004",
-        name: 'Beard Trim',
+        name: 'Shaves & Beard Trims',
         categoryImage: '/images/Memphis.jpg',
         services: [
             {

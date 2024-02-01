@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';
 const LandingHome = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const skeletonTimeout = 500; // timeout in ms
+    const navigate = useNavigate();
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -14,6 +16,10 @@ const LandingHome = () => {
 
         loadData();
     }, []);
+
+    const goToBookAppointment = () => {
+        navigate('/book-appointment');
+    };
 
     const renderLandingHome = () => {
         if (isLoading) {

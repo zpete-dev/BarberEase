@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';
@@ -8,6 +9,7 @@ const LandingServices = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const skeletonTimeout = 500; // timeout in ms
+    const navigate = useNavigate();
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -17,6 +19,11 @@ const LandingServices = () => {
 
         loadData();
     }, []);
+
+    const goToBookAppointment = () => {
+        closeDialog();
+        navigate('/book-appointment');
+    };
 
     const renderLandingServices = () => {
         if (isLoading) {
@@ -67,8 +74,8 @@ const LandingServices = () => {
                     <div className='flex gap-4 md:gap-10 justify-center'>
                         {Object.entries(services).slice(0, 3).map(([key, service]) => (
                             <div key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed hover:underline' onClick={() => handleDivClick(service)}>
-                                <img src={service.imgSrc} alt={service.altText} className='rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
-                                <p className='text-sm md:text-xl text-center font-bold hover:underline'>{service.name}</p>
+                                <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
+                                <p className='text-sm sm:text-base md:text-xl text-center font-bold hover:underline'>{service.name}</p>
                             </div>
                         ))}
                     </div>
@@ -76,8 +83,8 @@ const LandingServices = () => {
                     <div className='flex justify-center gap-10'>
                         {Object.entries(services).slice(3, servicesLength).map(([key, service]) => (
                             <div key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed' onClick={() => handleDivClick(service)}>
-                                <img src={service.imgSrc} alt={service.altText} className='rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
-                                <p className='text-sm md:text-xl text-center font-bold hover:underline'>{service.name}</p>
+                                <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
+                                <p className='text-sm sm:text-base md:text-xl text-center font-bold hover:underline'>{service.name}</p>
                             </div>
                         ))}
                     </div>
@@ -92,7 +99,7 @@ const LandingServices = () => {
                             </button>
                             {dialogInfo}
                             <div className='flex gap-4 mt-8'>
-                                <button onClick={closeDialog} className='bg-barberRed text-white hover:bg-hoverRed px-5 py-2 rounded text-xl'>
+                                <button  onClick={goToBookAppointment} className='bg-barberRed text-white hover:bg-hoverRed px-5 py-2 rounded text-xl'>
                                     Book Now
                                 </button>
                                 <button onClick={closeDialog} className='bg-gray-600 text-white hover:bg-gray-900 px-5 py-2 rounded text-xl'>
@@ -120,9 +127,9 @@ const LandingServices = () => {
 
     const services = {
         1: {
-            name: 'Haircut',
+            name: 'Haircuts',
             imgSrc: '/images/Memphis.jpg',
-            altText: 'Placeholder',
+            altText: 'Haircuts',
             dialogInfo:
                 <div className='flex flex-col w-full'>
                     <h2 className='mb-4 text-3xl font-bold self-center border-b-2 border-black'>Haircuts</h2>
@@ -177,25 +184,25 @@ const LandingServices = () => {
                 </div>,
         },
         2: {
-            name: 'Color',
+            name: 'Shaves & Beard Trims',
             imgSrc: '/images/Memphis.jpg',
-            altText: 'Placeholder',
+            altText: 'Shaves & Beard Trims',
             dialogInfo: 'Placeholder',
         },
         3: {
-            name: 'Beard Trim',
+            name: 'Placeholder',
             imgSrc: '/images/Memphis.jpg',
             altText: 'Placeholder',
             dialogInfo: 'Placeholder',
         },
         4: {
-            name: 'Nails',
+            name: 'Placeholder',
             imgSrc: '/images/Memphis.jpg',
             altText: 'Placeholder',
             dialogInfo: 'Placeholder',
         },
         5: {
-            name: 'Braids',
+            name: 'Placeholder',
             imgSrc: '/images/Memphis.jpg',
             altText: 'Placeholder',
             dialogInfo: 'Placeholder',

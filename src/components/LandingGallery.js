@@ -76,9 +76,10 @@ const LandingGallery = () => {
                 <div className='flex justify-center mt-8'>
                     <div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-7'>
                         {images.map((image, index) => (
-                            <div key={index} className='h-[200px] w-[200px] md:h-[225px] md:w-[225px] drop-shadow-md'>
+                            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
+                                key={index} className='h-[200px] w-[200px] md:h-[225px] md:w-[225px] drop-shadow-md'>
                                 <img src={image} alt={`Gallery ${index + 1}`} className='w-full h-auto object-cover' />
-                            </div>
+                            </a>
                         ))}
                     </div>
                 </div>

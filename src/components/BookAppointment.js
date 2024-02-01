@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DateTime } from 'luxon';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -28,6 +28,7 @@ const BookAppointment = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const skeletonTimeout = 500; // timeout in ms
+    const navigate = useNavigate();
 
     useEffect(() => {
         console.log("Running useEffect.");
@@ -140,6 +141,8 @@ const BookAppointment = () => {
     const prevStep = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
+        } else {
+            navigate('/');
         }
     };
 
