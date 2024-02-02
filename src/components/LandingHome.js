@@ -1,25 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';
 const LandingHome = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [homeBackgroundImg, sethomeBackgroundImg] = useState('');
 
     const skeletonTimeout = 500; // timeout in ms
-    const navigate = useNavigate();
+    //const ahomeBackgroundImg = useRef();
+
     useEffect(() => {
+        const loadImage = (path) => new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = path;
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+        });
+
+        async function preloadBackgroundImage() {
+            const myBackgroundImage = await loadImage('/images/DogInAChair-desat.jpg');
+            sethomeBackgroundImg(myBackgroundImage);
+        }
+
         const loadData = async () => {
             setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, skeletonTimeout));
+
+            const fetchBackgroundImage = preloadBackgroundImage();
+            const timeoutPromise = new Promise(resolve => setTimeout(resolve, skeletonTimeout));
+
+
+            await Promise.all([timeoutPromise, fetchBackgroundImage]);
             setIsLoading(false);
         };
 
         loadData();
     }, []);
-
-    const goToBookAppointment = () => {
-        navigate('/book-appointment');
-    };
 
     const renderLandingHome = () => {
         if (isLoading) {
@@ -88,7 +102,8 @@ const LandingHome = () => {
             );
         }
         return (
-            <div className='bg-cover bg-center h-[900px] font-serif' style={{ backgroundImage: 'url(/images/DogInAChair-desat.jpg)' }}>
+            /*<div className='bg-cover bg-center h-[900px] font-serif' style={{ backgroundImage: 'url(/images/DogInAChair-desat.jpg)' }}>*/
+            <div className='bg-cover bg-center h-[900px] font-serif'  style={{ backgroundImage: `url(${homeBackgroundImg.src})` }}>
                 <div className='flex flex-col w-full h-1/3 p-5 place-items-center'>
                     <div className='flex flex-row gap-8 md:gap-12 items-center mb-4 text-gray-200 text-xl drop-shadow-md'>
                         <a href="#home" className='underline hover:text-hoverRed'>Home</a>

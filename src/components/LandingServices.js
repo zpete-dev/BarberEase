@@ -73,19 +73,19 @@ const LandingServices = () => {
                     {/* First Row */}
                     <div className='flex gap-4 md:gap-10 justify-center'>
                         {Object.entries(services).slice(0, 3).map(([key, service]) => (
-                            <div key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed hover:underline' onClick={() => handleDivClick(service)}>
+                            <button key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed hover:underline' onClick={() => handleDivClick(service)}>
                                 <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
                                 <p className='text-sm sm:text-base md:text-xl text-center font-bold hover:underline'>{service.name}</p>
-                            </div>
+                            </button>
                         ))}
                     </div>
                     {/* Second Row */}
                     <div className='flex justify-center gap-10'>
                         {Object.entries(services).slice(3, servicesLength).map(([key, service]) => (
-                            <div key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed' onClick={() => handleDivClick(service)}>
+                            <button key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed' onClick={() => handleDivClick(service)}>
                                 <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
                                 <p className='text-sm sm:text-base md:text-xl text-center font-bold hover:underline'>{service.name}</p>
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </div>
@@ -99,7 +99,7 @@ const LandingServices = () => {
                             </button>
                             {dialogInfo}
                             <div className='flex gap-4 mt-8'>
-                                <button  onClick={goToBookAppointment} className='bg-barberRed text-white hover:bg-hoverRed px-5 py-2 rounded text-xl'>
+                                <button onClick={goToBookAppointment} className='bg-barberRed text-white hover:bg-hoverRed px-5 py-2 rounded text-xl'>
                                     Book Now
                                 </button>
                                 <button onClick={closeDialog} className='bg-gray-600 text-white hover:bg-gray-900 px-5 py-2 rounded text-xl'>
@@ -187,7 +187,28 @@ const LandingServices = () => {
             name: 'Shaves & Beard Trims',
             imgSrc: '/images/Memphis.jpg',
             altText: 'Shaves & Beard Trims',
-            dialogInfo: 'Placeholder',
+            dialogInfo:
+                <div className='flex flex-col w-full'>
+                    <h2 className='mb-4 text-3xl font-bold self-center border-b-2 border-black'>Shaves & Beard Trims</h2>
+                    <div className='flex flex-row mb-4 justify-between'>
+                        <div className='flex flex-col'>
+                            <span className='text-lg xs:text-xl font-bold'>Close Shave - $15</span>
+                            <span className='text-xs xs:text-sm'>Straight razor, hot towel, baby face</span>
+                        </div>
+                        <div className='hidden xs:flex flex-col ml-10 text-center'>
+                            <span className='self-center italic text-sm'>*All shaves and beard trims come with a </span>
+                            <span className='italic underline text-sm'>complimentary hot towel finish.</span>
+                        </div>
+                    </div>
+                    <div className='flex flex-col mb-4'>
+                        <span className='text-lg xs:text-xl font-bold'>Shape Up - $13</span>
+                        <span className='text-xs xs:text-sm'>We shape up your beard just how you like it</span>
+                    </div>
+                    <div className='xs:hidden'>
+                        <span className='italic text-sm'>*All shaves and beard trims come with a </span>
+                        <span className='italic underline text-sm'>complimentary hot towel finish.</span>
+                    </div>
+                </div>,
         },
         3: {
             name: 'Placeholder',
