@@ -33,12 +33,12 @@ const BookAppointment = () => {
     useEffect(() => {
         console.log("Running useEffect.");
 
+        setSessionToken(null);
         const handleScroll = () => {
             // Set isScrolledDown to true if scrolled down from top, otherwise false
             setIsScrolledDown(window.scrollY > 0);
         };
         window.addEventListener('scroll', handleScroll);
-
         async function fetchBarbers() {
             try {
                 const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers`, {
@@ -64,7 +64,6 @@ const BookAppointment = () => {
         }
 
         async function aquireSessionToken() {
-
             try {
                 const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/sessions`, {}, {
                     headers: {
@@ -74,7 +73,7 @@ const BookAppointment = () => {
                 const data = response.data;
                 // Check for success response and navigate with state
                 if (data.success) {
-                    await setSessionToken(data.token);
+                    setSessionToken(data.token);
                 } else {
                     console.error('Could not generate JWT token.');
                 }

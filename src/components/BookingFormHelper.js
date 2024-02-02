@@ -48,5 +48,14 @@ export const BookingFormHelper = (providers) => {
         return null;
     };
 
-    return { getServiceNameById, getServicePriceById, getProviderNameById, getProviderPictureById };
+    // A function to get provider by id
+    const getProviderById = (providerId) => {
+        for (const provider of providers) {
+            if (provider._id === providerId) {
+                return provider;
+            }
+        }
+        return null;
+    };
+    return { getServiceNameById, getServicePriceById, getProviderNameById, getProviderPictureById, getProviderById };
 };

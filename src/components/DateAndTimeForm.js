@@ -74,6 +74,9 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             const dstOffset = (DateTime.fromJSDate(selectedDate).toJSDate().getTimezoneOffset()) / 60;
             const selectedDateMST = DateTime.fromJSDate(selectedDate).minus({ hours: dstOffset }).toJSDate().toISOString().split('T')[0] + 'T00:00:00.000Z';
             setTimeButtonsByTimeArray(fullAvailability[selectedDateMST]);
+            /*console.log(fullAvailability);
+            console.log(selectedDate);
+            setTimeButtonsByTimeArray(fullAvailability[selectedDate]);*/
         };
 
         const loadData = async () => {
@@ -81,12 +84,12 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             setIsLoading(true);
             const fetchDataPromise = fetchAvailability();
             const timeoutPromise = new Promise(resolve => setTimeout(resolve, skeletonTimeout));
-    
+
             // Wait for both data fetching and timeout to complete
             await Promise.all([fetchDataPromise, timeoutPromise]);
             setIsLoading(false);
         };
-    
+
         if (selectedProviders.length > 0) {
             loadData();
         }

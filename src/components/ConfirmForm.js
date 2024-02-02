@@ -46,15 +46,146 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     }, [firstName, lastName, email, phone]);
 
 
+    //Returns true if the given provider has availability for the date and time the user has selected
+    const availableAtSelectedTime = (aProviderId) => {
+        const myProvider = BookingFormHelper(providers).getProviderById(aProviderId);
+        if (!(myProvider === null)) {
+            const myProviderAvailability = myProvider.availability;
+            const selectedDateString = selectedDate.toISOString().split('T')[0];
+
+            const selectedDateAvailability = myProviderAvailability.find(availability =>
+                availability.date.split('T')[0] === selectedDateString
+            );
+
+            console.log(selectedDateAvailability);
+            console.log(myProviderAvailability);
+            console.log(selectedDateString);
+            console.log(selectedTime);
+
+            if (!selectedDateAvailability) {
+                console.log(selectedDateAvailability);
+                return true;
+            }
+            //As of now, if a day is not in a provider's availability, full availability is assumed for that day, so return true above
+            //Going forward I need to check the time slot array of the selected date's availability, and see if the given provider has that time free.
+
+
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    //Select provider to book with based on who the user chose, and provider availability. Random provider is selected if multiple are available.
+    const selectProviderForBooking = () => {
+        let providerList = [];
+        if (selectedProviders.includes("Any")) {
+            for (const aProvider in providers) {
+                if (!(providers[aProvider]._id === "Any")) {
+                    providerList.push(providers[aProvider]._id);
+                }
+            }
+        } else {
+            providerList = selectedProviders;
+        }
+
+        //console.log('providerList:', { providerList });
+        //console.log('providers:', { providers });
+
+        const availableProviders = [];
+        providerList.forEach(myProviderId => {
+            if (availableAtSelectedTime(myProviderId)) {
+                availableProviders.push(myProviderId);
+            }
+        });
+
+        let mySelectedProvider = "";
+        if (availableProviders.length > 0) {
+            mySelectedProvider = availableProviders[Math.floor(Math.random() * availableProviders.length)];
+        }
+
+        return mySelectedProvider;
+    };
+
     // Function to handle form submission
-    const handleConfirmBooking = () => {
+    const handleConfirmBooking = async (e) => {
+        e.preventDefault();
+
+        //Take selectedServices ID array and make a selectedServices name string
+        const serviceNames = [];
+        selectedServices.forEach(selectedService => {
+            serviceNames.push(BookingFormHelper(providers).getServiceNameById(selectedService));
+        });
+        //Name string for POST
+        const selectedServicesNames = serviceNames.join(", ");
+
+        //Provider object for POST
+        const mySelectedProvider = selectProviderForBooking();
+
+        const bookingData = {
+            customerName: `${firstName} ${lastName}`,
+            customerEmail: email,
+            customerPhone: phone,
+            barberId: mySelectedProvider,
+            date: selectedDate.toISOString(),
+            slotTime: selectedTime,
+            service: selectedServicesNames
+        };
         if (!isFormValid) {
             setShowErrorMessage(true);
             return;
         }
         // Implementation for booking confirmation goes here
-        console.log('Booking confirmed with:', { firstName, lastName, email, phone });
+        console.log('Booking confirmed with:', { bookingData });
     };
+
+    /*const ahandleConfirmBooking = async (e) => {
+            e.preventDefault();
+            const bookingData = {
+                customerName: formData.name,
+                customerEmail: formData.email,
+                customerPhone: formData.phoneNumber,
+                barberId: selectedBarber, // Ensure this is the ID, not the name
+                date: selectedDate.toISOString(), // Ensure selectedDate is a Date object
+                slotTime: selectedSlot,
+                service: selectedServiceName
+            };
+    
+            try {
+                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/bookings`, bookingData, {
+                    headers: {
+                        'x-api-key': `${process.env.REACT_APP_API_KEY}`,
+                        'x-auth-token': sessionToken
+                    }
+                });
+    
+                // Check for success response and navigate with state
+                if (response.data.success) {
+                    console.log("Expiring token.");
+                    setSessionToken(null);
+                    navigate('/', { state: { bookingConfirmed: true } });
+                } else {
+                    // Handle unsuccessful booking attempt
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    setShowPopup(true);
+                    // Set a timeout to redirect after 5 seconds
+                    if (!timeoutId) {
+                        const newTimeoutId = setTimeout(() => {
+                            setShowPopup(false);
+                            navigate('/');
+                        }, 5000);
+                        setTimeoutId(newTimeoutId); // Update the timeoutId state
+                    }
+                } else {
+                    // Handle other types of errors (network error, server error, etc.)
+                    console.error("Error during booking:", error.message);
+                }
+            }
+        };*/
+
+
 
     const handlePhoneChange = (e) => {
         const formattedInput = formatPhoneNumber(e.target.value);
@@ -87,7 +218,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
             <hr className='hidden lg:flex border-black w-7/12 mb-8' />
             <div className='flex flex-col mx-auto w-full'>
                 {/* Personal Information Form Box */}
-                <div className='mx-auto w-full p-4 mb-4 border border-gray-300 rounded shadow-lg'>
+                <form onSubmit={handleConfirmBooking} className='mx-auto w-full p-4 mb-4 border border-gray-300 rounded shadow-lg'>
                     <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
                     <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
                     text-red-500 text-sm text-left`}>- Please enter 2 or more characters</span>
@@ -155,13 +286,13 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                     )}
 
                     <button
-                        onClick={handleConfirmBooking}
+                        type="submit"
                         className={`bg-barberRed text-white p-2 rounded mt-2
                                     lg:px-4 lg:py-3 lg:mt-4
                                 ${!isFormValid ? 'bg-red-400 hover:bg-red-300' : 'hover:bg-hoverRed shadow-lg shadow-carrotOrangeHover/90'}`}>
                         Confirm Booking
                     </button>
-                </div>
+                </form>
 
                 {/* Summary Box */}
                 <div className='hidden mx-auto p-4 border border-black rounded shadow-lg w-5/6 lg md:w-[640px] text-[15px] xl:w-[40%]'>

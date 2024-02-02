@@ -14,7 +14,7 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, skeletonTimeout)); 
+            await new Promise(resolve => setTimeout(resolve, skeletonTimeout));
             setIsLoading(false);
         };
 
@@ -53,6 +53,15 @@ const ServiceAndProviderForm = ({ providers, selectedServices, setSelectedServic
     const toggleProvider = (providerId) => {
         setSelectedTime(null);
         setSelectedDate(DateTime.now().setZone('America/Denver').toJSDate());
+
+        //Get Today's Date in proper format
+        /*const todayAsJSDate = DateTime.now().setZone('America/Denver').toJSDate();
+        const todayAsFormattedString = `${todayAsJSDate.getFullYear()}-${(todayAsJSDate.getMonth() + 1).toString().padStart(2, '0')}-${todayAsJSDate.getDate().toString().padStart(2, '0')}`;
+        console.log(todayAsJSDate);
+        console.log(todayAsFormattedString);
+        console.log(todayAsFormattedString+'T00:00:00.000Z');
+        setSelectedDate(todayAsFormattedString+'T00:00:00.000Z');*/
+
         if (providerId === "Any") {
             setSelectedProviders(prevSelected => prevSelected.includes(providerId) ? [] : ["Any"]);
         } else {
