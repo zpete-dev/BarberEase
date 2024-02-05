@@ -51,19 +51,18 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
                                 }
                             });
 
-                            //console.log(fullAvailability);
-                            let asdfasdf = [];
-                            //console.log(data.availability);
+
+                            let myTempAvailability = [];
+
                             for (const myAvailability in data.availability) {
-                                asdfasdf.push(data.availability[myAvailability].date);
+                                myTempAvailability.push(data.availability[myAvailability].date);
                             }
-                            //console.log(asdfasdf);
+
                             for (const myDate in fullAvailability) {
                                 //console.log(`Date: ${myDate}`);
-                                if (asdfasdf.indexOf(myDate) === -1) {
+                                if (myTempAvailability.indexOf(myDate) === -1) {
                                     fullAvailability[myDate] = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
                                 }
-
                             }
                         }
                     }
