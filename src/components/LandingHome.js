@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';
 const LandingHome = () => {
@@ -6,7 +6,6 @@ const LandingHome = () => {
     const [homeBackgroundImg, sethomeBackgroundImg] = useState('');
 
     const skeletonTimeout = 500; // timeout in ms
-    //const ahomeBackgroundImg = useRef();
 
     useEffect(() => {
         const loadImage = (path) => new Promise((resolve, reject) => {

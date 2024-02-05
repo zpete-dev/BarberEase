@@ -160,7 +160,7 @@ const BookAppointment = () => {
                     selectedTime={selectedTime} setSelectedTime={setSelectedTime}
                     selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
             case 2:
-                return <ConfirmForm providers={barbers} sessionToken={sessionToken}
+                return <ConfirmForm providers={barbers} sessionToken={sessionToken} setSessionToken={setSessionToken}
                     selectedServices={selectedServices} subtotal={subtotal} selectedProviders={selectedProviders}
                     selectedDate={selectedDate} selectedTime={selectedTime} />;
             default:

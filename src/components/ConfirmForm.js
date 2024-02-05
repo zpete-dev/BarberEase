@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { BookingFormHelper } from './BookingFormHelper';
 
 import 'react-loading-skeleton/dist/skeleton.css'
 
-const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, selectedProviders, selectedDate, selectedTime }) => {
+const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedServices, subtotal, selectedProviders, selectedDate, selectedTime }) => {
     // State for form inputs
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -13,7 +15,8 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [formattedPhone, setFormattedPhone] = useState('');
 
-    // Email and phone validation functions
+    const navigate = useNavigate();
+    // Validation functions
     const validateEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
@@ -23,6 +26,21 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
         const regex = /^[0-9]{10}$/; // Simple validation for 10 digit number
         return regex.test(phone);
     };
+
+    //TODO verify only characters as input. Change error message to give feedback. No numbers or special characters allowed
+    const validateName = (name) => {
+        // Ensure name is at least 2 characters long after trimming
+        if (name.trim().length < 2) {
+            return false;
+        }
+
+        // Regular expression to match letters and spaces
+        const regex = /^[A-Za-z\s]+$/;
+
+        // Test the trimmed name against the regular expression
+        return regex.test(name.trim());
+    };
+
 
     // Function to format phone number
     const formatPhoneNumber = (input) => {
@@ -40,7 +58,7 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
     };
 
     useEffect(() => {
-        const isValid = firstName.trim() !== '' && lastName.trim() !== '' &&
+        const isValid = validateName(firstName) && validateName(lastName) &&
             validateEmail(email) && validatePhone(phone);
         setIsFormValid(isValid);
     }, [firstName, lastName, email, phone]);
@@ -57,23 +75,22 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                 availability.date.split('T')[0] === selectedDateString
             );
 
-            console.log(selectedDateAvailability);
-            console.log(myProviderAvailability);
-            console.log(selectedDateString);
-            console.log(selectedTime);
 
-            if (!selectedDateAvailability) {
-                console.log(selectedDateAvailability);
+
+
+            //Check date in Provider's calendar
+            if ((selectedDateAvailability === undefined)) {
+                //If day WAS NOT found, then full availability is assumed
+                console.log(`Availability for ${myProvider.name} on ${selectedDateString} at ${selectedTime}: True`);
+                return true;
+            } else if (selectedDateAvailability.slots.includes(selectedTime)) {
+                //If day WAS found, then check if time slot is free
+                console.log(`Availability for ${myProvider.name} on ${selectedDateString} at ${selectedTime}: True`);
                 return true;
             }
-            //As of now, if a day is not in a provider's availability, full availability is assumed for that day, so return true above
-            //Going forward I need to check the time slot array of the selected date's availability, and see if the given provider has that time free.
-
-
-        } else {
-            return false;
+            console.log(`Availability for ${myProvider.name} on ${selectedDateString} at ${selectedTime}: False`);
         }
-        return true;
+        return false;
     }
 
     //Select provider to book with based on who the user chose, and provider availability. Random provider is selected if multiple are available.
@@ -88,9 +105,6 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
         } else {
             providerList = selectedProviders;
         }
-
-        //console.log('providerList:', { providerList });
-        //console.log('providers:', { providers });
 
         const availableProviders = [];
         providerList.forEach(myProviderId => {
@@ -131,61 +145,50 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
             slotTime: selectedTime,
             service: selectedServicesNames
         };
+
         if (!isFormValid) {
             setShowErrorMessage(true);
             return;
         }
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/bookings`, bookingData, {
+                headers: {
+                    'x-api-key': `${process.env.REACT_APP_API_KEY}`,
+                    'x-auth-token': sessionToken
+                }
+            });
+
+            // Check for success response and navigate with state
+            if (response.data.success) {
+                console.log("Expiring token.");
+                setSessionToken(null);
+                navigate('/', { state: { bookingConfirmed: true } });
+            } else {
+                // Handle unsuccessful booking attempt
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                /*setShowPopup(true);
+                                // Set a timeout to redirect after 5 seconds
+                                if (!timeoutId) {
+                                    const newTimeoutId = setTimeout(() => {
+                                        setShowPopup(false);
+                                        navigate('/');
+                                    }, 5000);
+                                    setTimeoutId(newTimeoutId); // Update the timeoutId state
+                                }*/
+            } else {
+                // Handle other types of errors (network error, server error, etc.)
+                console.error("Error during booking:", error.message);
+            }
+        }
+
+
+
         // Implementation for booking confirmation goes here
         console.log('Booking confirmed with:', { bookingData });
     };
-
-    /*const ahandleConfirmBooking = async (e) => {
-            e.preventDefault();
-            const bookingData = {
-                customerName: formData.name,
-                customerEmail: formData.email,
-                customerPhone: formData.phoneNumber,
-                barberId: selectedBarber, // Ensure this is the ID, not the name
-                date: selectedDate.toISOString(), // Ensure selectedDate is a Date object
-                slotTime: selectedSlot,
-                service: selectedServiceName
-            };
-    
-            try {
-                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/bookings`, bookingData, {
-                    headers: {
-                        'x-api-key': `${process.env.REACT_APP_API_KEY}`,
-                        'x-auth-token': sessionToken
-                    }
-                });
-    
-                // Check for success response and navigate with state
-                if (response.data.success) {
-                    console.log("Expiring token.");
-                    setSessionToken(null);
-                    navigate('/', { state: { bookingConfirmed: true } });
-                } else {
-                    // Handle unsuccessful booking attempt
-                }
-            } catch (error) {
-                if (error.response && error.response.status === 401) {
-                    setShowPopup(true);
-                    // Set a timeout to redirect after 5 seconds
-                    if (!timeoutId) {
-                        const newTimeoutId = setTimeout(() => {
-                            setShowPopup(false);
-                            navigate('/');
-                        }, 5000);
-                        setTimeoutId(newTimeoutId); // Update the timeoutId state
-                    }
-                } else {
-                    // Handle other types of errors (network error, server error, etc.)
-                    console.error("Error during booking:", error.message);
-                }
-            }
-        };*/
-
-
 
     const handlePhoneChange = (e) => {
         const formattedInput = formatPhoneNumber(e.target.value);
@@ -197,9 +200,9 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
         if (showErrorMessage) {
             switch (value) {
                 case 0:
-                    return firstName.length >= 2 ? 'border-gray-300' : 'border-red-500';
+                    return validateName(firstName) ? 'border-gray-300' : 'border-red-500';
                 case 1:
-                    return lastName.length >= 2 ? 'border-gray-300' : 'border-red-500';
+                    return validateName(lastName) ? 'border-gray-300' : 'border-red-500';
                 case 2:
                     return validateEmail(email) ? 'border-gray-300' : 'border-red-500';
                 case 3:
@@ -220,8 +223,8 @@ const ConfirmForm = ({ sessionToken, providers, selectedServices, subtotal, sele
                 {/* Personal Information Form Box */}
                 <form onSubmit={handleConfirmBooking} className='mx-auto w-full p-4 mb-4 border border-gray-300 rounded shadow-lg'>
                     <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
-                    <span className={`${showErrorMessage && (firstName.length < 2 || lastName.length < 2) ? '' : 'invisible'} 
-                    text-red-500 text-sm text-left`}>- Please enter 2 or more characters</span>
+                    <span className={`${showErrorMessage && (validateName(firstName) || validateName(lastName)) ? '' : 'invisible'} 
+                    text-red-500 text-sm text-left`}>- Please enter 2 or more characters. <br/> *Numbers and special characters NOT allowed</span>
                     <div className='flex flex-wrap justify-between mb-2'>
                         <label className='block w-[48%]'>
                             <span className="block text-left">First Name</span>
