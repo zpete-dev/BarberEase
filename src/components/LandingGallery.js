@@ -78,7 +78,7 @@ const LandingGallery = () => {
                         {images.map((image, index) => (
                             <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
                                 key={index} className='h-[200px] w-[200px] md:h-[225px] md:w-[225px] drop-shadow-md'>
-                                <img src={image} alt={`Gallery ${index + 1}`} className='w-full h-auto object-cover' />
+                                <img src={image} alt={`Gallery ${index + 1}`} className='w-full h-auto object-cover hover:scale-105 transition-all duration-150 ease-in-out' />
                             </a>
                         ))}
                     </div>

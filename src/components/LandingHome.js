@@ -101,19 +101,19 @@ const LandingHome = () => {
             );
         }
         return (
-            /*<div className='bg-cover bg-center h-[900px] font-serif' style={{ backgroundImage: 'url(/images/DogInAChair-desat.jpg)' }}>*/
-            <div className='bg-cover bg-center h-[900px] font-serif'  style={{ backgroundImage: `url(${homeBackgroundImg.src})` }}>
+            <div className='bg-cover bg-center h-[900px] font-serif' style={{ backgroundImage: `url(${homeBackgroundImg.src})` }}>
                 <div className='flex flex-col w-full h-1/3 p-5 place-items-center'>
-                    <div className='flex flex-row gap-8 md:gap-12 items-center mb-4 text-gray-200 text-xl drop-shadow-md'>
-                        <a href="#home" className='underline hover:text-hoverRed'>Home</a>
-                        <a href="#services" className='underline hover:text-hoverRed'>Services</a>
+                    <div className='flex flex-row gap-8 md:gap-12 items-center mb-4 text-gray-200 text-xl'>
+                        <a href="#home" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Home</a>
+                        <a href="#services" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Services</a>
                         <a href="/" className='hidden lg:flex items-center mb-3 mx-3'>
                             <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[200px] w-[200px]' />
                             <span className='text-white text-6xl'>Barber</span>
+
                             <span className='text-barberRed text-6xl'>Dog</span>
                         </a>
-                        <a href="#gallery" className='underline hover:text-hoverRed'>Gallery</a>
-                        <a href="#contact" className='underline hover:text-hoverRed'>Contact</a>
+                        <a href="#gallery" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Gallery</a>
+                        <a href="#contact" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Contact</a>
                     </div>
                     <div className='lg:hidden flex items-center mb-4 text-white text-xl'>
                         <a href="/" className='flex items-center mb-3 mx-3'>
@@ -137,7 +137,8 @@ const LandingHome = () => {
                     </div>
                 </div>
                 <div className='flex w-full h-1/3 p-5 place-content-center justify-center items-center'>
-                    <a href="/book-appointment" className='border-barberRed text-white hover:text-hoverRed text-4xl py-3 px-7 rounded-lg border-2'>
+                    <a href="/book-appointment" className='border-barberRed text-gray-300 text-4xl py-3 px-7 rounded-lg border-2
+                    transition-all ease-in-out duration-200 hover:bg-barberRed hover:scale-105 hover:text-white'>
                         Book Now
                     </a>
                 </div>

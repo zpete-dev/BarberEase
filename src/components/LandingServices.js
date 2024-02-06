@@ -1,24 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';
+import '../Styles.css';
 const LandingServices = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [dialogInfo, setdialogInfo] = useState(<p>null</p>);
     const [isLoading, setIsLoading] = useState(true);
 
+    const dialogRef = useRef(null);
     const skeletonTimeout = 500; // timeout in ms
     const navigate = useNavigate();
+
     useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dialogRef.current && !dialogRef.current.contains(event.target)) {
+                setShowDialog(false);
+            }
+        };
+
+        // Add click event listener
+        document.addEventListener('mousedown', handleClickOutside);
         const loadData = async () => {
             setIsLoading(true);
             await new Promise(resolve => setTimeout(resolve, skeletonTimeout));
             setIsLoading(false);
         };
-
         loadData();
-    }, []);
+        return () => {
+            // Remove event listener on cleanup
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dialogRef]);
 
     const goToBookAppointment = () => {
         closeDialog();
@@ -73,18 +87,18 @@ const LandingServices = () => {
                     {/* First Row */}
                     <div className='flex gap-4 md:gap-10 justify-center'>
                         {Object.entries(services).slice(0, 3).map(([key, service]) => (
-                            <button key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed hover:underline' onClick={() => handleDivClick(service)}>
-                                <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
-                                <p className='text-sm sm:text-base md:text-xl text-center font-bold hover:underline'>{service.name}</p>
+                            <button key={key} className='cursor-pointer hover:underline panOnHover hover:drop-shadow-[0_20px_20px_rgba(235,235,235,0.70)]' onClick={() => handleDivClick(service)}>
+                                <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[260px] md:h-[150px] object-cover' />
+                                <p className='text-sm sm:text-base md:text-xl text-center font-bold'>{service.name}</p>
                             </button>
                         ))}
                     </div>
                     {/* Second Row */}
                     <div className='flex justify-center gap-10'>
                         {Object.entries(services).slice(3, servicesLength).map(([key, service]) => (
-                            <button key={key} className='cursor-pointer hover:brightness-75 hover:text-hoverRed' onClick={() => handleDivClick(service)}>
-                                <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[300px] md:h-[150px] object-cover hover:border hover:border-hoverRed' />
-                                <p className='text-sm sm:text-base md:text-xl text-center font-bold hover:underline'>{service.name}</p>
+                            <button key={key} className='cursor-pointer hover:underline panOnHover hover:drop-shadow-[0_20px_20px_rgba(235,235,235,0.70)]' onClick={() => handleDivClick(service)}>
+                            <img src={service.imgSrc} alt={service.altText} className='mx-auto rounded-[85px] w-[85px] h-[85px] xs:rounded-[120px] xs:w-[120px] xs:h-[120px] sm:rounded-[160px] sm:w-[160px] sm:h-[160px] md:rounded-[160px] md:w-[260px] md:h-[150px] object-cover' />
+                                <p className='text-sm sm:text-base md:text-xl text-center font-bold'>{service.name}</p>
                             </button>
                         ))}
                     </div>
@@ -93,16 +107,16 @@ const LandingServices = () => {
                 {/* Dialog Box */}
                 {showDialog && (
                     <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50'>
-                        <div className='bg-white rounded-lg flex flex-col items-center p-8 relative'>
+                        <div ref={dialogRef} className='bg-white rounded-lg flex flex-col items-center p-8 relative'>
                             <button onClick={closeDialog} className='absolute top-0.5 left-2 text-lg bg-transparent text-gray-500 hover:text-gray-300 rounded-full p-1'>
                                 x
                             </button>
                             {dialogInfo}
                             <div className='flex gap-4 mt-8'>
-                                <button onClick={goToBookAppointment} className='bg-barberRed text-white hover:bg-hoverRed px-5 py-2 rounded text-xl'>
+                                <button onClick={goToBookAppointment} className='transition-all duration-150 bg-barberRed/80 hover:bg-barberRed hover:scale-105 text-white px-5 py-2 rounded text-xl'>
                                     Book Now
                                 </button>
-                                <button onClick={closeDialog} className='bg-gray-600 text-white hover:bg-gray-900 px-5 py-2 rounded text-xl'>
+                                <button onClick={closeDialog} className='transition-all duration-150 bg-gray-600 hover:bg-gray-900 hover:scale-105 text-white px-5 py-2 rounded text-xl'>
                                     Close
                                 </button>
                             </div>

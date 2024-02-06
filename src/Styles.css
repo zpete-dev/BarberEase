@@ -114,3 +114,18 @@
 .md-provider-item-exit-done {
   @apply scale-y-0 m-0;
 }
+
+@keyframes panImage {
+  from {
+      object-position: left center;
+  }
+  to {
+      object-position: right center;
+  }
+}
+
+.panOnHover:hover img {
+  animation: panImage 5s ease-out infinite;
+  object-fit: cover;
+  object-position: left center;
+}
