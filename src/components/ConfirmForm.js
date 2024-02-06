@@ -14,6 +14,7 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
     const [isFormValid, setIsFormValid] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [formattedPhone, setFormattedPhone] = useState('');
+    const [isBooking, setIsBooking] = useState(false);
 
     const navigate = useNavigate();
     // Validation functions
@@ -125,6 +126,8 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
     const handleConfirmBooking = async (e) => {
         e.preventDefault();
 
+        setIsBooking(true);
+
         //Take selectedServices ID array and make a selectedServices name string
         const serviceNames = [];
         selectedServices.forEach(selectedService => {
@@ -149,6 +152,8 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
         if (!isFormValid) {
             setShowErrorMessage(true);
             return;
+        } else {
+            await new Promise(resolve => setTimeout(resolve, 1500));
         }
 
         try {
@@ -168,6 +173,7 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
                 // Handle unsuccessful booking attempt
             }
         } catch (error) {
+            console.error("Error during booking:", error.message);
             if (error.response && error.response.status === 401) {
                 /*setShowPopup(true);
                                 // Set a timeout to redirect after 5 seconds
@@ -178,13 +184,10 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
                                     }, 5000);
                                     setTimeoutId(newTimeoutId); // Update the timeoutId state
                                 }*/
-            } else {
-                // Handle other types of errors (network error, server error, etc.)
-                console.error("Error during booking:", error.message);
             }
+        } finally {
+            setIsBooking(false); // End loading
         }
-
-
 
         // Implementation for booking confirmation goes here
         console.log('Booking confirmed with:', { bookingData });
@@ -216,6 +219,17 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
 
     return (
         <div className='text-center w-full md:w-[640px] md:mx-auto lg:w-full lg:mx-0'>
+            {isBooking && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Slightly white background
+                    zIndex: 1000, // Ensure it's above everything else
+                }} onClick={e => e.preventDefault()} />
+            )}
             <h2 className='text-2xl text-center font-bold underline mb-3
                 lg:text-3xl lg:text-left lg:no-underline lg:mb-1'>Confirm Appointment</h2>
             <hr className='hidden lg:flex border-black w-7/12 mb-8' />
@@ -224,7 +238,7 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
                 <form onSubmit={handleConfirmBooking} className='mx-auto w-full p-4 mb-4 border border-gray-300 rounded shadow-lg'>
                     <p className='text-center mb-3'>Complete the form below to <br /><strong>confirm your reservation.</strong></p>
                     <span className={`${showErrorMessage && (validateName(firstName) || validateName(lastName)) ? '' : 'invisible'} 
-                    text-red-500 text-sm text-left`}>- Please enter 2 or more characters. <br/> *Numbers and special characters NOT allowed</span>
+                    text-red-500 text-sm text-left`}>- Please enter 2 or more characters. <br /> *Numbers and special characters NOT allowed</span>
                     <div className='flex flex-wrap justify-between mb-2'>
                         <label className='block w-[48%]'>
                             <span className="block text-left">First Name</span>
@@ -290,10 +304,14 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
 
                     <button
                         type="submit"
-                        className={`bg-barberRed text-white p-2 rounded mt-2
-                                    lg:px-4 lg:py-3 lg:mt-4
-                                ${!isFormValid ? 'bg-red-400 hover:bg-red-300' : 'hover:bg-hoverRed shadow-lg shadow-carrotOrangeHover/90'}`}>
-                        Confirm Booking
+                        disabled={!isFormValid || isBooking}
+                        className={`bg-barberRed text-white p-2 rounded mt-2 lg:px-4 lg:py-3 lg:mt-4 
+                        ${!isFormValid ? 'bg-red-400 hover:bg-red-300 cursor-not-allowed'
+                                : isBooking ? 'bg-gray-400 text-slate-100 cursor-not-allowed'
+                                    : 'hover:bg-hoverRed shadow-lg shadow-carrotOrangeHover/90'}`}>
+                        {isBooking ? 'Booking ' : 'Confirm Booking'}
+                        <div role="status" className={` ${!isBooking ? 'hidden' : ''} ml-2 self-center inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current
+                        border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]`} />
                     </button>
                 </form>
 
