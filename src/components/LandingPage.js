@@ -16,6 +16,7 @@ const LandingPage = () => {
     const contactRef = useRef(null);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         const handleScroll = () => {
             //70 px offset for navbar thickness
             const positions = {

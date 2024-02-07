@@ -8,7 +8,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import '../CalendarStyles.css';
 import '../Styles.css';
 
-const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedProviders, selectedTime, setSelectedTime, selectedDate, setSelectedDate }) => {
+const DateAndTimeForm = ({ providers, sessionToken, setShowErrorPopup, selectedServices, selectedProviders, selectedTime, setSelectedTime, selectedDate, setSelectedDate }) => {
     const [availability, setAvailability] = useState([]);
     const [amTimes, setAmTimes] = useState([]);
     const [pmTimes, setPmTimes] = useState([]);
@@ -31,40 +31,50 @@ const DateAndTimeForm = ({ providers, sessionToken, selectedServices, selectedPr
             }
             for (let i = 0; i < 2; i++) {
                 for (const provider of providerList) {
-                    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers/${provider}/availability`, {
-                        headers: {
-                            'x-api-key': `${process.env.REACT_APP_API_KEY}`
-                        }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.success) {
-                            data.availability.map(availability => {
-                                if (availability.date in fullAvailability) {
-                                    availability.slots.map(timeSlot => {
-                                        if (fullAvailability[availability.date].indexOf(timeSlot) === -1) {
-                                            fullAvailability[availability.date].push(timeSlot);
-                                        }
-                                    });
-                                } else {
-                                    fullAvailability[availability.date] = availability.slots;
-                                }
-                            });
-
-
-                            let myTempAvailability = [];
-
-                            for (const myAvailability in data.availability) {
-                                myTempAvailability.push(data.availability[myAvailability].date);
+                    try {
+                        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/barbers/${provider}/availability`, {
+                            headers: {
+                                'x-api-key': `${process.env.REACT_APP_API_KEY}`
                             }
+                        });
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.success) {
+                                data.availability.map(availability => {
+                                    if (availability.date in fullAvailability) {
+                                        availability.slots.map(timeSlot => {
+                                            if (fullAvailability[availability.date].indexOf(timeSlot) === -1) {
+                                                fullAvailability[availability.date].push(timeSlot);
+                                            }
+                                        });
+                                    } else {
+                                        fullAvailability[availability.date] = availability.slots;
+                                    }
+                                });
 
-                            for (const myDate in fullAvailability) {
-                                //console.log(`Date: ${myDate}`);
-                                if (myTempAvailability.indexOf(myDate) === -1) {
-                                    fullAvailability[myDate] = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
+
+                                let myTempAvailability = [];
+
+                                for (const myAvailability in data.availability) {
+                                    myTempAvailability.push(data.availability[myAvailability].date);
+                                }
+
+                                for (const myDate in fullAvailability) {
+                                    //console.log(`Date: ${myDate}`);
+                                    if (myTempAvailability.indexOf(myDate) === -1) {
+                                        fullAvailability[myDate] = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM'];
+                                    }
                                 }
                             }
+                        } else {
+                            console.error('Error fetching barber availability from backend.');
+                            setShowErrorPopup(true);
                         }
+                    } catch (error) {
+                        // Handle error (network error, server error, etc.)
+                        console.error('Error fetching barber availability from backend.');
+                        console.error(error.message);
+                        setShowErrorPopup(true);
                     }
                 }
             }

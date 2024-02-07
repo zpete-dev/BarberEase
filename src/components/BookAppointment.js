@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DateTime } from 'luxon';
@@ -16,9 +16,7 @@ import '../Styles.css';
 const BookAppointment = () => {
     const [sessionToken, setSessionToken] = useState(null);
     const [currentStep, setCurrentStep] = useState(0);
-
     const [barbers, setBarbers] = useState([]);
-
     const [selectedServices, setSelectedServices] = useState([]);
     const [selectedProviders, setSelectedProviders] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
@@ -26,9 +24,13 @@ const BookAppointment = () => {
     const [subtotal, setSubtotal] = useState(0);
     const [isScrolledDown, setIsScrolledDown] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [redirectCountdown, setRedirectCountdown] = useState(5);
 
     const skeletonTimeout = 500; // timeout in ms
     const navigate = useNavigate();
+
+    const errorRef = useRef(null);
 
     useEffect(() => {
         console.log("Running useEffect.");
@@ -60,6 +62,8 @@ const BookAppointment = () => {
             } catch (error) {
                 // Handle error (network error, server error, etc.)
                 console.error('Error fetching barbers from backend.');
+                console.error(error.message);
+                setShowErrorPopup(true);
             }
         }
 
@@ -76,32 +80,49 @@ const BookAppointment = () => {
                     setSessionToken(data.token);
                 } else {
                     console.error('Could not generate JWT token.');
+                    setShowErrorPopup(true);
                 }
             } catch (error) {
                 // Handle error (network error, server error, etc.)
                 console.error('Error navigating to BookingForm.');
+                setShowErrorPopup(true);
             }
         }
 
         const loadData = async () => {
             // Start loading and fetch data
             setIsLoading(true);
-            
             const fetchBarbersPromise = fetchBarbers();
             const fetchSessionTokenPromise = aquireSessionToken();
             const timeoutPromise = new Promise(resolve => setTimeout(resolve, skeletonTimeout));
-    
             // Wait for both data fetching and timeout to complete
             await Promise.all([fetchBarbersPromise, fetchSessionTokenPromise, timeoutPromise]);
             setIsLoading(false);
         };
         loadData();
 
+        if (showErrorPopup) {
+            const intervalId = setInterval(() => {
+                setRedirectCountdown((currentCountdown) => currentCountdown - 1);
+            }, 1000);
+
+            const timeoutId = setTimeout(() => {
+                navigate('/');
+            }, 5000);
+
+            // Cleanup interval and timeout
+            return () => {
+                clearInterval(intervalId);
+                clearTimeout(timeoutId);
+            };
+        }
+
+
         return () => {
             window.removeEventListener('scroll', handleScroll);
             console.log("Cleaning up BookAppointment Component.");
         };
-    }, []);
+    }, [showErrorPopup]);
 
     const goToStep = (step) => {
         if (currentStep >= step) {
@@ -155,12 +176,12 @@ const BookAppointment = () => {
                     setSelectedTime={setSelectedTime} setSelectedDate={setSelectedDate}
                     setSubtotal={setSubtotal} />;
             case 1:
-                return <DateAndTimeForm providers={barbers} sessionToken={sessionToken}
+                return <DateAndTimeForm providers={barbers} sessionToken={sessionToken} setShowErrorPopup={setShowErrorPopup}
                     selectedServices={selectedServices} selectedProviders={selectedProviders}
                     selectedTime={selectedTime} setSelectedTime={setSelectedTime}
                     selectedDate={selectedDate} setSelectedDate={setSelectedDate} />;
             case 2:
-                return <ConfirmForm providers={barbers} sessionToken={sessionToken} setSessionToken={setSessionToken}
+                return <ConfirmForm providers={barbers} sessionToken={sessionToken} setSessionToken={setSessionToken} setShowErrorPopup={setShowErrorPopup}
                     selectedServices={selectedServices} subtotal={subtotal} selectedProviders={selectedProviders}
                     selectedDate={selectedDate} selectedTime={selectedTime} />;
             default:
@@ -697,6 +718,30 @@ const BookAppointment = () => {
                             md:mx-auto ${currentStep === 2 ? 'md:h-[72px]' : 'md:h-[100px]'} md:w-[720px] md:border-x-2 md:rounded-t-2xl z-50`}>
                 {renderSummaryBar()}
             </div>
+
+            {/* Backend Error Redirect */}
+            {showErrorPopup && (
+                <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50'>
+                    <div ref={errorRef} className='bg-white rounded-lg flex flex-col items-center p-8 relative'>
+                        {currentStep === 2 ?
+                            <p className='text-lg text-center mb-2'>
+                                An error has occurred!
+                                <br />
+                                Someone may have recently taken that time slot!
+                            </p>
+                            : <p className='text-lg text-center mb-2'>
+                                Oops! Error connecting to backend!
+                            </p>
+                        }
+                        <p className='text-xl text-center'>
+                            Redirecting to home page...
+                        </p>
+                        <p className='text-xl text-center'>
+                            {redirectCountdown}
+                        </p>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };

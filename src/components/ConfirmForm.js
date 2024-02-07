@@ -5,7 +5,7 @@ import { BookingFormHelper } from './BookingFormHelper';
 
 import 'react-loading-skeleton/dist/skeleton.css'
 
-const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedServices, subtotal, selectedProviders, selectedDate, selectedTime }) => {
+const ConfirmForm = ({ sessionToken, setSessionToken, setShowErrorPopup, providers, selectedServices, subtotal, selectedProviders, selectedDate, selectedTime }) => {
     // State for form inputs
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -170,27 +170,16 @@ const ConfirmForm = ({ sessionToken, setSessionToken, providers, selectedService
                 setSessionToken(null);
                 navigate('/', { state: { bookingConfirmed: true } });
             } else {
-                // Handle unsuccessful booking attempt
+                console.error("Unsuccessful POST for booking.");
+                setShowErrorPopup(true);
             }
         } catch (error) {
-            console.error("Error during booking:", error.message);
-            if (error.response && error.response.status === 401) {
-                /*setShowPopup(true);
-                                // Set a timeout to redirect after 5 seconds
-                                if (!timeoutId) {
-                                    const newTimeoutId = setTimeout(() => {
-                                        setShowPopup(false);
-                                        navigate('/');
-                                    }, 5000);
-                                    setTimeoutId(newTimeoutId); // Update the timeoutId state
-                                }*/
-            }
+            console.error("Error during POST for booking.");
+            console.error(error.message);
+            setShowErrorPopup(true);
         } finally {
             setIsBooking(false); // End loading
         }
-
-        // Implementation for booking confirmation goes here
-        console.log('Booking confirmed with:', { bookingData });
     };
 
     const handlePhoneChange = (e) => {
