@@ -36,10 +36,11 @@ app.use(cors(corsOptions));
 
 
 app.use(express.json());
-
+//TODO - CHANGE ALL HARD CODED ADDRESS REFERENCES
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/barberease', {
-  useNewUrlParser: true,
+//mongoose.connect('mongodb://localhost:27017/barberease', {
+mongoose.connect('mongodb://mongodb:27017/barberease', {
+useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => console.log('MongoDB connected...'))

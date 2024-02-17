@@ -1,8 +1,8 @@
 # Fetching the latest node image on alpine linux
-FROM node:alpine AS development
+FROM node:alpine
 
 # Setting up the work directory
-WORKDIR /client
+WORKDIR /server
 
 # Installing dependencies
 COPY ./package*.json .
@@ -12,8 +12,8 @@ RUN npm install
 # Copying all the files in our project
 COPY . .
 
-#TODO - Change this to be an environment variable
-EXPOSE 3000
+# Define the port exposed for backend
+EXPOSE 5000
 
 # Starting our application
 CMD ["npm","start"]
