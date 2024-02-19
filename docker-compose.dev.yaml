@@ -6,7 +6,7 @@ services:
     build: 
       target: development
       context: ./client
-      dockerfile: Dockerfile.dev
+      dockerfile: docker/Dockerfile.dev
     restart: unless-stopped
     volumes:
       - ./client:/client
@@ -28,7 +28,7 @@ services:
     container_name: server-dev-c
     build: 
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     restart: unless-stopped
     volumes:
       - ./server:/server
