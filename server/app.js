@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bookingsRoutes = require('./routes/bookings');
 const barbersRoutes = require('./routes/barbers');
@@ -8,6 +9,7 @@ const usersRoutes = require('./routes/users');
 
 const app = express();
 
+app.use(helmet());
 
 // Define CORS options
 const corsOptions = {
