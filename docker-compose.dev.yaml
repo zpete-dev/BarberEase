@@ -46,11 +46,13 @@ services:
       ADMIN_API_KEY: /run/secrets/ADMIN_API_KEY
       JWT_SECRET_ADMIN: /run/secrets/JWT_SECRET_ADMIN
       JWT_SECRET: /run/secrets/JWT_SECRET
+      DB_PASSWORD: /run/secrets/DB_PASSWORD
     secrets:
       - API_KEY
       - ADMIN_API_KEY
       - JWT_SECRET_ADMIN
       - JWT_SECRET
+      - DB_PASSWORD
   mongodb:
     container_name: mongodb-c
     image: mongo
@@ -61,16 +63,19 @@ services:
       - C:\Projects\data\barberease:/data/db
     networks:
       - backend
+    command: [--auth]
 
 secrets:
-   ADMIN_API_KEY:
-     file: ./config/secrets/ADMIN_API_KEY.txt
-   API_KEY:
-     file: ./config/secrets/API_KEY.txt
-   JWT_SECRET_ADMIN:
-     file: ./config/secrets/JWT_SECRET_ADMIN.txt
-   JWT_SECRET:
-     file: ./config/secrets/JWT_SECRET.txt
+  ADMIN_API_KEY:
+    file: ./config/secrets/ADMIN_API_KEY.txt
+  API_KEY:
+    file: ./config/secrets/API_KEY.txt
+  JWT_SECRET_ADMIN:
+    file: ./config/secrets/JWT_SECRET_ADMIN.txt
+  JWT_SECRET:
+    file: ./config/secrets/JWT_SECRET.txt
+  DB_PASSWORD:
+    file: ./config/secrets/DB_PASSWORD.txt
 
 volumes:
   mongodb:
