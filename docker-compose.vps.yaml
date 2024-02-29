@@ -2,18 +2,10 @@ version: "3.8"
 services:
   client:
     image: client-dev-i
-    container_name: client-dev-c
-    build: 
-      target: development
-      context: ./client
-      dockerfile: docker/Dockerfile.dev
+    container_name: client-vps-c
     restart: unless-stopped
-    volumes:
-      - ./client:/client
-      - /client/node_modules
     ports:
       - 3000:3000
-    stdin_open: true
     depends_on:
       - server
     networks:
@@ -21,14 +13,8 @@ services:
     env_file: ./config/.env.client.dev
   server:
     image: server-dev-i
-    container_name: server-dev-c
-    build: 
-      context: ./server
-      dockerfile: docker/Dockerfile
+    container_name: server-vps-c
     restart: unless-stopped
-    volumes:
-      - ./server:/server
-      - /server/node_modules
     ports:
       - 5000:5000
     depends_on:
@@ -38,13 +24,13 @@ services:
       - frontend
     env_file: ./config/.env.server.dev
   mongodb:
-    container_name: mongodb-c
+    container_name: mongodb-vps-c
     image: mongo
     restart: always
     ports:
-      - 27018:27017
+      - 27019:27017
     volumes:
-      - C:\Projects\data\barberease:/data/db
+      - ./data/db:/data/db
     networks:
       - backend
     command: [--auth]

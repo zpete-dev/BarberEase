@@ -1,0 +1,99 @@
+version: "3.8"
+services:
+  client:
+    image: client-dev-i
+    container_name: client-dev-c
+    build: 
+      target: development
+      context: ./client
+      dockerfile: docker/Dockerfile.dev
+    restart: unless-stopped
+    volumes:
+      - ./client:/client
+      - /client/node_modules
+    ports:
+      - 3000:3000
+    stdin_open: true
+    depends_on:
+      - server
+    networks:
+      - frontend
+    env_file: ./config/.env.dev
+    environment:
+      REACT_APP_API_KEY: /run/secrets/API_KEY
+    secrets:
+      - API_KEY
+  server:
+    image: server-dev-i
+    container_name: server-dev-c
+    build: 
+      context: ./server
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./server:/server
+      - /server/node_modules
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+      - frontend
+    env_file: ./config/.env.dev
+    environment:
+      API_KEY: /run/secrets/API_KEY
+      ADMIN_API_KEY: /run/secrets/ADMIN_API_KEY
+      JWT_SECRET_ADMIN: /run/secrets/JWT_SECRET_ADMIN
+      JWT_SECRET: /run/secrets/JWT_SECRET
+      DB_PASSWORD: /run/secrets/DB_PASSWORD
+    secrets:
+      - API_KEY
+      - ADMIN_API_KEY
+      - JWT_SECRET_ADMIN
+      - JWT_SECRET
+      - DB_PASSWORD
+  mongodb:
+    container_name: mongodb-c
+    image: mongo
+    restart: always
+    ports:
+      - 27018:27017
+    volumes:
+      - C:\Projects\data\barberease:/data/db
+    networks:
+      - backend
+    command: [--auth]
+  nginxproxy:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ./config/nginx/:/etc/nginx/conf.d/:ro
+      - ./certbot/www/:/var/www/certbot/:ro
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./config/certbot/:/etc/letsencrypt/:rw
+
+secrets:
+  ADMIN_API_KEY:
+    file: ./config/secrets/ADMIN_API_KEY.txt
+  API_KEY:
+    file: ./config/secrets/API_KEY.txt
+  JWT_SECRET_ADMIN:
+    file: ./config/secrets/JWT_SECRET_ADMIN.txt
+  JWT_SECRET:
+    file: ./config/secrets/JWT_SECRET.txt
+  DB_PASSWORD:
+    file: ./config/secrets/DB_PASSWORD.txt
+
+volumes:
+  mongodb:
+
+networks:
+  backend:
+  frontend:

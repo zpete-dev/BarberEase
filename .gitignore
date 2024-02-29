@@ -1,3 +1,5 @@
 .vscode/
 .vs/
 config/
+export/
+dev-build-to-export.ps1

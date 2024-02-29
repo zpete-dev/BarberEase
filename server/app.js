@@ -13,16 +13,17 @@ app.use(helmet());
 
 // Define CORS options
 const corsOptions = {
-  origin: function (origin, callback) {
+  /*origin: function (origin, callback) {
     //console.log("Origin received:", origin);  // This will print the origin received in the request
-    const allowedOrigins = ['http://localhost:3000'];
+    const allowedOrigins = [process.env.ALLOWED_ORIGINS];
     // Allow requests with no origin, like mobile apps or curl requests
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  },
+  },*/
+  origin: process.env.ALLOWED_ORIGINS,
   methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
   allowedHeaders: ['x-auth-token', 'x-api-key', 'Content-Type'], // Allowed custom headers
   credentials: true, // Credentials are supported
@@ -38,17 +39,17 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-const fs = require('node:fs');
+/*const fs = require('node:fs');
 let DB_PASSWORD = "";
 try {
   const data = fs.readFileSync(process.env.DB_PASSWORD, 'utf8');
   DB_PASSWORD = data;
 } catch (err) {
   console.error("Error loading Secret file");
-}
+}*/
 
 const DB_USER = process.env.DB_USER;
-//const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const DB_NAME = process.env.DB_NAME;
@@ -76,5 +77,12 @@ app.use('/api/users', usersRoutes); //This route is intentionally not always on
 app.get('/', (req, res) => {
   res.send('Hello, BarberEase!');
 });
+
+// Root route
+/*app.get('/', async (req, res) => {
+  await;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.send('Hello, BarberEase!');
+});*/
 
 module.exports = app;
