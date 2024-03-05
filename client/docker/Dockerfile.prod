@@ -18,31 +18,11 @@ RUN npm run build
 #TODO - Change this to be an environment variable
 EXPOSE 3000
 
-FROM nginx
-
-WORKDIR /usr/share/nginx/html
-
-RUN apt-get update
-
-# Remove default nginx configuration
-RUN rm /etc/nginx/conf.d/*
-
-# Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
-
+FROM caddy:2.7.6-alpine
 # Copy static assets from builder stage
-COPY --from=production /client/build .
+COPY --from=production /client/build /srv
+#COPY ./build/ /etc/caddy/staticfiles
+#COPY ./build /etc/caddy/staticfiles
 
-# Update the nginx config with our own config file
-COPY --from=production /client/docker/nginx/nginx-barberease.conf /etc/nginx/conf.d/
-
-EXPOSE 80
-
-RUN useradd -ms /bin/bash nonroot
-
-RUN chown -R nonroot:nonroot /etc/nginx/conf.d/ /var/cache/nginx/ /var/run/
-
-USER nonroot
-
-# Containers run nginx with global directives and daemon off
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# Starting our application
+CMD ["npm","start"]

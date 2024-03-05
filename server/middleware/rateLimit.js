@@ -5,6 +5,10 @@ const getApiLimiter = (maxRequests) => rateLimit({
     max: maxRequests*100, //TODO Remove the *100
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    validate: {
+		xForwardedForHeader: true,
+		default: true,
+	}
 });
 
 module.exports = getApiLimiter;
