@@ -18,11 +18,5 @@ RUN npm run build
 #TODO - Change this to be an environment variable
 EXPOSE 3000
 
-FROM caddy:2.7.6-alpine
-# Copy static assets from builder stage
-COPY --from=production /client/build /srv
-#COPY ./build/ /etc/caddy/staticfiles
-#COPY ./build /etc/caddy/staticfiles
-
 # Starting our application
 CMD ["npm","start"]

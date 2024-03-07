@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  client:
+    image: client-dev-i
+    container_name: client-dev-c
+    build: 
+      target: production
+      context: ./client
+      dockerfile: docker/Dockerfile.prod
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    stdin_open: true
+    depends_on:
+      - server
+    networks:
+      - frontend
+    env_file: ./config/.env.client.dev
+  server:
+    image: server-dev-i
+    container_name: server-dev-c
+    build: 
+      context: ./server
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+      - frontend
+    env_file: ./config/.env.server.dev
+  mongodb:
+    container_name: mongodb-c
+    image: mongo
+    restart: always
+    ports:
+      - 27018:27017
+    volumes:
+      - C:\Projects\data\barberease:/data/db
+    networks:
+      - backend
+    command: [--auth]
+
+volumes:
+  mongodb:
+
+networks:
+  backend:
+  frontend:
