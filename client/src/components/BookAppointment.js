@@ -373,7 +373,7 @@ const BookAppointment = () => {
                 {/* Back Button */}
                 <button className='flex bg-licorice text-carrotOrange px-2 py-2 rounded-2xl md:px-4' onClick={prevStep}>Back</button>
                 {/* Service and Provider Count  < md*/}
-                <div className={`${currentStep === 2 ? 'hidden' : ''} ml-0.5 md:hidden`}>
+                <div className={`${currentStep === 2 ? 'hidden' : ''} ml-0.5 md:hidden text-[12px] xs:text-[14px]`}>
                     {/* Validation Messages */}
                     <CSSTransition
                         in={(selectedServices.length === 0)}
@@ -381,7 +381,7 @@ const BookAppointment = () => {
                         unmountOnExit
                         classNames="md-summary-message">
                         <p className="text-red-500 overflow-hidden whitespace-nowrap">
-                            {"Select 1 or more services"}
+                            {"Select 1+ services"}
                         </p>
                     </CSSTransition>
                     <CSSTransition
@@ -390,7 +390,7 @@ const BookAppointment = () => {
                         unmountOnExit
                         classNames="md-summary-message">
                         <p className='text-black overflow-hidden whitespace-nowrap'>
-                            Service(s) - {selectedServices.length} Selected
+                            <b><u>{selectedServices.length}</u></b> Service(s)<span className='hidden xs:inline'> selected</span>
                         </p>
                     </CSSTransition>
                     <CSSTransition
@@ -399,7 +399,7 @@ const BookAppointment = () => {
                         unmountOnExit
                         classNames="md-summary-message">
                         <p className="text-red-500 overflow-hidden">
-                            {"Select 1 or more providers"}
+                            {"Select 1+ providers"}
                         </p>
                     </CSSTransition>
                     <CSSTransition
@@ -407,12 +407,12 @@ const BookAppointment = () => {
                         timeout={500}
                         unmountOnExit
                         classNames="md-summary-message">
-                        {selectedProviders.includes("Any") ? <p className='text-black overflow-hidden'>Provider(s) - Any Provider</p>
-                            : <p className='text-black overflow-hidden'>Provider(s) - {selectedProviders.length} Selected</p>}
+                        {selectedProviders.includes("Any") ? <p className='text-black overflow-hidden'><b><u>Any</u></b> Provider<span className='hidden xs:inline'> selected</span></p>
+                            : <p className='text-black overflow-hidden'><b><u>{selectedProviders.length}</u></b> Provider(s)<span className='hidden xs:inline'> selected</span></p>}
                     </CSSTransition>
                 </div>
                 {/* Subtotal / Date & Time Display < md*/}
-                <div className={`${currentStep === 2 ? 'hidden' : 'mr-0.5'} md:hidden text-center`}>
+                <div className={`${currentStep === 2 ? 'hidden' : 'mr-0.5'} md:hidden text-center text-[12px] xs:text-[14px]`}>
                     <p className='text-black font-bold'>Subtotal: ${subtotal.toFixed(2)}</p>
                     <CSSTransition
                         in={(selectedTime !== null)}
@@ -430,7 +430,7 @@ const BookAppointment = () => {
                         unmountOnExit
                         classNames="summary-date-time">
                         <p className='text-barberRed overflow-hidden'>
-                            Select a date & time
+                            Select date & time
                         </p>
                     </CSSTransition>
                 </div>
@@ -685,7 +685,8 @@ const BookAppointment = () => {
                             className={`hidden sm:flex h-8 w-8 rounded-full text-white bg-licorice text-[20px] place-content-center mr-4`}>
                             &#x2190;{/* Left Arrow */}
                         </button>
-                        <div className='flex justify-center space-x-1 text-[15px] items-center 
+                        <div className='flex justify-center space-x-0.5 text-[13px] items-center text-center
+                        xs:text-[15px] xs:space-x-1
                         sm:text-[16px] sm:space-x-2
                         lg:text-[18px]'>
                             <div onClick={() => goToStep(0)} className={`${currentStep >= 0 ? 'cursor-pointer' : ''} ${currentStep === 0 ? 'text-black font-bold underline' : 'text-gray-400 underline'}`}>Service & Provider</div>
@@ -698,14 +699,14 @@ const BookAppointment = () => {
                     <div className='ml-auto lg:w-[40%]'>
                         <Link to="/" className='flex bg-licorice relative ml-auto -top-4 -right-4 px-3 pb-3 pt-2 rounded-bl-2xl 
                                             sm:px-5 sm:py-4
-                                            md:-top-4 md:ml-auto md:rounded-br-2xl md:pb-6
+                                            md:-top-4 md:ml-auto md:rounded-br-2xl md:pb-4
                                             lg:relative lg:right-[10%] lg:w-fit
-                                            xl:px-8 xl:py-6'>
+                                            xl:px-6 xl:py-4'>
                             <div className='flex flex-col md:flex-row items-center'>
-                                <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[44px] w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2 xl:h-[64px] xl:w-[64px] ' />
+                                <img src='/images/BarberDemo.png' alt='BarberDemo Logo' className='h-[40px] w-[40px] xs:h-[44px] xs:w-[44px] sm:h-[56px] sm:w-[56px] md:mr-2 xl:h-[64px] xl:w-[64px] ' />
                                 <div className=''>
-                                    <span className='text-white text-xl font-serif text-justify'>Barber</span>
-                                    <span className='text-barberRed text-xl font-serif'>Dog</span>
+                                    <span className='text-white text-[17px] xs:text-xl font-serif text-justify'>Barber</span>
+                                    <span className='text-barberRed text-[17px] xs:text-xl font-serif'>Demo</span>
                                 </div>
                             </div>
                         </Link>

@@ -135,7 +135,7 @@ const LandingServices = () => {
     const services = {
         1: {
             name: 'Haircuts',
-            imgSrc: '/images/Memphis.jpg',
+            imgSrc: '/images/Haircuts.jpg',
             altText: 'Haircuts',
             dialogInfo:
                 <div className='flex flex-col w-full'>
@@ -192,7 +192,7 @@ const LandingServices = () => {
         },
         2: {
             name: 'Shaves & Beard Trims',
-            imgSrc: '/images/Memphis.jpg',
+            imgSrc: '/images/BeardTrim.jpg',
             altText: 'Shaves & Beard Trims',
             dialogInfo:
                 <div className='flex flex-col w-full'>
@@ -219,19 +219,19 @@ const LandingServices = () => {
         },
         3: {
             name: 'Placeholder',
-            imgSrc: '/images/Memphis.jpg',
+            imgSrc: '/images/PlaceholderService.jpg',
             altText: 'Placeholder',
             dialogInfo: 'Placeholder',
         },
         4: {
             name: 'Placeholder',
-            imgSrc: '/images/Memphis.jpg',
+            imgSrc: '/images/PlaceholderService.jpg',
             altText: 'Placeholder',
             dialogInfo: 'Placeholder',
         },
         5: {
             name: 'Placeholder',
-            imgSrc: '/images/Memphis.jpg',
+            imgSrc: '/images/PlaceholderService.jpg',
             altText: 'Placeholder',
             dialogInfo: 'Placeholder',
         },

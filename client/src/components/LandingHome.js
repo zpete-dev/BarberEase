@@ -16,7 +16,7 @@ const LandingHome = () => {
         });
 
         async function preloadBackgroundImage() {
-            const myBackgroundImage = await loadImage('/images/DogInAChair-desat.jpg');
+            const myBackgroundImage = await loadImage('/images/LandingBackgroundDesat.jpg');
             sethomeBackgroundImg(myBackgroundImage);
         }
 
@@ -107,19 +107,19 @@ const LandingHome = () => {
                         <a href="#home" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Home</a>
                         <a href="#services" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Services</a>
                         <a href="/" className='hidden lg:flex items-center mb-3 mx-3'>
-                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[200px] w-[200px]' />
+                            <img src='/images/BarberDemo.png' alt='BarberDemo Logo' className='h-[180px] w-[200px] mr-2' />
                             <span className='text-white text-6xl'>Barber</span>
 
-                            <span className='text-barberRed text-6xl'>Dog</span>
+                            <span className='text-barberRed text-6xl'>Demo</span>
                         </a>
                         <a href="#gallery" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Gallery</a>
                         <a href="#contact" className='text-gray-300 hover:text-white hover:text-shadow-sm hover:shadow-white hover:scale-105 transition-all duration-100'>Contact</a>
                     </div>
                     <div className='lg:hidden flex items-center mb-4 text-white text-xl'>
                         <a href="/" className='flex items-center mb-3 mx-3'>
-                            <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[125px] w-[125px]' />
+                            <img src='/images/BarberDemo.png' alt='BarberDemo Logo' className='h-[125px] w-[125px] mr-2' />
                             <span className='text-white text-4xl'>Barber</span>
-                            <span className='text-barberRed text-4xl'>Dog</span>
+                            <span className='text-barberRed text-4xl'>Demo</span>
                         </a>
                     </div>
                 </div>
@@ -129,10 +129,10 @@ const LandingHome = () => {
                             HAIR CARE.
                         </h1>
                         <h2 className='text-white font-bold'>
-                            FOR DOGS,
+                            FOR YOU,
                         </h2>
                         <h1 className='text-barberRed font-bold'>
-                            BY DOGS.
+                            BY US.
                         </h1>
                     </div>
                 </div>

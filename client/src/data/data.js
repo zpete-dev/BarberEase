@@ -3,7 +3,7 @@ export const serviceCategories = [
     {
         _id: "0000",
         name: 'Haircuts',
-        categoryImage: '/images/Memphis.jpg',
+        categoryImage: '/images/Haircuts.jpg',
         services: [
             {
                 _id: "0001",
@@ -28,7 +28,7 @@ export const serviceCategories = [
     {
         _id: "0004",
         name: 'Shaves & Beard Trims',
-        categoryImage: '/images/Memphis.jpg',
+        categoryImage: '/images/BeardTrim.jpg',
         services: [
             {
                 _id: "0005",
@@ -51,17 +51,14 @@ export const providers = [
     {
         _id: 'Any',
         name: 'Any Provider',
-        profilePicture: '/images/Memphis.jpg',
-        instagramLink: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60',
-    },
+        profilePicture: '/images/AnyProvider.png'
+        },
     {
         name: 'Memphis',
-        profilePicture: '/images/Memphis.jpg',
-        instagramLink: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60',
+        profilePicture: '/images/Memphis.jpg'
     },
     {
         name: 'Emy',
-        profilePicture: '/images/Emy.png',
-        instagramLink: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fGJ1cmdlcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=1400&q=60',
+        profilePicture: '/images/Emy.jpg'
     },
 ];

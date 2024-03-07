@@ -99,7 +99,7 @@ const LandingContact = () => {
                         {/* TODO: Reading 3rd Party Cookies will be phased out soon. Change map to not use iFrame and instead use API key.*/}
                         <div>
                             <iframe
-                                title='BarberDog Location'
+                                title='BarberDemo Location'
                                 src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12271.352271222568!2d-104.99775260216704!3d39.743288172302194!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c78d5472cf5a3%3A0x40482bfb29562d8c!2sCivic%20Center%20Park!5e0!3m2!1sen!2sus!4v1706732855675!5m2!1sen!2sus'
                                 width='100%'
                                 height='450'

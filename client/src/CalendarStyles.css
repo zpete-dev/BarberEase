@@ -56,11 +56,11 @@
   }
   
   .react-calendar__tile {
-    @apply py-[10px] px-[6.6667px] sm:py-[15px] md:py-[16px] lg:md:py-[6px] pointer-events-none text-center text-sm bg-white transition-colors duration-150 ease-in-out;
+    @apply py-[10px] px-[6.6667px] sm:py-[15px] md:py-[16px] pointer-events-none text-center text-sm bg-white transition-colors duration-150 ease-in-out;
   }
     
   .react-calendar__tile:enabled abbr {
-    @apply flex border-slate-400 border-2 text-black rounded-full h-10 w-10 items-center justify-center mx-auto pointer-events-auto;
+    @apply flex border-slate-400 border-2 text-black rounded-full h-7 w-7 xs:h-10 xs:w-10 items-center justify-center mx-auto pointer-events-auto;
   }
 
   .react-calendar__tile:enabled:hover abbr{
@@ -80,5 +80,5 @@
   }
 
   .react-calendar__tile:disabled abbr {
-    @apply flex border-gray-200 border-2 text-gray-400 rounded-full h-10 w-10 items-center justify-center mx-auto;
+    @apply flex border-gray-200 border-2 text-gray-400 rounded-full h-7 w-7 xs:h-10 xs:w-10 items-center justify-center mx-auto;
   }

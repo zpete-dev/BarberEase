@@ -2,7 +2,19 @@ import React, { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import '../skeleton.css';
 
-const images = Array(12).fill('/images/Emy.png');
+const images = ['/images/Instagram_1.jpg',
+    '/images/Instagram_2.jpg',
+    '/images/Instagram_3.jpg',
+    '/images/Instagram_5.jpg',
+    '/images/Instagram_6.jpg',
+    '/images/Instagram_7.jpg',
+    '/images/Instagram_8.jpg',
+    '/images/Instagram_9.jpg',
+    '/images/Instagram_10.jpg',
+    '/images/Instagram_11.jpg',
+    '/images/Instagram_12.jpg',
+    '/images/Instagram_13.jpg'
+];
 const LandingGallery = () => {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -64,7 +76,7 @@ const LandingGallery = () => {
                             Barber
                         </a>
                         <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className='text-barberRed font-serif font-bold'>
-                            Dog
+                            Demo
                         </a>
                         <span> on </span>
                         <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className=''>

@@ -34,9 +34,9 @@ const Navbar = ({ currentSection }) => {
             {/* Main Navbar for md+*/}
             <div className={` hidden fixed top-0 left-0 right-0 bg-licorice md: opacity-[0.98] text-white md:flex items-center justify-between px-4 py-1 z-50`}>
                 <div className='flex items-center'>
-                    <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[60px] w-[60px]' />
+                    <img src='/images/BarberDemo.png' alt='BarberDemo Logo' className='h-[60px] w-[60px] mr-2' />
                     <span className='text-white text-xl font-serif font-bold'>Barber</span>
-                    <span className='text-barberRed text-xl font-serif font-bold'>Dog</span>
+                    <span className='text-barberRed text-xl font-serif font-bold'>Demo</span>
                 </div>
                 <div className='flex flex-col md:flex-row gap-3 lg:gap-6 items-center'>
                     <a href="#home" className={linkStyle('home')}>Home</a>
@@ -57,10 +57,10 @@ const Navbar = ({ currentSection }) => {
                 ${isMenuOpen ? 'flex flex-col max-h-[400px] max-w-[416px] pt-2 pb-4 pr-6'
                         : 'max-h-0 max-w-0 p-0 m-0'} `}>
                     <div className={`flex flex-col items-center ${isMenuOpen ? 'mb-4' : 'mb-0'} transition-all duration-300`}>
-                        <img src='/images/BarberDogSymbol.png' alt='BarberDog Logo' className='h-[60px] w-[60px]' />
+                        <img src='/images/BarberDemo.png' alt='BarberDemo Logo' className='h-[60px] w-[60px]' />
                         <div>
                             <span className='text-white text-2xl font-serif font-bold'>Barber</span>
-                            <span className='text-barberRed text-2xl font-serif font-bold'>Dog</span>
+                            <span className='text-barberRed text-2xl font-serif font-bold'>Demo</span>
                         </div>
                     </div>
                     <div className='flex flex-col gap-3 lg:gap-6 items-center text-gray-300'>
