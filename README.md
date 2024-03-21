@@ -1,9 +1,9 @@
 
-Here's some videos showcasing the website!
+Below are some links to YouTube videos showcasing the website. Visit at https://zpete.dev !
+
 #### BarberDemo Desktop
 ---
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
-<iframe width="560" height="315" src="https://www.youtube.com/embed/iJajXseyBHE?si=T8Z7yYOypbVOBs_g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![BarberDemo Desktop Youtube](https://img.youtube.com/vi/iJajXseyBHE/0.jpg)](https://www.youtube.com/watch?v=iJajXseyBHE)
 
 #### BarberDemo Mobile
 ---
