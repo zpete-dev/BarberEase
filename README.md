@@ -7,7 +7,7 @@ Here's some videos showcasing the website!
 
 #### BarberDemo Mobile
 ---
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/7ahjOYiF5yY/0.jpg)](https://www.youtube.com/watch?v=7ahjOYiF5yY)
+[![BarberDemo Mobile Youtube](https://img.youtube.com/vi/7ahjOYiF5yY/0.jpg)](https://www.youtube.com/watch?v=7ahjOYiF5yY)
 
 ## Background  
 ---  
