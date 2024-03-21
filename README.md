@@ -14,7 +14,7 @@ For the backend, I went with Node.js and Express.js, and a Mongo Database. These
 
 For designing the layouts, I used Figma. Below is the Figma design with placeholder images. The beta version of the site was dog themed to keep things fun :)
 
-![[BarberEase.png]]
+![BarberEase](https://github.com/zpete-dev/BarberEase/assets/30848428/4dd152a7-668f-492d-9d09-876969c03fba)
 
 I used Docker to package the frontend, backend, and database. This was to simplify the process of installing the application on another machine when the time came.
 
