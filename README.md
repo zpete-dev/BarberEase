@@ -1,3 +1,13 @@
+
+Here's some videos showcasing the website!
+#### BarberDemo Desktop
+---
+<iframe width="560" height="315" src="https://www.youtube.com/embed/iJajXseyBHE?si=T8Z7yYOypbVOBs_g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+#### BarberDemo Mobile
+---
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7ahjOYiF5yY?si=ym2Sa3mpSxs6ghTH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Background  
 ---  
 The goal for this project was for me to build a website front to back to show potential clients I'm capable of releasing a modern, full stack web application. Before this project, my professional experience mostly consisted of aging technologies, and making changes to an already existing application. 
