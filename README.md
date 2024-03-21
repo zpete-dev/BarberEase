@@ -2,11 +2,12 @@
 Here's some videos showcasing the website!
 #### BarberDemo Desktop
 ---
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
 <iframe width="560" height="315" src="https://www.youtube.com/embed/iJajXseyBHE?si=T8Z7yYOypbVOBs_g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 #### BarberDemo Mobile
 ---
-<iframe width="560" height="315" src="https://www.youtube.com/embed/7ahjOYiF5yY?si=ym2Sa3mpSxs6ghTH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/7ahjOYiF5yY?si=ym2Sa3mpSxs6ghTH/0.jpg)](https://www.youtube.com/watch?v=7ahjOYiF5yY?si=ym2Sa3mpSxs6ghTH)
 
 ## Background  
 ---  
