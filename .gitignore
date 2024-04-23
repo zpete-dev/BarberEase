@@ -1,7 +1,9 @@
 Portfolio Videos/
+BarberDemoImages/
 .vscode/
 .vs/
 config/
 export/
 dev-build-to-export.ps1
 prod-build-to-export.ps1
+nogit/
