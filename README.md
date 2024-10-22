@@ -1,5 +1,5 @@
 
-Below are some links to YouTube videos showcasing the website. Visit at https://zpete.dev !
+Below are some links to YouTube videos showcasing the website.
 
 #### BarberDemo Desktop
 ---
@@ -13,7 +13,7 @@ Below are some links to YouTube videos showcasing the website. Visit at https://
 ---  
 The goal for this project was for me to build a website front to back to show potential clients I'm capable of releasing a modern, full stack web application. Before this project, my professional experience mostly consisted of aging technologies, and making changes to an already existing application. 
 
-Wanting to work as a freelance web developer, I felt I needed proof that I could work with a modern tech stack. I also wanted to prove that I could bring a web application from design to production. I ended up choosing the MERN stack, and you can visit the site at https://zpete.dev !
+Wanting to work as a freelance web developer, I felt I needed proof that I could work with a modern (MERN in this case) tech stack. I also wanted to prove that I could bring a web application from design to production.
 
 ## Design  
 ---  
@@ -39,6 +39,6 @@ Other minor problems I ran into were related to my not fully knowing how to plan
 ---  
 I was very pleased with the results, and I was able to achieve what I originally set out to do. This MERN stack app has a fully responsive frontend that is working on mobile. I went through many iterations making animations look fluid so that a potential user would have a seamless experience browsing the site. This website will stay up and running securely for the time being, with lots of security measures protecting it from attacks.
 
-With some additional minor changes, I believe many small businesses would be very pleased with this site. Don't take my word for it, though; you can visit the site and see for yourself! Visit https://zpete.dev and tell me what you think @ zpete.dev@gmail.com
+With some additional minor changes, I believe many small businesses would be very pleased with this site.
 
 Thank You!!!
